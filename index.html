@@ -1,28 +1,27 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr"> <!-- Bu etiket setLanguage fonksiyonu tarafından güncellenecek -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
-    <title>Selda Mediterranean - Product Order Form</title>
+    <title>Selda Mediterranean - Product Order Form</title> <!-- Bu başlık setLanguage fonksiyonu tarafından güncellenecek -->
 
     <!-- PWA Manifest, Tema ve İkonlar -->
-    <link rel="manifest" href="./manifest.json"> <!-- Aynı dizindeki manifest.json'a işaret eder (android-chrome ikonları burada tanımlanmalı) -->
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#28a745">
-    <link rel="apple-touch-icon" href="./apple-touch-icon.png"> <!-- Aynı dizindeki apple-touch-icon.png'ye işaret eder -->
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="description" content="Selda Mediterranean ürün sipariş formu uygulaması.">
 
-    <!-- Favicon (Aynı dizindeki favicon.ico, favicon-16x16.png, favicon-32x32.png dosyalarının varlığından emin olun) -->
+    <!-- Favicon -->
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
-    <!-- Not: favicon-16x16.png ve favicon-32x32.png tarayıcılar tarafından otomatik olarak veya manifest.json üzerinden algılanabilir -->
 
     <!-- Kütüphaneler -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script> <!-- Integrity kaldırıldı -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <style>
         :root {
@@ -158,7 +157,7 @@
         <main class="main-content">
             <div class="container">
                 <header class="page-header">
-                    <img src="./logo.png" alt="Selda Mediterranean Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/160x60?text=Selda+Logo'; this.alt='Placeholder Logo';" style="max-width: 160px; height: auto;"> <!-- LOGO GÜNCELLENDİ -->
+                    <img src="./logo.png" alt="Selda Mediterranean Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/160x60?text=Selda+Logo'; this.alt='Placeholder Logo';" style="max-width: 160px; height: auto;">
                     <div class="language-selector">
                         <button id="langTrBtn">TR</button>
                         <button id="langEnBtn">EN</button>
@@ -239,7 +238,6 @@
     <script>
     (function() {
         'use strict';
-        // ... (JavaScript kodunun geri kalanı değişmedi) ...
         let mainFormInitialized = false;
 
         const CORRECT_USERNAME = "Kitchen";
@@ -334,7 +332,7 @@
                 "webShareNotSupported": "Your browser does not support direct file sharing. You can download the file and share it manually."
             }
         };
-        let currentLanguage = 'en';
+        let currentLanguage = 'en'; // Varsayılan dil İngilizce olarak ayarlandı
 
         const productData = {
             "SMALL BITES": ["Soup of the Day", "Hummus", "Grilled Eggplant Salad", "Tzatziki (Cacik)", "Spicy Ezme", "Saksuka", "Turkish Feta and Olives", "Cigar Borek", "Shishito Peppers", "Halloumi Cheese", "Stuffed Dates", "Falafel", "Fried Cauliflower", "Salmon and Grape Leaves", "Arnavut Cigeri", "Shrimp Garlic", "Cheese and Meat Platter"],
@@ -350,8 +348,8 @@
         const LS_BRANCH_SELECT_VALUE = 'seldaOrderForm_branchSelectValue_v5';
         const LS_MANUAL_BRANCH_VALUE = 'seldaOrderForm_manualBranchValue_v5';
         const LS_MANUAL_BRANCH_ENABLED = 'seldaOrderForm_manualBranchEnabled_v5';
-        const LS_ORDER_DATE = 'seldaOrderForm_orderDate_v5';
-        const LS_DELIVERY_DATE = 'seldaOrderForm_deliveryDate_v5';
+        const LS_ORDER_DATE = 'seldaOrderForm_orderDate_v5'; // Sipariş tarihi için localStorage anahtarı
+        const LS_DELIVERY_DATE = 'seldaOrderForm_deliveryDate_v5'; // Teslim tarihi için localStorage anahtarı
         const LS_ORDER_COUNTER = 'seldaOrderCounterV13';
 
         function assignLoginDOMElements() {
@@ -419,7 +417,7 @@
         function handleLogin() {
             const enteredUsername = usernameInput.value.trim();
             const enteredPassword = passwordInput.value.trim();
-            const langSet = translations[currentLanguage] || translations.tr;
+            const langSet = translations[currentLanguage] || translations.en; // Hata mesajları için dil seti
 
             if (!enteredUsername || !enteredPassword) {
                 loginError.textContent = langSet.alert_loginFieldsMissing;
@@ -488,7 +486,7 @@
         }
 
         function updateUIForLanguage(lang) {
-            const translationSet = translations[lang] || translations.tr;
+            const translationSet = translations[lang] || translations.en; // Dil seti için İngilizce'ye fallback
             if (!translationSet) return;
             if(document) document.title = translationSet.pageTitle;
 
@@ -514,15 +512,23 @@
             }
 
             if (mainFormInitialized) {
-                renderProducts();
-                updateOrderSummary();
+                renderProducts(); // Dil değiştiğinde ürün listesini yeniden render et (Other: etiketi için)
+                updateOrderSummary(); // Dil değiştiğinde özeti yeniden render et (LB, Adet etiketleri için)
             }
         }
 
         function loadLanguage() {
-            let savedLang = 'tr';
-            try { savedLang = localStorage.getItem(LS_LANGUAGE) || 'tr'; } catch(e) { console.warn("localStorage dil okuma başarısız:", e); }
-            setLanguage(savedLang);
+            let savedLang = 'en'; // Varsayılan olarak İngilizce başla
+            try {
+                const langFromStorage = localStorage.getItem(LS_LANGUAGE);
+                if (langFromStorage === 'tr' || langFromStorage === 'en') {
+                    savedLang = langFromStorage;
+                }
+                // Eğer localStorage'da geçerli bir dil yoksa, 'en' olarak kalır.
+            } catch(e) {
+                console.warn("localStorage dil okuma başarısız, İngilizce'ye dönülüyor:", e);
+            }
+            setLanguage(savedLang); // Bu fonksiyon dili UI'a uygular ve gerekirse localStorage'a kaydeder.
         }
 
         function formatDateForInput(date) {
@@ -549,7 +555,7 @@
             const container = document.getElementById('productSectionsContainer');
             if (!container) return;
             let htmlContent = '';
-            const langSet = translations[currentLanguage] || translations.tr;
+            const langSet = translations[currentLanguage] || translations.en; // Dil seti için İngilizce'ye fallback
             Object.keys(productData).forEach((category) => {
                 const categoryId = `category-${category.replace(/\s+/g, '').toLowerCase()}`;
                 htmlContent += `
@@ -594,7 +600,7 @@
             const totalAdetEl = document.getElementById('totalAdet');
             if(!summaryList || !emptySummaryText || !totalLbEl || !totalAdetEl) return;
 
-            const langSet = translations[currentLanguage] || translations.tr;
+            const langSet = translations[currentLanguage] || translations.en; // Dil seti için İngilizce'ye fallback
             summaryList.innerHTML = '';
             let hasItemsInSummary = false; let currentTotalLb = 0; let currentTotalAdet = 0;
             document.querySelectorAll('.section-title[data-category-id]').forEach(title => title.classList.remove('has-selection'));
@@ -668,10 +674,10 @@
 
         function populateBranchSelect() { if(!branchSelect) return; branchSelect.innerHTML = ''; BRANCH_OPTIONS.forEach(text => { const opt = document.createElement('option'); opt.value = text; opt.textContent = text; branchSelect.appendChild(opt); });}
         function updateBranchInputState() { if(!manualBranchCheckbox || !manualBranchInput || !branchSelect) return; const isManual = manualBranchCheckbox.checked; manualBranchInput.style.display = isManual ? 'block' : 'none'; manualBranchInput.disabled = !isManual; branchSelect.disabled = isManual;}
-        function getCurrentBranchName() { const langSet = translations[currentLanguage] || translations.tr; if(!manualBranchCheckbox || !manualBranchInput || !branchSelect) return langSet.selectionBranchNotSpecified; if (manualBranchCheckbox.checked) return manualBranchInput.value.trim() || langSet.manualBranchNotSpecified; return branchSelect.value || langSet.selectionBranchNotSpecified;}
+        function getCurrentBranchName() { const langSet = translations[currentLanguage] || translations.en; if(!manualBranchCheckbox || !manualBranchInput || !branchSelect) return langSet.selectionBranchNotSpecified; if (manualBranchCheckbox.checked) return manualBranchInput.value.trim() || langSet.manualBranchNotSpecified; return branchSelect.value || langSet.selectionBranchNotSpecified;}
 
         function saveFormSetting(key, value) { try { localStorage.setItem(key, value); } catch (e) { console.warn(`localStorage '${key}' kaydı başarısız:`, e); }}
-        function loadFormSettings() {
+        function loadFormSettings() { // Bu fonksiyon tarihleri YÜKLEMEZ, sadece diğer ayarları yükler.
             if(!mainFormInitialized) return;
             try {
                 orderSenderNameInput.value = localStorage.getItem(LS_SENDER_NAME) || '';
@@ -685,30 +691,60 @@
 
         function setInitialDates() {
             if(!mainFormInitialized || !orderDateInput || !deliveryDateInput) return;
-            let savedOrderDate = null, savedDeliveryDate = null;
+
+            // 1. Sipariş Tarihi: Her zaman uygulamanın açıldığı güncel tarihle başlar.
+            orderDateInput.value = formatDateForInput(new Date());
+            // Kullanıcı bu tarihi değiştirirse, 'change' event listener'ı değişikliği LS_ORDER_DATE'e kaydeder.
+            // Ancak bir sonraki uygulama açılışında bu satır yine güncel tarihi ayarlayacaktır.
+
+            // 2. Talep Edilen Teslim Tarihi:
+            let savedDeliveryDate = null;
             try {
-                savedOrderDate = localStorage.getItem(LS_ORDER_DATE);
+                // Kullanıcının önceki teslim tarihi seçimini localStorage'dan yükle.
                 savedDeliveryDate = localStorage.getItem(LS_DELIVERY_DATE);
-            } catch (e) { console.warn("localStorage tarih okuma hatası:", e); }
+            } catch (e) { console.warn("localStorage teslim tarihi okuma hatası:", e); }
 
-            orderDateInput.value = savedOrderDate || formatDateForInput(new Date());
-            if(!savedOrderDate) saveFormSetting(LS_ORDER_DATE, orderDateInput.value);
-
-            if (!savedDeliveryDate) {
+            if (savedDeliveryDate) {
+                // Eğer kayıtlı bir seçim varsa, onu kullan.
+                deliveryDateInput.value = savedDeliveryDate;
+            } else {
+                // Kayıtlı bir seçim yoksa, sipariş tarihinden bir gün sonrası olarak ayarla.
+                // orderDateInput.value'nun (az önce bugünün tarihi olarak ayarlandı) ayrıştırılması:
                 let orderDateVal;
-                if (orderDateInput.value) { const parts = orderDateInput.value.split('-'); if (parts.length === 3) orderDateVal = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));}
-                const baseDate = (orderDateVal && !isNaN(orderDateVal.getTime())) ? orderDateVal : new Date();
-                const tomorrow = new Date(baseDate); tomorrow.setDate(baseDate.getDate() + 1);
+                const parts = orderDateInput.value.split('-'); // Örn: "2023-10-27"
+                if (parts.length === 3) {
+                    // Date yapıcısında ay 0-indekslidir, bu yüzden 1 çıkar.
+                    orderDateVal = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                } else {
+                    // formatDateForInput'un güvenilirliği nedeniyle bu bloğa girilmemeli.
+                    console.error("setInitialDates içinde orderDateInput.value ayrıştırılamadı. Teslimat hesaplaması için new Date() kullanılıyor.");
+                    orderDateVal = new Date(); // Hata durumunda yedek.
+                }
+
+                // orderDateVal'in geçerli bir tarih olduğundan emin ol.
+                if (isNaN(orderDateVal.getTime())) {
+                     console.error("setInitialDates içinde orderDateVal geçersiz. Teslimat hesaplaması için new Date() kullanılıyor.");
+                    orderDateVal = new Date(); // Ek yedek.
+                }
+
+                const tomorrow = new Date(orderDateVal); // orderDateVal'den yeni bir Date nesnesi oluştur.
+                tomorrow.setDate(orderDateVal.getDate() + 1); // Bu yeni nesneyi değiştir.
                 deliveryDateInput.value = formatDateForInput(tomorrow);
+
+                // Bu varsayılan teslim tarihini localStorage'a kaydet, böylece kullanıcı değiştirmezse hatırlanır.
+                // Kullanıcı değiştirirse, deliveryDateInput üzerindeki event listener bunu güncelleyecektir.
                 saveFormSetting(LS_DELIVERY_DATE, deliveryDateInput.value);
-            } else { deliveryDateInput.value = savedDeliveryDate; }
+            }
+            // orderDateInput ve deliveryDateInput için 'change' event listener'ları
+            // kullanıcı tarafından yapılan değişiklikleri ilgili LS anahtarlarına kaydedecektir.
         }
+
 
         function setFooterInfo() { if(!mainFormInitialized) return; const addr = document.getElementById('footerCompanyAddress'); const phone = document.getElementById('footerCompanyPhone'); if(addr) addr.textContent = COMPANY_ADDRESS_PRINT; if(phone) phone.textContent = COMPANY_PHONE_PRINT;}
         function setDeveloperSignature() { if(!mainFormInitialized) return; const devSign = document.querySelector('.developer-signature'); if (devSign) devSign.innerHTML = `Developed by K.E.`;}
 
         function validateOrderForm() {
-            const langSet = translations[currentLanguage] || translations.tr;
+            const langSet = translations[currentLanguage] || translations.en;
             if (!orderSenderNameInput.value.trim()) { alert(langSet.alert_authPersonMissing); orderSenderNameInput.focus(); return false; }
             if (!orderDateInput.value || formatDateForDisplay(orderDateInput.value) === 'N/A') { alert(langSet.alert_orderDateInvalid); orderDateInput.focus(); return false; }
             if (!deliveryDateInput.value || formatDateForDisplay(deliveryDateInput.value) === 'N/A') { alert(langSet.alert_deliveryDateInvalid); deliveryDateInput.focus(); return false; }
@@ -719,7 +755,7 @@
         }
 
         function getOrderDetails(forTextSummary = false) {
-            const langSet = translations[currentLanguage] || translations.tr;
+            const langSet = translations[currentLanguage] || translations.en;
             const details = {
                 orderNo: orderNoInput ? orderNoInput.value : 'N/A',
                 orderDate: orderDateInput ? orderDateInput.value : '',
@@ -736,17 +772,17 @@
                 }))
             };
             const displayLocale = currentLanguage === 'tr' ? 'tr-TR' : 'en-US';
-            details.formattedOrderDate = formatDateForDisplay(details.orderDate, 'en-US');
-            details.displayOrderDate = formatDateForDisplay(details.orderDate, displayLocale);
-            details.formattedDeliveryDate = formatDateForDisplay(details.deliveryDate, 'en-US');
-            details.displayDeliveryDate = formatDateForDisplay(details.deliveryDate, displayLocale);
+            details.formattedOrderDate = formatDateForDisplay(details.orderDate, 'en-US'); // PDF/Word için her zaman en-US
+            details.displayOrderDate = formatDateForDisplay(details.orderDate, displayLocale); // E-posta için yerel
+            details.formattedDeliveryDate = formatDateForDisplay(details.deliveryDate, 'en-US'); // PDF/Word için her zaman en-US
+            details.displayDeliveryDate = formatDateForDisplay(details.deliveryDate, displayLocale); // E-posta için yerel
             return details;
         }
 
         function generatePrintContent(forPdfOrWord = false) {
             const details = getOrderDetails();
-            const langSet = translations[currentLanguage] || translations.tr;
-            const companyNamePrint = translations['en'].footerCompanyName;
+            const langSet = translations[currentLanguage] || translations.en;
+            const companyNamePrint = translations['en'].footerCompanyName; // PDF/Word için her zaman İngilizce şirket adı
             const captureContainerWidth = forPdfOrWord ? '210mm' : '195mm';
             const containerPadding = forPdfOrWord ? '10mm' : '0';
             let logoSrcToUse = '';
@@ -769,15 +805,25 @@
                     const productName = item.name;
                     const productQtyText = item.quantity;
                     let lbQty = '-'; let pcsQty = '-';
-                    const lbRegex = new RegExp(`([\\d\\.]+)\\s*(${langSet.summaryUnitLB.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}|LB)`);
-                    const pcsRegex = new RegExp(`(\\d+)\\s*(${langSet.summaryUnitPCS.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}|PCS|Adet)`);
-                    const lbMatch = productQtyText.match(lbRegex); if (lbMatch) lbQty = lbMatch[1];
-                    const pcsMatch = productQtyText.match(pcsRegex); if (pcsMatch) pcsQty = pcsMatch[1];
-                    if (lbMatch && productQtyText.includes(langSet.summaryUnitManual)) lbQty += " (M)";
-                    if (pcsMatch && productQtyText.includes(langSet.summaryUnitManual)) pcsQty += " (M)";
+                    // PDF/Word için birimler her zaman İngilizce olacaksa, regex'ler 'en' dil setine göre ayarlanmalı.
+                    // Şimdilik mevcut dilin birimlerini kullanıyor.
+                    const lbRegexEn = new RegExp(`([\\d\\.]+)\\s*(LB)`); // İngilizce LB için
+                    const pcsRegexEn = new RegExp(`(\\d+)\\s*(PCS)`);   // İngilizce PCS için
+                    const manualRegexEn = new RegExp(`\\(M\\)`);          // İngilizce (M) için
+
+
+                    const lbMatch = productQtyText.match(new RegExp(`([\\d\\.]+)\\s*(${translations.en.summaryUnitLB}|${translations.tr.summaryUnitLB})`));
+                    if (lbMatch) lbQty = lbMatch[1];
+
+                    const pcsMatch = productQtyText.match(new RegExp(`(\\d+)\\s*(${translations.en.summaryUnitPCS}|${translations.tr.summaryUnitPCS})`));
+                    if (pcsMatch) pcsQty = pcsMatch[1];
+
+                    if (lbMatch && (productQtyText.includes(translations.en.summaryUnitManual) || productQtyText.includes(translations.tr.summaryUnitManual))) lbQty += " (M)";
+                    if (pcsMatch && (productQtyText.includes(translations.en.summaryUnitManual) || productQtyText.includes(translations.tr.summaryUnitManual))) pcsQty += " (M)";
+
                     productRowsHtml += `<tr><td class="product-name-col">${productName}</td><td class="qty-col">${lbQty}</td><td class="qty-col">${pcsQty}</td></tr>`;
                 });
-            } else { productRowsHtml = '<tr><td colspan="3" style="text-align:center;">No products ordered.</td></tr>'; }
+            } else { productRowsHtml = `<tr><td colspan="3" style="text-align:center;">No products ordered.</td></tr>`; }
 
             const printHTML = `
                 <div id="captureForPdfOrWord" style="width:${captureContainerWidth};margin:0 auto;padding:${containerPadding};background:white;font-family:Arial,sans-serif;font-size:9pt;color:#000;box-sizing:border-box;">
@@ -805,8 +851,8 @@
                         <tbody style="font-size:8.5pt;">${productRowsHtml.replace(/<td/g,'<td style="border:1px solid #ccc;padding:4px 6px;text-align:left;vertical-align:top;box-sizing:border-box;word-break:break-word;"').replace(/class="product-name-col"/g,'style="width:50%;"').replace(/class="qty-col"/g,'style="width:25%;text-align:center;"')}</tbody>
                     </table>
                     <div class="print-totals" style="margin-top:10px;padding-top:10px;border-top:1px solid #666;font-size:9pt;box-sizing:border-box;">
-                        <p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested LB:</span><span style="margin-left:15px;">${details.totalLbText.replace(langSet.summaryUnitLB,"LB")}</span></p>
-                        <p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested PCS:</span><span style="margin-left:15px;">${details.totalPcsText.replace(langSet.summaryUnitPCS,"PCS")}</span></p>
+                        <p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested LB:</span><span style="margin-left:15px;">${details.totalLbText.replace(langSet.summaryUnitLB,translations.en.summaryUnitLB)}</span></p>
+                        <p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested PCS:</span><span style="margin-left:15px;">${details.totalPcsText.replace(langSet.summaryUnitPCS,translations.en.summaryUnitPCS)}</span></p>
                     </div>
                 </section>
                 <section class="print-section" style="margin-bottom:10px;box-sizing:border-box;">
@@ -830,6 +876,7 @@
             }
             return printHTML;
         }
+
 
         async function generatePdfBlob() {
             if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
@@ -859,22 +906,41 @@
                     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
                 } else {
                     let numPages = Math.ceil(pdfHeight / pdf.internal.pageSize.getHeight());
-                    let yPosition = 0;
+                    let yPositionOnCanvas = 0; // Y eksenindeki konumu tam tuval üzerinde takip et
+                    const canvasHeight = imgProps.height; // Tam tuvalin yüksekliği
+                    const pageHeightOnCanvas = (pdf.internal.pageSize.getHeight() / pdfWidth) * imgProps.width; // Bir PDF sayfasının tuval üzerindeki yüksekliği
+
                     for (let i = 0; i < numPages; i++) {
                         if (i > 0) pdf.addPage();
-                        let sliceHeightOnCanvas = (pdf.internal.pageSize.getHeight() / pdfWidth) * imgProps.width;
-                        sliceHeightOnCanvas = Math.min(sliceHeightOnCanvas, imgProps.height - yPosition);
+                        
+                        // Kesilecek parçanın yüksekliğini hesapla
+                        let sliceHeightOnCanvas = Math.min(pageHeightOnCanvas, canvasHeight - yPositionOnCanvas);
+                        
+                        if (sliceHeightOnCanvas <= 0) break; // Kesilecek bir şey kalmadıysa döngüden çık
+
                         const tempPageCanvas = document.createElement('canvas');
-                        tempPageCanvas.width = imgProps.width; tempPageCanvas.height = sliceHeightOnCanvas;
+                        tempPageCanvas.width = imgProps.width;
+                        tempPageCanvas.height = sliceHeightOnCanvas;
                         const tempPageCtx = tempPageCanvas.getContext('2d');
-                        const fullImage = new Image(); fullImage.src = imgData;
-                        await new Promise(resolve => { if (fullImage.complete) resolve(); else fullImage.onload = resolve; });
-                        tempPageCtx.drawImage(fullImage, 0, yPosition, imgProps.width, sliceHeightOnCanvas, 0, 0, imgProps.width, sliceHeightOnCanvas);
+                        
+                        const fullImage = new Image();
+                        fullImage.src = imgData; // imgData tam tuvalin resmidir
+                        // Tam resmin yüklenmesini bekle (genellikle zaten yüklüdür ama emin olmak için)
+                        await new Promise(resolve => { if (fullImage.complete && fullImage.naturalWidth !== 0) resolve(); else fullImage.onload = resolve; fullImage.onerror = resolve; });
+
+                        // Tam resimden ilgili parçayı kesip geçici tuvale çiz
+                        tempPageCtx.drawImage(fullImage, 
+                                              0, yPositionOnCanvas, // Kaynak (tam resim) x, y
+                                              imgProps.width, sliceHeightOnCanvas, // Kaynak genişlik, yükseklik
+                                              0, 0, // Hedef (geçici tuval) x, y
+                                              imgProps.width, sliceHeightOnCanvas); // Hedef genişlik, yükseklik
+                        
                         const pageImgData = tempPageCanvas.toDataURL('image/png');
                         const pagePdfHeight = (sliceHeightOnCanvas * pdfWidth) / imgProps.width;
                         pdf.addImage(pageImgData, 'PNG', 0, 0, pdfWidth, pagePdfHeight);
-                        yPosition += sliceHeightOnCanvas;
-                        if (yPosition >= imgProps.height) break;
+                        
+                        yPositionOnCanvas += sliceHeightOnCanvas;
+                        if (yPositionOnCanvas >= canvasHeight) break;
                     }
                 }
                 return pdf.output('blob');
@@ -885,11 +951,12 @@
             }
         }
 
+
         async function generateAndDownloadWord() {
             if (typeof htmlDocx === 'undefined' || typeof saveAs === 'undefined') {
                 console.error("html-docx-js veya FileSaver kütüphanesi yüklenemedi."); alert("Word oluşturma kütüphaneleri yüklenemedi."); return;
             }
-            const langSet = translations[currentLanguage] || translations.tr;
+            const langSet = translations[currentLanguage] || translations.en;
             shareModalMessage.textContent = "Word dosyası oluşturuluyor...";
             shareButtonsContainer.style.display = 'none';
             try {
@@ -897,7 +964,7 @@
                 const tempDiv = document.createElement('div'); tempDiv.innerHTML = contentHtml;
                 const converted = htmlDocx.asBlob(tempDiv.querySelector('#captureForPdfOrWord').innerHTML, {
                     orientation: 'portrait',
-                    margins: { top: 720, right: 720, bottom: 720, left: 720, header: 0, footer: 0, gutter: 0 }
+                    margins: { top: 720, right: 720, bottom: 720, left: 720, header: 0, footer: 0, gutter: 0 } // 1 inç = 720 twips
                 });
                 saveAs(converted, `Siparis_${orderNoInput.value || 'form'}.docx`);
                 shareModalMessage.textContent = langSet.shareModalMessageReady;
@@ -911,7 +978,7 @@
 
         function getOrderSummaryAsText() {
             const details = getOrderDetails(true);
-            const langSet = translations[currentLanguage] || translations.tr;
+            const langSet = translations[currentLanguage] || translations.en;
             let text = `${langSet.orderFormTitle}\n------------------------------------\n`;
             text += `${langSet.orderNoLabel} ${details.orderNo}\n`;
             text += `${langSet.orderDateLabel} ${details.displayOrderDate}\n`;
@@ -932,12 +999,12 @@
 
         function initializeMainForm(){
             if (mainFormInitialized) return;
-            assignMainFormDOMElements();
+            assignMainFormDOMElements(); // DOM elementlerini ata
             mainFormInitialized = true;
 
             populateBranchSelect();
-            loadFormSettings();
-            setInitialDates();
+            loadFormSettings(); // Tarihler hariç diğer ayarları yükle
+            setInitialDates();  // Tarihleri isteklere göre ayarla
             setFooterInfo();
             setDeveloperSignature();
             renderProducts();
@@ -954,13 +1021,17 @@
             const day = now.getDate().toString().padStart(2, '0');
             if(orderNoInput) orderNoInput.value = `S-${year}${month}${day}-${orderCounter.toString().padStart(3, '0')}-${(Math.floor(Math.random() * 900) + 100)}`;
 
+            // Form ayarlarını localStorage'a kaydetmek için event listener'lar
             if(orderSenderNameInput) orderSenderNameInput.addEventListener('input', () => saveFormSetting(LS_SENDER_NAME, orderSenderNameInput.value));
             if(contactPhoneInput) contactPhoneInput.addEventListener('input', () => saveFormSetting(LS_CONTACT_PHONE, contactPhoneInput.value));
             if(branchSelect) branchSelect.addEventListener('change', () => saveFormSetting(LS_BRANCH_SELECT_VALUE, branchSelect.value));
             if(manualBranchInput) manualBranchInput.addEventListener('input', () => saveFormSetting(LS_MANUAL_BRANCH_VALUE, manualBranchInput.value));
             if(manualBranchCheckbox) manualBranchCheckbox.addEventListener('change', () => { updateBranchInputState(); saveFormSetting(LS_MANUAL_BRANCH_ENABLED, manualBranchCheckbox.checked); });
+            
+            // Tarih değişikliklerini localStorage'a kaydetmek için event listener'lar
             if(orderDateInput) orderDateInput.addEventListener('change', () => saveFormSetting(LS_ORDER_DATE, orderDateInput.value));
             if(deliveryDateInput) deliveryDateInput.addEventListener('change', () => saveFormSetting(LS_DELIVERY_DATE, deliveryDateInput.value));
+
 
             if (mainFormLangTrBtn) mainFormLangTrBtn.addEventListener('click', () => setLanguage('tr'));
             if (mainFormLangEnBtn) mainFormLangEnBtn.addEventListener('click', () => setLanguage('en'));
@@ -977,7 +1048,7 @@
 
             if (shareButton) shareButton.addEventListener('click', async function() {
                 if(!mainFormInitialized || !validateOrderForm()) return;
-                const langSet = translations[currentLanguage] || translations.tr;
+                const langSet = translations[currentLanguage] || translations.en;
                 shareOptionsModal.style.display = 'flex';
                 shareModalMessage.textContent = langSet.shareModalMessage;
                 shareButtonsContainer.style.display = 'none';
@@ -1008,21 +1079,22 @@
 
         function onPageLoad() {
             console.log('DOM fully loaded and parsed.');
-            assignLoginDOMElements();
-            loadLanguage();
-            loadRememberMe();
+            assignLoginDOMElements(); // Önce login DOM elementlerini ata
+            loadLanguage();         // Dili yükle (varsayılan EN)
+            loadRememberMe();       // "Beni Hatırla" ayarını yükle
 
-            if (!checkAuth()) {
+            if (!checkAuth()) { // Eğer kimlik doğrulanmamışsa, login event'lerini ayarla
                 if (loginButton) loginButton.addEventListener('click', handleLogin);
                 if (passwordInput) passwordInput.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); handleLogin(); }});
                 if (usernameInput) usernameInput.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); if(passwordInput) passwordInput.focus(); }});
             }
+            // Eğer checkAuth() true dönerse, initializeMainForm() zaten içinde çağrılır.
         }
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', onPageLoad);
         } else {
-            onPageLoad();
+            onPageLoad(); // DOM zaten yüklenmişse doğrudan çalıştır
         }
 
         // PWA Service Worker Kaydı
@@ -1031,7 +1103,7 @@
             console.log('PWA Script: Service Worker API is available in navigator.');
             window.addEventListener('load', () => {
                 console.log('PWA Script: Window (including all resources) fully loaded. Registering Service Worker from ./sw.js');
-                navigator.serviceWorker.register('./sw.js', { scope: './' }) // GitHub Pages'da /key/ altındaysa scope: './' genellikle doğrudur.
+                navigator.serviceWorker.register('./sw.js', { scope: './' })
                     .then((registration) => {
                         console.log('PWA Script: Service Worker registered successfully! Scope is: ', registration.scope);
                         registration.onupdatefound = () => {
