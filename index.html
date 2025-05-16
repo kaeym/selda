@@ -685,44 +685,21 @@
 
         function setInitialDates() {
             if(!mainFormInitialized || !orderDateInput || !deliveryDateInput) return;
-
-            // 1. Sipariş Tarihi (orderDateInput):
-            // Her zaman sayfa yüklendiğinde o anki güncel tarih ile başlasın.
-            // Kullanıcı bu tarihi manuel olarak değiştirdiğinde, bu değişiklik
-            // initializeMainForm içindeki 'change' event listener tarafından LS_ORDER_DATE anahtarıyla localStorage'a kaydedilecektir.
-            orderDateInput.value = formatDateForInput(new Date());
-
-            // 2. Talep Edilen Teslim Tarihi (deliveryDateInput):
-            // Bu alan için mevcut davranış korunacak: Eğer localStorage'da kayıtlı bir değer varsa o kullanılacak,
-            // yoksa sipariş tarihinden (ki bu artık güncel tarih oldu) bir gün sonrası hesaplanıp
-            // hem input'a atanacak hem de localStorage'a (LS_DELIVERY_DATE) kaydedilecek.
-            let savedDeliveryDate = null;
+            let savedOrderDate = null, savedDeliveryDate = null;
             try {
+                savedOrderDate = localStorage.getItem(LS_ORDER_DATE);
                 savedDeliveryDate = localStorage.getItem(LS_DELIVERY_DATE);
-            } catch (e) { console.warn("localStorage teslim tarihi okuma hatası:", e); }
+            } catch (e) { console.warn("localStorage tarih okuma hatası:", e); }
 
-            if (savedDeliveryDate && savedDeliveryDate !== "undefined" && savedDeliveryDate !== "null") {
-                // Eğer localStorage'da geçerli bir kayıtlı teslim tarihi varsa onu kullan.
-                deliveryDateInput.value = savedDeliveryDate;
-            } else {
-                // Eğer localStorage'da kayıtlı teslim tarihi yoksa veya geçersizse,
-                // o anki sipariş tarihinden (ki bu üst satırlarda güncel tarih olarak ayarlandı) bir gün sonrasını ata.
+            orderDateInput.value = savedOrderDate || formatDateForInput(new Date());
+            if(!savedOrderDate) saveFormSetting(LS_ORDER_DATE, orderDateInput.value);
+
+            if (!savedDeliveryDate) {
                 let orderDateVal;
-                // orderDateInput.value'dan tarihi parse et
-                const orderDateParts = orderDateInput.value.split('-');
-                if (orderDateParts.length === 3) {
-                    orderDateVal = new Date(parseInt(orderDateParts[0]), parseInt(orderDateParts[1]) - 1, parseInt(orderDateParts[2]));
-                }
-
-                // orderDateVal'ın geçerli olup olmadığını kontrol et, değilse yine de new Date() kullan (temel olarak güncel tarih).
-                const baseDateForDelivery = (orderDateVal && !isNaN(orderDateVal.getTime())) ? orderDateVal : new Date();
-                const tomorrow = new Date(baseDateForDelivery);
-                tomorrow.setDate(baseDateForDelivery.getDate() + 1);
+                if (orderDateInput.value) { const parts = orderDateInput.value.split('-'); if (parts.length === 3) orderDateVal = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));}
+                const baseDate = (orderDateVal && !isNaN(orderDateVal.getTime())) ? orderDateVal : new Date();
+                const tomorrow = new Date(baseDate); tomorrow.setDate(baseDate.getDate() + 1);
                 deliveryDateInput.value = formatDateForInput(tomorrow);
-
-                // Bu hesaplanan ilk varsayılan teslim tarihi localStorage'a kaydedilsin.
-                // Kullanıcı daha sonra manuel olarak değiştirirse, 'change' event listener'ı
-                // LS_DELIVERY_DATE değerini güncelleyecektir.
                 saveFormSetting(LS_DELIVERY_DATE, deliveryDateInput.value);
             } else { deliveryDateInput.value = savedDeliveryDate; }
         }
