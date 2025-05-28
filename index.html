@@ -344,37 +344,41 @@
                  margin-left: 0;
             }
         }
-        /* Madde 1: Çıktıda logo boyutu */
         @media print {
-            body {margin:0!important;padding:0!important;background-color:var(--white);font-family:Arial,sans-serif;font-size:9pt;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+            body {margin:0!important;padding:0!important;background-color:var(--white);font-family:Arial,sans-serif;font-size:8pt;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
             #loginScreen,.page-wrapper,.order-summary-panel,.page-footer,.buttons-area,.main-title-button,.language-selector,.developer-signature,#shareOptionsModal{display:none!important}
             #printAreaContainer{display:block!important;margin:0 auto!important;padding:0!important;width:100%}
-            #printAreaContent{margin:0;padding:0}
+            #printAreaContent{margin:0;padding:0; display: flex; flex-direction: column; min-height: 98vh;} /* Flex container for footer push */
             #printAreaContent *,#printAreaContent *::before,#printAreaContent *::after{box-sizing:border-box}
-            .print-header{text-align:center;margin-bottom:15px;border-bottom:2px solid #000;padding-bottom:8px}
-            .print-logo{max-width:100px;height:auto;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;} /* Logo boyutu ayarlandı */
-            #printAreaContent h1{font-size:14pt;font-weight:700;margin-top:5px;margin-bottom:10px;text-align:center;color:#333}
-            .print-order-info{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px;font-size:9pt}
+            .print-header{text-align:center;margin-bottom:10px;border-bottom:1.5px solid #000;padding-bottom:6px}
+            .print-logo{max-width:80px !important; height:auto !important;margin-bottom:6px;display:block;margin-left:auto;margin-right:auto;}
+            #printAreaContent h1{font-size:13pt;font-weight:700;margin-top:4px;margin-bottom:8px;text-align:center;color:#333}
+            .print-order-info{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:4px;font-size:8.5pt}
             .print-order-info span{margin:1px 0}
-            .print-section{margin-bottom:10px}
-            #printAreaContent h2{font-size:11pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:3px;margin-top:15px;margin-bottom:8px;text-align:left;color:#333}
-            .print-info-compact .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px 15px;font-size:9pt}
-            .print-info-compact .info-grid p{margin:2px 0}
-            .print-product-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:8.5pt}
-            .print-product-table th,.print-product-table td{border:1px solid #ccc;padding:4px 6px;text-align:left;word-break:break-word;overflow-wrap:break-word}
+            .print-section{margin-bottom:8px}
+            #printAreaContent h2{font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333}
+            .print-info-compact .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px 12px;font-size:8.5pt}
+            .print-info-compact .info-grid p{margin:1.5px 0}
+            .print-product-table{width:100%;border-collapse:collapse;margin-top:6px;font-size:8pt}
+            .print-product-table th,.print-product-table td{border:1px solid #ccc;padding:3px 5px;text-align:left;word-break:break-word;overflow-wrap:break-word}
             .print-product-table th{background-color:#f0f0f0;font-weight:700;text-align:center}
             .print-product-table td{vertical-align:top}
-            .print-product-table .product-name-col{width:auto;} /* Dinamik genişlik */
-            .print-product-table .unit-col{width:auto;text-align:center;} /* Dinamik genişlik */
-            .print-totals{margin-top:10px;padding-top:10px;border-top:1px solid #666;font-size:9pt}
-            .print-totals p{margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline}
-            .print-totals p span:first-child{margin-right:15px}
-            .print-notes{border:none;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:8px 0;min-height:40px;margin-top:5px;font-size:8.5pt;white-space:pre-wrap;word-break:break-word}
-            .print-signatures-footer-group{page-break-inside:avoid!important;margin-top:auto}
-            .print-signatures{margin-top:30px;display:flex;justify-content:space-between;font-size:8.5pt;align-items:flex-end}
+            .print-product-table .product-name-col{width:auto;}
+            .print-product-table .unit-col{width:auto;text-align:center;}
+            .print-totals{margin-top:8px;padding-top:8px;border-top:1px solid #666;font-size:8.5pt}
+            .print-totals p{margin:3px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline}
+            .print-totals p span:first-child{margin-right:12px}
+            .print-notes-signatures-footer-group {
+                page-break-inside: avoid !important;
+                margin-top: auto; 
+                padding-top: 10px;
+                flex-shrink: 0; /* Prevent shrinking if content is short */
+            }
+            .print-notes{border:none;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:6px 0;min-height:30px;margin-top:4px;font-size:8pt;white-space:pre-wrap;word-break:break-word}
+            .print-signatures{margin-top:25px;display:flex;justify-content:space-between;font-size:8pt;align-items:flex-end}
             .signature-block-print{width:45%;text-align:center}
-            .signature-block-print p{margin:0;padding-top:15px;border-top:1px solid #666}
-            .print-footer{text-align:center;margin-top:20px;padding-top:8px;border-top:1px dashed #aaa;font-size:7.5pt;color:#555}
+            .signature-block-print p{margin:0;padding-top:12px;border-top:1px solid #666}
+            .print-footer{text-align:center;margin-top:15px;padding-top:6px;border-top:1px dashed #aaa;font-size:7pt;color:#555}
             .print-section,.print-product-table tbody tr{page-break-inside:avoid}
             @page{size:A4 portrait;margin:10mm}
         }
@@ -506,7 +510,7 @@
 
         const CORRECT_USERNAME = "Kitchen";
         const CORRECT_PASSWORD = "S8246";
-        const AUTH_KEY_SESSION = 'seldaOrderForm_authenticated_v22_manual_login_final'; // Veya yeni versiyon
+        const AUTH_KEY_SESSION = 'seldaOrderForm_authenticated_v23_print_final';
         const LS_REMEMBER_USER = 'seldaOrderForm_rememberUser_v2';
         const LS_REMEMBERED_USERNAME = 'seldaOrderForm_rememberedUsername_v2';
         const LS_REMEMBERED_PASSWORD = 'seldaOrderForm_rememberedPassword_v2';
@@ -742,18 +746,18 @@
                         rememberMeCheckbox.checked = true;
                     }
 
-                    if(usernameInput.value && passwordInput.value) { // Her ikisi de doluysa butona odaklan
+                    if(usernameInput.value && passwordInput.value) {
                         if(loginButton) loginButton.focus();
-                    } else if (usernameInput.value && !passwordInput.value) { // Sadece username doluysa password'a odaklan
+                    } else if (usernameInput.value && !passwordInput.value) {
                         if(passwordInput) passwordInput.focus();
-                    } else { // Hiçbiri dolu değilse (veya sadece password doluysa - ki bu durum olmamalı) username'e odaklan
+                    } else {
                          if(usernameInput) usernameInput.focus();
                     }
                 } else {
                     if (rememberMeCheckbox) {
                         rememberMeCheckbox.checked = false;
                     }
-                    if (usernameInput) usernameInput.focus(); // Hiçbir şey hatırlanmıyorsa username'e focus
+                    if (usernameInput) usernameInput.focus();
                 }
             } catch (e) {
                 console.warn("localStorage 'Beni Hatırla' okuma başarısız:", e);
@@ -831,16 +835,17 @@
             if (parts.length === 3) {
                 const dateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
                 if (!isNaN(dateObj.getTime())) {
-                    return dateObj.toLocaleDateString(locale, { month: '2-digit', day: '2-digit', year: 'numeric' }); // AA-GG-YYYY
+                     // Madde 2: Dosya adı için tarih formatı (AA-GG-YYYY)
+                    return dateObj.toLocaleDateString(locale, { month: '2-digit', day: '2-digit', year: 'numeric' });
                 }
             }
             return 'N/A';
         }
         
-        function formatDateForFileName(date) { // YYYY-MM-DD formatı için
-            const year = date.getFullYear();
+        function formatDateForFileName(date) {
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             const day = date.getDate().toString().padStart(2, '0');
+            const year = date.getFullYear();
             return `${month}-${day}-${year}`; // AA-GG-YYYY
         }
 
@@ -922,7 +927,7 @@
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="4"> 4</label>
                                 <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
                             </div>`;
-                        } else {
+                        } else { // Diğer DESSERT ürünleri
                             column1Html = `
                             <div class="quantity-options" data-unit="Adet">
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="5"> 5</label>
@@ -1273,10 +1278,11 @@
                 }))
             };
             const displayLocale = currentLanguage === 'tr' ? 'tr-TR' : 'en-US';
-            details.formattedOrderDate = formatDateForDisplay(details.orderDate, 'en-US'); // PDF/Word için her zaman en-US
-            details.displayOrderDate = formatDateForDisplay(details.orderDate, displayLocale); // E-posta için yerel
-            details.formattedDeliveryDate = formatDateForDisplay(details.deliveryDate, 'en-US'); // PDF/Word için her zaman en-US
-            details.displayDeliveryDate = formatDateForDisplay(details.deliveryDate, displayLocale); // E-posta için yerel
+            // Tarih formatı (AA-GG-YYYY)
+            details.formattedOrderDate = formatDateForDisplay(details.orderDate, 'en-US');
+            details.displayOrderDate = formatDateForDisplay(details.orderDate, displayLocale);
+            details.formattedDeliveryDate = formatDateForDisplay(details.deliveryDate, 'en-US');
+            details.displayDeliveryDate = formatDateForDisplay(details.deliveryDate, displayLocale);
             return details;
         }
 
@@ -1383,51 +1389,51 @@
 
 
             const printHTML = `
-                <div id="captureForPdfOrWord" style="width:${captureContainerWidth};margin:0 auto;padding:${containerPadding};background:white;font-family:Arial,sans-serif;font-size:9pt;color:#000;box-sizing:border-box;">
+                <div id="captureForPdfOrWord" style="width:${captureContainerWidth};margin:0 auto;padding:${containerPadding};background:white;font-family:Arial,sans-serif;font-size:8pt;color:#000;box-sizing:border-box;">
                 <header class="print-header" style="box-sizing:border-box;">
-                    ${logoSrcToUse?`<img src="${logoSrcToUse}" alt="Selda Mediterranean Logo" class="print-logo" style="max-width: 80px; height: auto; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto;">`:''}
-                    <h1 style="font-size:14pt;font-weight:700;margin-top:5px;margin-bottom:10px;text-align:center;color:#333;">PRODUCT ORDER FORM</h1>
-                    <div class="print-order-info" style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px;font-size:9pt;box-sizing:border-box;">
+                    <img src="${logoSrcToUse}" alt="Selda Mediterranean Logo" class="print-logo" style="max-width: 80px; height: auto; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto;">
+                    <h1 style="font-size:13pt;font-weight:700;margin-top:4px;margin-bottom:8px;text-align:center;color:#333;">PRODUCT ORDER FORM</h1>
+                    <div class="print-order-info" style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:4px;font-size:8.5pt;box-sizing:border-box;">
                         <span style="margin:1px 0;"><strong>Order No:</strong> ${details.orderNo}</span>
                         <span style="margin:1px 0;"><strong>Order Date:</strong> ${details.formattedOrderDate}</span>
                     </div>
                 </header>
-                <section class="print-section" style="margin-bottom:10px;box-sizing:border-box;">
-                    <h2 style="font-size:11pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:3px;margin-top:15px;margin-bottom:8px;text-align:left;color:#333;">BRANCH INFORMATION</h2>
-                    <div class="print-info-compact"><div class="info-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:3px 15px;font-size:9pt;box-sizing:border-box;">
-                        <p style="margin:2px 0;"><strong>Branch Name:</strong> ${details.branchName}</p>
-                        <p style="margin:2px 0;"><strong>Authorized Person:</strong> ${details.senderName}</p>
-                        <p style="margin:2px 0;"><strong>Contact Phone:</strong> ${details.contactPhone}</p>
-                        <p style="margin:2px 0;"><strong>Requested Delivery Date:</strong> ${details.formattedDeliveryDate}</p>
+                <section class="print-section" style="margin-bottom:8px;box-sizing:border-box;">
+                    <h2 style="font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333;">BRANCH INFORMATION</h2>
+                    <div class="print-info-compact"><div class="info-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:2px 12px;font-size:8.5pt;box-sizing:border-box;">
+                        <p style="margin:1.5px 0;"><strong>Branch Name:</strong> ${details.branchName}</p>
+                        <p style="margin:1.5px 0;"><strong>Authorized Person:</strong> ${details.senderName}</p>
+                        <p style="margin:1.5px 0;"><strong>Contact Phone:</strong> ${details.contactPhone}</p>
+                        <p style="margin:1.5px 0;"><strong>Requested Delivery Date:</strong> ${details.formattedDeliveryDate}</p>
                     </div></div>
                 </section>
-                <section class="print-section" style="margin-bottom:10px;box-sizing:border-box;">
-                    <h2 style="font-size:11pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:3px;margin-top:15px;margin-bottom:8px;text-align:left;color:#333;">REQUESTED PRODUCTS</h2>
-                    <table class="print-product-table" style="width:100%;border-collapse:collapse;margin-top:8px;font-size:8.5pt;box-sizing:border-box;">
-                        <thead style="font-size:8.5pt;"><tr style="page-break-inside:avoid;">
+                <section class="print-section" style="margin-bottom:8px;box-sizing:border-box;">
+                    <h2 style="font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333;">REQUESTED PRODUCTS</h2>
+                    <table class="print-product-table" style="width:100%;border-collapse:collapse;margin-top:6px;font-size:8pt;box-sizing:border-box;">
+                        <thead style="font-size:8pt;"><tr style="page-break-inside:avoid;">
                            ${headerHtml}
                         </tr></thead>
-                        <tbody style="font-size:8.5pt;">${productRowsHtml.replace(/<td/g,'<td style="border:1px solid #ccc;padding:4px 6px;text-align:left;vertical-align:top;box-sizing:border-box;word-break:break-word;"')}</tbody>
+                        <tbody style="font-size:8pt;">${productRowsHtml.replace(/<td/g,'<td style="border:1px solid #ccc;padding:3px 5px;text-align:left;vertical-align:top;box-sizing:border-box;word-break:break-word;"')}</tbody>
                     </table>
-                    <div class="print-totals" style="margin-top:10px;padding-top:10px;border-top:1px solid #666;font-size:9pt;box-sizing:border-box;">
+                    <div class="print-totals" style="margin-top:8px;padding-top:8px;border-top:1px solid #666;font-size:8.5pt;box-sizing:border-box;">
                         ${totalsHtml}
                     </div>
                 </section>
-                <section class="print-section" style="margin-bottom:10px;box-sizing:border-box;">
-                    <h2 style="font-size:11pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:3px;margin-top:15px;margin-bottom:8px;text-align:left;color:#333;">NOTES</h2>
-                    <div class="print-notes" style="border:none;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:8px 0;min-height:40px;margin-top:5px;font-size:8.5pt;white-space:pre-wrap;word-break:break-word;box-sizing:border-box;">${details.generalNotes.replace(/\n/g,'<br>')}</div>
-                </section>
-                <div style="height:1.5em;page-break-before:auto;"></div>
-                <section class="print-signatures-footer-group" style="page-break-inside:avoid!important;margin-top:auto;box-sizing:border-box;">
-                    <div class="print-signatures" style="margin-top:30px;display:flex;justify-content:space-between;font-size:8.5pt;align-items:flex-end;box-sizing:border-box;">
-                        <div class="signature-block-print" style="width:45%;text-align:center;box-sizing:border-box;"><p style="margin:0;padding-top:15px;border-top:1px solid #666;">Delivered By (Signature)</p></div>
-                        <div class="signature-block-print" style="width:45%;text-align:center;box-sizing:border-box;"><p style="margin:0;padding-top:15px;border-top:1px solid #666;">Received By (Signature)</p></div>
+                <div class="print-notes-signatures-footer-group">
+                    <section class="print-section" style="margin-bottom:8px;box-sizing:border-box;">
+                        <h2 style="font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333;">NOTES</h2>
+                        <div class="print-notes" style="border:none;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:6px 0;min-height:30px;margin-top:4px;font-size:8pt;white-space:pre-wrap;word-break:break-word;box-sizing:border-box;">${details.generalNotes.replace(/\n/g,'<br>')}</div>
+                    </section>
+                    <div style="height:1em;page-break-before:auto;"></div>
+                    <div class="print-signatures" style="margin-top:25px;display:flex;justify-content:space-between;font-size:8pt;align-items:flex-end;box-sizing:border-box;">
+                        <div class="signature-block-print" style="width:45%;text-align:center;box-sizing:border-box;"><p style="margin:0;padding-top:12px;border-top:1px solid #666;">Delivered By (Signature)</p></div>
+                        <div class="signature-block-print" style="width:45%;text-align:center;box-sizing:border-box;"><p style="margin:0;padding-top:12px;border-top:1px solid #666;">Received By (Signature)</p></div>
                     </div>
-                    <footer class="print-footer" style="text-align:center;margin-top:20px;padding-top:8px;border-top:1px dashed #aaa;font-size:7.5pt;color:#555;box-sizing:border-box;">
+                    <footer class="print-footer" style="text-align:center;margin-top:15px;padding-top:6px;border-top:1px dashed #aaa;font-size:7pt;color:#555;box-sizing:border-box;">
                         <p>${companyNamePrint}</p>
                         <p>Address: ${COMPANY_ADDRESS_PRINT} | Phone: ${COMPANY_PHONE_PRINT}</p>
                     </footer>
-                </section>
+                </div>
                 </div>`;
             if(document.getElementById('printAreaContent') && !forPdfOrWord) {
                 document.getElementById('printAreaContent').innerHTML = printHTML;
@@ -1515,7 +1521,7 @@
                     margins: { top: 720, right: 720, bottom: 720, left: 720, header: 0, footer: 0, gutter: 0 }
                 });
                 const today = new Date();
-                const formattedDate = formatDateForFileName(today); // AA-GG-YYYY
+                const formattedDate = formatDateForFileName(today);
                 const branchName = getCurrentBranchName().replace(/[^a-zA-Z0-9\s-]/g, '').replace(/\s+/g, '_');
                 const fileName = `${branchName}_${formattedDate}.docx`;
                 saveAs(converted, fileName);
@@ -1617,7 +1623,7 @@
                 let pdfFileForSharing = null;
 
                 const today = new Date();
-                const formattedDate = formatDateForFileName(today); // AA-GG-YYYY
+                const formattedDate = formatDateForFileName(today);
                 const branchName = getCurrentBranchName().replace(/[^a-zA-Z0-9\s-]/g, '').replace(/\s+/g, '_');
                 const baseFileName = `${branchName}_${formattedDate}`;
 
