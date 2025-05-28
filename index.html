@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="tr"> <!-- Bu etiket setLanguage fonksiyonu tarafından güncellenecek -->
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
-    <title>Selda Mediterranean - Product Order Form</title> <!-- Bu başlık setLanguage fonksiyonu tarafından güncellenecek -->
+    <title>Selda Mediterranean - Product Order Form</title>
 
-    <!-- PWA Manifest, Tema ve İkonlar -->
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#28a745">
     <link rel="apple-touch-icon" href="./apple-touch-icon.png">
@@ -13,11 +12,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="description" content="Selda Mediterranean ürün sipariş formu uygulaması.">
 
-    <!-- Favicon -->
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
 
-    <!-- Kütüphaneler -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
@@ -25,117 +22,348 @@
 
     <style>
         :root {
-            --primary-color: #28a745;
-            --banner-bg-color: #5cb85c;
-            --secondary-color: #6c757d;
-            --light-gray: #f4f7f6;
-            --dark-gray: #333;
+            --primary-color: #007AFF;
+            --banner-bg-color: #F2F2F7;
+            --banner-text-color: #1D1D1F;
+            --secondary-color: #8A8A8E;
+            --light-gray: #F2F2F7;
+            --medium-gray: #E5E5EA;
+            --dark-gray: #1D1D1F;
             --white: #fff;
-            --border-color: #dee2e6;
-            --border-radius-sm: 4px;
-            --border-radius-md: 6px;
+            --border-color: #D1D1D6;
+            --border-radius-sm: 5px;
+            --border-radius-md: 7px;
             --border-radius-lg: 10px;
-            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --input-bg-disabled: #e9ecef;
-            --summary-total-bg: #f0f0f0;
-            --button-blue-original: #007bff;
-            --button-blue-original-hover: #0056b3;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            --input-bg-disabled: #f5f5f5;
+            --summary-total-bg: #f9f9f9;
+            --macos-control-bg: #fff;
+            --macos-control-border: #C6C6C8;
+            --macos-control-hover-bg: #F5F5F5;
+            --macos-focus-ring: rgba(40, 167, 69, 0.25);
+            --original-green: #28a745;
+            --original-green-darker: #1e7e34;
+            --macos-section-header-bg: #F7F7F7;
+            --macos-section-header-text: #333;
+            --macos-section-header-border: #E0E0E0;
         }
         body {font-family: var(--font-family); margin: 0; padding: 0; background-color: var(--light-gray); color: var(--dark-gray); display: flex; flex-direction: column; align-items: center; min-height: 100vh;}
         #loginScreen {position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 1; visibility: visible; transition: opacity 0.5s ease, visibility 0.5s ease; overflow-y: auto;}
         #loginScreen.hidden {opacity: 0; visibility: hidden; pointer-events: none;}
         .login-container {background-color: var(--white); padding: 30px 40px; border-radius: var(--border-radius-lg); box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center; width: 100%; max-width: 360px; box-sizing: border-box; margin: 20px;}
-        #loginScreen h2 {color: var(--dark-gray); margin-top: 0; margin-bottom: 25px; font-size: 1.7em;}
+        #loginScreen h2 {color: var(--dark-gray); margin-top: 0; margin-bottom: 25px; font-size: 1.7em; font-weight: 600;}
         #loginScreen input[type="text"],
-        #loginScreen input[type="password"] {width: calc(100% - 22px); padding: 12px 10px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); font-size: 1em; box-sizing: border-box;}
+        #loginScreen input[type="password"] {
+            width: calc(100% - 22px); padding: 12px 10px; margin-bottom: 15px;
+            border: 1px solid var(--border-color); border-radius: var(--border-radius-sm);
+            font-size: 1em; box-sizing: border-box; background-color: var(--macos-control-bg);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
         #loginScreen input[type="text"]:focus,
-        #loginScreen input[type="password"]:focus {border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);}
+        #loginScreen input[type="password"]:focus {
+            border-color: var(--original-green); outline: none;
+            box-shadow: 0 0 0 3px var(--macos-focus-ring);
+        }
         .remember-me-container { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 15px; font-size: 0.9em; }
-        .remember-me-container input[type="checkbox"] { margin-right: 8px; transform: scale(1.1); }
+        .remember-me-container input[type="checkbox"] { margin-right: 8px; transform: scale(1.1); accent-color: var(--original-green);}
         .remember-me-container label { cursor: pointer; color: #555; }
-        #loginScreen button {background-color: var(--primary-color); color: var(--white); border: none; padding: 12px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 1.05em; font-weight: bold; margin-top: 10px; border-radius: var(--border-radius-sm); cursor: pointer; transition: background-color 0.3s ease; width: 100%;}
-        #loginScreen button:hover {background-color: #1e7e34;}
+        #loginScreen button {
+            background-color: var(--original-green);
+            color: var(--white); border: none;
+            padding: 12px 20px; text-align: center; text-decoration: none; display: inline-block;
+            font-size: 1.05em; font-weight: bold; margin-top: 10px; border-radius: var(--border-radius-sm);
+            cursor: pointer; transition: background-color 0.3s ease; width: 100%;
+        }
+        #loginScreen button:hover {background-color: var(--original-green-darker);}
+        #loginScreen button:active {background-color: #1a6c2c;}
         .login-error-message {color: #dc3545; font-size: 0.9em; margin-top: 10px; min-height: 1.2em;}
+
         .page-wrapper {display: flex; flex-direction: column; width: 100%; max-width: 1800px; padding: 20px; box-sizing: border-box; flex-grow: 1;}
         @media (min-width: 992px) {.page-wrapper {flex-direction: row; align-items: flex-start; justify-content: center;}}
         .main-content {flex-grow: 1; width: 100%;}
-        .container {background-color: var(--white); padding: 30px 40px; border-radius: var(--border-radius-lg); box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box;}
+        .container {background-color: var(--white); padding: 25px 35px; border-radius: var(--border-radius-lg); box-shadow: 0 6px 18px rgba(0,0,0,0.08); width: 100%; box-sizing: border-box;}
         .page-header {text-align: center; margin-bottom: 20px; position: relative;}
-        .page-header img {max-width: 160px; height: auto;}
-        .language-selector {position: absolute; top: 5px; right: 5px; display: flex; gap: 5px;}
-        .language-selector button {background-color: var(--secondary-color); color: var(--white); border: none; padding: 6px 9px; border-radius: var(--border-radius-sm); cursor: pointer; font-size: 0.8em; font-weight: bold; transition: background-color 0.2s;}
-        .language-selector button:hover,
-        .language-selector button.active {background-color: var(--primary-color);}
-        .main-title-button {background-color: var(--banner-bg-color); color: var(--white); padding: 15px; border-radius: var(--border-radius-md); text-align: center; font-size: 1.6em; font-weight: bold; margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-transform: uppercase;}
-        .section-title {background-color: var(--secondary-color); color: var(--white); padding: 10px 14px; border-radius: var(--border-radius-md); margin-top: 20px; margin-bottom: 0; font-size: 1.1em; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0; transition: background-color 0.3s ease;}
-        .section-title:focus {outline: 2px solid var(--primary-color); outline-offset: 2px;}
-        .section-title.has-selection {background-color: #5a9a68;}
+        .page-header img {
+            max-width: 150px; height: auto;
+            filter: drop-shadow(0px 3px 5px rgba(0,0,0,0.15));
+        }
+        .language-selector {position: absolute; top: 10px; right: 10px; display: flex; gap: 6px;}
+        .language-selector button {
+            background-color: var(--macos-control-bg); color: var(--dark-gray);
+            border: 1px solid var(--macos-control-border); padding: 6px 10px;
+            border-radius: var(--border-radius-sm); cursor: pointer; font-size: 0.8em;
+            font-weight: 500;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .language-selector button:hover {background-color: var(--macos-control-hover-bg);}
+        .language-selector button.active {background-color: var(--primary-color); color: var(--white); border-color: var(--primary-color);}
+
+        .main-title-button {
+            background-color: var(--banner-bg-color); color: var(--banner-text-color);
+            padding: 15px; border-radius: var(--border-radius-md); text-align: center;
+            font-size: 1.5em; font-weight: 600; margin-bottom: 25px;
+            border: 1px solid var(--macos-section-header-border);
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .section-title {
+            background-color: var(--macos-section-header-bg); color: var(--macos-section-header-text);
+            padding: 8px 12px;
+            border-radius: var(--border-radius-md);
+            margin-top: 15px;
+            margin-bottom: 0; font-size: 1em;
+            font-weight: 500;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            user-select: none; border: 1px solid var(--macos-section-header-border);
+            border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+            transition: background-color 0.2s ease;
+        }
+        .section-title:hover { background-color: #EDEDED; }
+        .section-title:focus {outline: 2px solid var(--primary-color); outline-offset: 1px;}
+        .section-title.has-selection {background-color: #E6F2FF; border-color: #B3D7FF;}
         .category-title-text {flex-grow: 1;}
-        .category-search-container {margin-left: 10px; display: flex; align-items: center;}
-        .category-search-box {padding: 4px 6px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.7em; width: 80px; background-color: var(--white); color: var(--dark-gray); transition: width 0.2s ease-in-out, border-color 0.2s ease-in-out;}
-        .category-search-box:focus {width: 120px; border-color: #555; outline: none;}
-        .section-title .toggle-icon::before {content: '▼'; font-size: 0.8em; margin-left: 10px; transition: transform 0.3s ease;}
-        .section-title.collapsed + .product-table-wrapper {max-height: 0; overflow: hidden; border-top: none;}
-        .section-title.collapsed .toggle-icon::before {transform: rotate(-90deg);}
+        .category-search-container {margin-left: 8px; display: flex; align-items: center;}
+        .category-search-box {
+            padding: 3px 6px;
+            border: 1px solid var(--macos-control-border); border-radius: var(--border-radius-sm);
+            font-size: 0.65em;
+            width: 70px; background-color: var(--white); color: var(--dark-gray);
+            transition: width 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .category-search-box:focus {width: 110px; border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3);}
+        .section-title .toggle-icon::before {
+            content: '›';
+            font-size: 1.2em;
+            line-height: 1;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-left: 6px;
+            transition: transform 0.25s ease-out;
+            display: inline-block;
+        }
+        .section-title:not(.collapsed) .toggle-icon::before {
+            transform: rotate(90deg);
+        }
+        .section-title.collapsed + .product-table-wrapper {max-height: 0; overflow-y: hidden; border-top: none;}
+        .section-title:not(.collapsed) + .product-table-wrapper {overflow-y: auto;}
+
         .general-notes-title-styling {border-radius: var(--border-radius-md); border-bottom-left-radius: var(--border-radius-md) !important; border-bottom-right-radius: var(--border-radius-md) !important; cursor: default !important;}
         .general-notes-title-styling .toggle-icon,
         .general-notes-title-styling .category-search-container {display: none;}
-        .product-table-wrapper {max-height: 2000px; overflow: hidden; transition: max-height 0.5s ease-in-out, border 0.3s ease; border: 1px solid #e9ecef; border-top: none; border-bottom-left-radius: var(--border-radius-md); border-bottom-right-radius: var(--border-radius-md); margin-bottom: 20px;}
+
+        .product-table-wrapper {
+            max-height: 350px;
+            overflow-y: auto;
+            transition: max-height 0.4s ease-in-out, border 0.3s ease;
+            border: 1px solid var(--macos-section-header-border); border-top: none;
+            border-bottom-left-radius: var(--border-radius-md); border-bottom-right-radius: var(--border-radius-md);
+            margin-bottom: 20px;
+        }
         table.info-table, table.product-table {width: 100%; border-collapse: collapse;}
-        .info-table th, .info-table td, .product-table th, .product-table td {border: 1px solid var(--border-color); padding: 7px 9px; text-align: left; vertical-align: top; word-break: break-word;}
-        .product-table th {text-align: center; background-color: #f8f9fa;}
-        .info-table th {background-color: #e9ecef; font-weight: 600; font-size: 0.9em; width: 220px; white-space: nowrap;}
+        .info-table th, .info-table td, .product-table th, .product-table td {border: 1px solid var(--border-color); padding: 8px 10px; text-align: left; vertical-align: top; word-break: break-word; font-size: 0.9em;}
+
+        .product-table th {
+            text-align: center; background-color: #f9f9f9; font-weight: 500;
+            position: sticky; top: 0; z-index: 2;
+            border-bottom: 1.5px solid var(--macos-section-header-border);
+            font-size: 0.85em;
+        }
+        .product-table th.dessert-pcs-header {
+            width: auto !important;
+            text-align: center;
+        }
+        .product-table th.kunefe-header { /* Künefe için Small/Large ana başlıkları */
+            width: 50% !important;
+        }
+
+
+        .info-table th {background-color: var(--medium-gray); font-weight: 500; font-size: 0.85em; width: 220px; white-space: nowrap;}
         .branch-input-container {display: flex; align-items: center; gap: 10px; flex-wrap: nowrap;}
         .branch-input-container select {flex-grow: 1; min-width: 150px;}
-        .branch-input-container input[type="checkbox"] {margin-left: auto; margin-right: 5px; transform: scale(1.2); flex-shrink: 0;}
+        .branch-input-container input[type="checkbox"] {margin-left: auto; margin-right: 5px; transform: scale(1.2); flex-shrink: 0; accent-color: var(--primary-color);}
         #manualBranchInput {width: calc(100% - 20px); margin-top: 8px; box-sizing: border-box;}
-        .product-row.selected-row {background-color: #a7d7ae !important;}
-        .product-row.selected-row td:first-child {color: var(--primary-color); font-weight: bold;}
+        .product-row.selected-row {background-color: #E6F2FF !important;}
+        .product-row.selected-row td:first-child {color: var(--primary-color); font-weight: 500;}
         .product-row.hidden-by-search {display: none !important;}
-        input[type="text"], input[type="date"], input[type="time"], input[type="email"], select, textarea {width: calc(100% - 20px); padding: 8px 10px; border: 1px solid #ced4da; border-radius: var(--border-radius-sm); box-sizing: border-box; font-size: 0.9em;}
-        textarea {min-height: 70px;}
-        input[type="number"].manual-qty-input {width: 60px; padding: 6px; text-align: center; margin-left: 5px; font-size: 0.85em; border: 1px solid #ced4da; border-radius: var(--border-radius-sm);}
+
+        input[type="text"], input[type="date"], input[type="time"], input[type="email"], select, textarea {
+            width: calc(100% - 20px); padding: 9px 10px;
+            border: 1px solid var(--macos-control-border); border-radius: var(--border-radius-sm);
+            box-sizing: border-box; font-size: 0.9em; background-color: var(--macos-control-bg);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        input[type="text"]:focus, input[type="date"]:focus, input[type="time"]:focus, input[type="email"]:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color); outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3);
+        }
+        textarea {min-height: 75px;}
+        input[type="number"].manual-qty-input {
+            width: 60px; padding: 6px; text-align: center; margin-left: 5px;
+            font-size: 0.85em; border: 1px solid var(--macos-control-border);
+            border-radius: var(--border-radius-sm); background-color: var(--macos-control-bg);
+        }
         .quantity-options {display: flex; flex-direction: column; gap: 5px;}
-        .quantity-options label {margin-right: 8px; font-size: 0.9em; display: inline-flex; align-items: center; cursor: pointer; padding: 4px 0;}
-        .quantity-options label span.qty-label-text {margin-left: 4px;}
-        .quantity-options input[type="checkbox"] {margin-right: 6px; transform: scale(1.2); cursor: pointer;}
-        input[readonly], input[type="text"]:disabled, select:disabled {background-color: var(--input-bg-disabled); cursor: not-allowed;}
-        .buttons-area {margin-top: 25px; text-align: right; padding-top: 15px; border-top: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end;}
-        .buttons-area button {color: var(--white); border: none; padding: 10px 18px; text-align: center; text-decoration: none; display: inline-block; font-size: 0.9em; font-weight: 500; border-radius: var(--border-radius-sm); cursor: pointer; transition: background-color 0.3s ease; flex-grow: 0;}
+        .quantity-options label {
+            margin-right: 8px; font-size: 0.9em; display: inline-flex;
+            align-items: center; cursor: pointer; padding: 4px 0;
+        }
+        .quantity-options label:has(.manual-qty-input) {
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+        .quantity-options label span.qty-label-text {
+            margin-left: 4px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-right: 4px;
+        }
+        .quantity-options label .manual-qty-input {
+            min-width: 50px;
+        }
+        /* Künefe için özel stil */
+        .kunefe-options-container {
+            display: flex;
+            gap: 0; /* Aradaki boşluğu kaldır, çizgiyle birleşsin */
+            align-items: flex-start;
+            width: 100%; /* td'yi tamamen kaplasın */
+        }
+        .kunefe-options-group {
+            flex: 1;
+            padding: 5px; /* İç boşluk */
+        }
+        .kunefe-options-group:first-child { /* Small grubu */
+            border-right: 1px solid var(--border-color); /* Araya çizgi */
+            padding-right: 10px; /* Çizgi için sağda boşluk */
+        }
+         .kunefe-options-group:last-child { /* Large grubu */
+            padding-left: 10px; /* Çizgi için solda boşluk */
+        }
+
+        .kunefe-options-group .size-label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 0.85em;
+            color: var(--dark-gray);
+            text-align: center;
+        }
+        .specific-unit-label { /* Soup of the Day için Quart başlığı */
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 0.85em;
+            color: var(--dark-gray);
+            text-align: center;
+        }
+
+
+        .quantity-options input[type="checkbox"] {margin-right: 6px; transform: scale(1.2); cursor: pointer; accent-color: var(--primary-color);}
+        input[readonly], input[type="text"]:disabled, select:disabled {background-color: var(--input-bg-disabled); cursor: not-allowed; color: #777;}
+        .buttons-area {margin-top: 25px; text-align: right; padding-top: 18px; border-top: 1px solid var(--medium-gray); display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end;}
+        .buttons-area button {
+            color: var(--white); border: none; padding: 10px 18px;
+            text-align: center; text-decoration: none; display: inline-block;
+            font-size: 0.9em; font-weight: 500; border-radius: var(--border-radius-md);
+            cursor: pointer; transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .buttons-area button:active { transform: translateY(1px); }
         .buttons-area button.print-btn {background-color: var(--primary-color);}
-        .buttons-area button.print-btn:hover {background-color: #1e7e34;}
+        .buttons-area button.print-btn:hover {background-color: #0068d6;}
         .buttons-area button#sendEmailBtn {background-color: var(--secondary-color);}
-        .buttons-area button#sendEmailBtn:hover {background-color: #545b62;}
-        .buttons-area button.share-btn {background-color: var(--button-blue-original);}
-        .buttons-area button.share-btn:hover {background-color: var(--button-blue-original-hover);}
-        .page-footer {text-align: center; margin-top: auto; padding: 15px 0; border-top: 1px solid #eee; font-size: 0.85em; color: #777; width: 100%; background-color: var(--light-gray);}
-        .developer-signature {text-align: center; font-size: 0.8em; color: #888; padding: 10px 0; width: 100%; background-color: var(--light-gray);}
-        .order-summary-panel {width: 100%; max-width: 300px; min-width: 280px; background-color: #fdfdfd; border: 1px solid #ddd; border-radius: var(--border-radius-md); padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); align-self: flex-start; display: flex; flex-direction: column; transition: height 0.3s ease-out; margin-top: 20px;}
+        .buttons-area button#sendEmailBtn:hover {background-color: #7a7a7e;}
+        .buttons-area button.share-btn {background-color: #34C759;}
+        .buttons-area button.share-btn:hover {background-color: #2baa4f;}
+
+        .page-footer {text-align: center; margin-top: auto; padding: 18px 0; border-top: 1px solid var(--medium-gray); font-size: 0.85em; color: #555; width: 100%; background-color: var(--light-gray);}
+        .developer-signature {text-align: center; font-size: 0.75em; color: var(--secondary-color); padding: 8px 0; width: 100%; background-color: var(--light-gray);}
+
+        .order-summary-panel {width: 100%; max-width: 300px; min-width: 280px; background-color: #FDFDFD; border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); padding: 18px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); align-self: flex-start; display: flex; flex-direction: column; transition: height 0.3s ease-out; margin-top: 20px;}
         @media (min-width: 992px) {.order-summary-panel {position: sticky; top: 20px; width: 320px; margin-top: 0; margin-left: 20px;}}
-        .order-summary-panel h3 {margin-top: 0; font-size: 1.1em; color: var(--dark-gray); border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 8px; flex-shrink: 0;}
+        .order-summary-panel h3 {margin-top: 0; font-size: 1.1em; font-weight: 500; color: var(--dark-gray); border-bottom: 1px solid var(--medium-gray); padding-bottom: 8px; margin-bottom: 8px; flex-shrink: 0;}
         .order-summary-list-container {overflow-y: auto; max-height: 380px; margin-bottom: 10px; flex-grow: 1;}
         .order-summary-list {list-style: none; padding: 0; margin: 0;}
-        .order-summary-list li {padding: 7px 0; font-size: 0.85em; border-bottom: 1px dashed #f0f0f0; display: flex; justify-content: space-between; align-items: center;}
+        .order-summary-list li {padding: 7px 0; font-size: 0.85em; border-bottom: 1px dashed #EAEAEA; display: flex; justify-content: space-between; align-items: center;}
         .order-summary-list li:last-child {border-bottom: none;}
-        .summary-product-name {flex-grow: 1; margin-right: 8px; color: #444;}
-        .summary-product-qty {font-weight: 600; white-space: nowrap; text-align: right; color: var(--primary-color);}
-        .empty-summary {text-align: center; color: #888; font-style: italic; padding: 15px 0;}
-        .summary-totals {margin-top: auto; padding: 8px; border-top: 1px solid #ccc; font-size: 0.9em; flex-shrink: 0; background-color: var(--summary-total-bg); border-radius: var(--border-radius-sm);}
-        .summary-totals div {display: flex; justify-content: space-between; margin-bottom: 4px; font-weight: 600;}
-        .summary-totals div span:first-child {color: #555;}
+        .summary-product-name {flex-grow: 1; margin-right: 8px; color: #333;}
+        .summary-product-qty {font-weight: 500; white-space: nowrap; text-align: right; color: var(--primary-color);}
+        .empty-summary {text-align: center; color: var(--secondary-color); font-style: italic; padding: 18px 0;}
+        .summary-totals {margin-top: auto; padding: 9px; border-top: 1px solid var(--border-color); font-size: 0.9em; flex-shrink: 0; background-color: var(--summary-total-bg); border-radius: var(--border-radius-sm);}
+        .summary-totals div {display: flex; justify-content: space-between; margin-bottom: 4px; font-weight: 500;}
+        .summary-totals div span:first-child {color: #444;}
         .summary-totals span:last-child {color: var(--dark-gray);}
-        @media (max-width: 991px) {.container {padding: 20px 15px;} .main-title-button {font-size: 1.3em; padding: 12px;} .section-title {font-size: 1em; padding: 9px 12px;} .category-search-box {font-size: 0.7em; width: 70px;} .category-search-box:focus {width: 100px;} .info-table th, .info-table td, .product-table th, .product-table td {padding: 6px 7px; font-size: 0.85em;} .info-table th {width: auto; min-width: 110px; font-size: 0.8em; white-space: normal;} .info-table td {min-width: 140px;} .branch-input-container {flex-wrap: wrap;} input[type="text"], input[type="date"], input[type="time"], input[type="email"], select, textarea {font-size: 0.9em; padding: 8px 9px; width: 100%;} #manualBranchInput {width: 100%;} input[type="number"].manual-qty-input {width: 55px; font-size: 0.85em;} .quantity-options label {font-size: 0.85em;} .buttons-area {text-align: center; justify-content: center;} .buttons-area button {padding: 9px 15px; font-size: 0.85em; margin: 5px 5px 10px; width: calc(50% - 12px); min-width: 110px;} @media (max-width: 991px) and (min-width: 481px) {.buttons-area button {width: calc(33.33% - 10px);}} @media (max-width: 480px) {.buttons-area button {width: 100%; margin-left: 0; margin-right: 0;}} .order-summary-panel {max-width: 100%; min-width: unset; margin-left: 0; margin-top: 25px; border-radius: var(--border-radius-md);} .order-summary-list-container {max-height: 300px;} .order-summary-panel h3 {font-size: 1em;} .order-summary-list li {font-size: 0.8em;} .summary-totals {font-size: 0.85em;}}
-        @media (max-width: 767px) {.page-header img {max-width: 140px;} .language-selector {top: 2px; right: 2px; gap: 3px;} .language-selector button {padding: 5px 7px; font-size: 0.75em;} .main-title-button {font-size: 1.1em;} .info-table, .info-table tbody, .info-table tr, .info-table td, .info-table th {display: block; width: 100% !important; box-sizing: border-box;} .info-table tr {margin-bottom: 10px;} .info-table th {text-align: left; border-bottom: none; background-color: var(--light-gray);} .info-table td {border-top: none;} .product-table th:nth-child(2), .product-table th:nth-child(3) {width: 100px !important; font-size: 0.8em;} .quantity-options {align-items: flex-start;}}
-        @media (max-width: 480px) {.container {padding: 15px 10px;} .page-header img {max-width: 120px;} .login-container {padding: 25px 20px; max-width: 320px;} .category-search-box {width: 60px;} .category-search-box:focus {width: 90px;}}
-        @media print {body {margin:0!important;padding:0!important;background-color:var(--white);font-family:Arial,sans-serif;font-size:9pt;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact} #loginScreen,.page-wrapper,.order-summary-panel,.page-footer,.buttons-area,.main-title-button,.language-selector,.developer-signature,#shareOptionsModal{display:none!important} #printAreaContainer{display:block!important;margin:0 auto!important;padding:0!important;width:100%} #printAreaContent{margin:0;padding:0} #printAreaContent *,#printAreaContent *::before,#printAreaContent *::after{box-sizing:border-box} .print-header{text-align:center;margin-bottom:15px;border-bottom:2px solid #000;padding-bottom:8px} .print-logo{max-width:130px;height:auto;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto} #printAreaContent h1{font-size:14pt;font-weight:700;margin-top:5px;margin-bottom:10px;text-align:center;color:#333} .print-order-info{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px;font-size:9pt} .print-order-info span{margin:1px 0} .print-section{margin-bottom:10px} #printAreaContent h2{font-size:11pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:3px;margin-top:15px;margin-bottom:8px;text-align:left;color:#333} .print-info-compact .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px 15px;font-size:9pt} .print-info-compact .info-grid p{margin:2px 0} .print-product-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:8.5pt} .print-product-table th,.print-product-table td{border:1px solid #ccc;padding:4px 6px;text-align:left;word-break:break-word;overflow-wrap:break-word} .print-product-table th{background-color:#f0f0f0;font-weight:700;text-align:center} .print-product-table td{vertical-align:top} .print-product-table .product-name-col{width:50%} .print-product-table .qty-col{width:25%;text-align:center} .print-totals{margin-top:10px;padding-top:10px;border-top:1px solid #666;font-size:9pt} .print-totals p{margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline} .print-totals p span:first-child{margin-right:15px} .print-notes{border:none;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:8px 0;min-height:40px;margin-top:5px;font-size:8.5pt;white-space:pre-wrap;word-break:break-word} .print-signatures-footer-group{page-break-inside:avoid!important;margin-top:auto} .print-signatures{margin-top:30px;display:flex;justify-content:space-between;font-size:8.5pt;align-items:flex-end} .signature-block-print{width:45%;text-align:center} .signature-block-print p{margin:0;padding-top:15px;border-top:1px solid #666} .print-footer{text-align:center;margin-top:20px;padding-top:8px;border-top:1px dashed #aaa;font-size:7.5pt;color:#555} .print-section,.print-product-table tbody tr{page-break-inside:avoid} @page{size:A4 portrait;margin:10mm}}
-        .modal {display:none;position:fixed;z-index:10000;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,.5);justify-content:center;align-items:center}
-        .modal-content {background-color:#fefefe;margin:auto;padding:25px;border:1px solid #888;width:90%;max-width:450px;border-radius:var(--border-radius-md);box-shadow:0 5px 15px rgba(0,0,0,.3);text-align:center}
-        .modal-content h4 {margin-top:0;color:var(--dark-gray)}
-        .modal-content button {background-color:var(--primary-color);color:#fff;padding:10px 15px;margin:8px 5px;border:none;border-radius:var(--border-radius-sm);cursor:pointer;font-size:.9em}
-        .modal-content button:hover {opacity:.9}
-        .modal-content button.secondary {background-color:var(--secondary-color)}
-        .close-modal-btn {background-color:#ccc;color:#333}
-        .modal-message {font-size:.9em;color:#555;margin-bottom:15px;min-height:1.2em}
+
+        @media (max-width: 991px) {
+            .container {padding: 20px 15px;} .main-title-button {font-size: 1.3em; padding: 12px;}
+            .section-title {font-size: 0.95em; padding: 7px 10px;}
+            .category-search-box {font-size: 0.6em; width: 65px;} .category-search-box:focus {width: 100px;}
+            .info-table th, .info-table td, .product-table th, .product-table td {padding: 6px 8px; font-size: 0.85em;}
+            .info-table th {width: auto; min-width: 110px; font-size: 0.8em; white-space: normal;} .info-table td {min-width: 140px;}
+            .branch-input-container {flex-wrap: wrap;}
+            input[type="text"], input[type="date"], input[type="time"], input[type="email"], select, textarea {font-size: 0.9em; padding: 8px 9px; width: 100%;}
+            #manualBranchInput {width: 100%;}
+            input[type="number"].manual-qty-input {width: 55px; font-size: 0.8em;}
+            .quantity-options label {font-size: 0.85em;}
+            .quantity-options label:has(.manual-qty-input) { flex-direction: row; align-items: center; }
+            .quantity-options label:has(.manual-qty-input) span.qty-label-text { margin-bottom: 0; margin-right: 4px;}
+
+            .buttons-area {text-align: center; justify-content: center;}
+            .buttons-area button {padding: 9px 15px; font-size: 0.85em; margin: 5px 5px 10px; width: calc(50% - 12px); min-width: 110px;}
+            @media (max-width: 991px) and (min-width: 481px) {.buttons-area button {width: calc(33.33% - 10px);}}
+            @media (max-width: 480px) {.buttons-area button {width: 100%; margin-left: 0; margin-right: 0;}}
+            .order-summary-panel {max-width: 100%; min-width: unset; margin-left: 0; margin-top: 25px; border-radius: var(--border-radius-lg);}
+            .order-summary-list-container {max-height: 300px;} .order-summary-panel h3 {font-size: 1em;}
+            .order-summary-list li {font-size: 0.8em;} .summary-totals {font-size: 0.85em;}
+             .kunefe-options-container { flex-direction: column; gap: 5px;}
+        }
+        @media (max-width: 767px) {
+            .page-header img {max-width: 120px;} .language-selector {top: 5px; right: 5px; gap: 4px;}
+            .language-selector button {padding: 5px 8px; font-size: 0.75em;} .main-title-button {font-size: 1.1em;}
+            .info-table, .info-table tbody, .info-table tr, .info-table td, .info-table th {display: block; width: 100% !important; box-sizing: border-box;}
+            .info-table tr {margin-bottom: 10px;} .info-table th {text-align: left; border-bottom: none; background-color: var(--medium-gray);}
+            .info-table td {border-top: none;}
+            .product-table th:nth-child(2), .product-table th:nth-child(3), .product-table th.dessert-pcs-header {width: 100px !important; font-size: 0.8em;}
+            .quantity-options {align-items: flex-start;}
+        }
+        @media (max-width: 480px) {
+            .container {padding: 15px 10px;} .page-header img {max-width: 110px;}
+            .login-container {padding: 25px 20px; max-width: calc(100% - 30px);}
+            .category-search-box {width: 60px;} .category-search-box:focus {width: 90px;}
+            .quantity-options label:has(.manual-qty-input) {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .quantity-options label:has(.manual-qty-input) span.qty-label-text {
+                margin-bottom: 3px;
+                margin-right: 0;
+            }
+            .quantity-options label:has(.manual-qty-input) .manual-qty-input {
+                 width: 100%;
+                 margin-left: 0;
+            }
+        }
+        @media print {body {margin:0!important;padding:0!important;background-color:var(--white);font-family:Arial,sans-serif;font-size:9pt;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact} #loginScreen,.page-wrapper,.order-summary-panel,.page-footer,.buttons-area,.main-title-button,.language-selector,.developer-signature,#shareOptionsModal{display:none!important} #printAreaContainer{display:block!important;margin:0 auto!important;padding:0!important;width:100%} #printAreaContent{margin:0;padding:0} #printAreaContent *,#printAreaContent *::before,#printAreaContent *::after{box-sizing:border-box} .print-header{text-align:center;margin-bottom:15px;border-bottom:2px solid #000;padding-bottom:8px} .print-logo{max-width:130px;height:auto;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto} #printAreaContent h1{font-size:14pt;font-weight:700;margin-top:5px;margin-bottom:10px;text-align:center;color:#333} .print-order-info{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px;font-size:9pt} .print-order-info span{margin:1px 0} .print-section{margin-bottom:10px} #printAreaContent h2{font-size:11pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:3px;margin-top:15px;margin-bottom:8px;text-align:left;color:#333} .print-info-compact .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px 15px;font-size:9pt} .print-info-compact .info-grid p{margin:2px 0} .print-product-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:8.5pt} .print-product-table th,.print-product-table td{border:1px solid #ccc;padding:4px 6px;text-align:left;word-break:break-word;overflow-wrap:break-word} .print-product-table th{background-color:#f0f0f0;font-weight:700;text-align:center} .print-product-table td{vertical-align:top} .print-product-table .product-name-col{width:auto;} .print-product-table .unit-col{width:auto;text-align:center;} .print-totals{margin-top:10px;padding-top:10px;border-top:1px solid #666;font-size:9pt} .print-totals p{margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline} .print-totals p span:first-child{margin-right:15px} .print-notes{border:none;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:8px 0;min-height:40px;margin-top:5px;font-size:8.5pt;white-space:pre-wrap;word-break:break-word} .print-signatures-footer-group{page-break-inside:avoid!important;margin-top:auto} .print-signatures{margin-top:30px;display:flex;justify-content:space-between;font-size:8.5pt;align-items:flex-end} .signature-block-print{width:45%;text-align:center} .signature-block-print p{margin:0;padding-top:15px;border-top:1px solid #666} .print-footer{text-align:center;margin-top:20px;padding-top:8px;border-top:1px dashed #aaa;font-size:7.5pt;color:#555} .print-section,.print-product-table tbody tr{page-break-inside:avoid} @page{size:A4 portrait;margin:10mm}}
+        .modal {display:none;position:fixed;z-index:10000;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,.55);justify-content:center;align-items:center}
+        .modal-content {
+            background-color:var(--white); margin:auto; padding:30px;
+            border:none;
+            width:90%;max-width:480px; border-radius:var(--border-radius-lg);
+            box-shadow:0 10px 30px rgba(0,0,0,.2);
+            text-align:center;
+        }
+        .modal-content h4 {margin-top:0;color:var(--dark-gray); font-size: 1.3em; font-weight: 500; margin-bottom: 15px;}
+        .modal-content button {
+            background-color:var(--primary-color);color:#fff;padding:12px 18px;
+            margin:10px 6px;border:none;border-radius:var(--border-radius-md);
+            cursor:pointer;font-size:.95em; font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+        .modal-content button:hover {background-color: #0068d6;}
+        .modal-content button.secondary {background-color:var(--secondary-color); color: var(--white);}
+        .modal-content button.secondary:hover {background-color: #7a7a7e;}
+        .close-modal-btn {background-color:#E5E5EA;color:var(--dark-gray);}
+        .close-modal-btn:hover {background-color: #DCDCE0;}
+        .modal-message {font-size:.95em;color:#444;margin-bottom:20px;min-height:1.2em;}
     </style>
 </head>
 <body>
@@ -157,7 +385,7 @@
         <main class="main-content">
             <div class="container">
                 <header class="page-header">
-                    <img src="./logo.png" alt="Selda Mediterranean Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/160x60?text=Selda+Logo'; this.alt='Placeholder Logo';" style="max-width: 160px; height: auto;">
+                    <img src="./logo.png" alt="Selda Mediterranean Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/160x60?text=Selda+Logo'; this.alt='Placeholder Logo';">
                     <div class="language-selector">
                         <button id="langTrBtn">TR</button>
                         <button id="langEnBtn">EN</button>
@@ -210,6 +438,7 @@
             </div>
             <div class="summary-totals" id="summaryTotals">
                 <div><span data-translate="totalLbLabel">Toplam LB:</span> <span id="totalLb">0 LB</span></div>
+                <div id="totalQuartRow" style="display:none;"><span data-translate="totalQuartLabel">Toplam Quart:</span> <span id="totalQuart">0 Quart</span></div>
                 <div><span data-translate="totalPcsLabel">Toplam Adet:</span> <span id="totalAdet">0 Adet</span></div>
             </div>
         </aside>
@@ -242,9 +471,10 @@
 
         const CORRECT_USERNAME = "Kitchen";
         const CORRECT_PASSWORD = "S8246";
-        const AUTH_KEY_SESSION = 'seldaOrderForm_authenticated_v11_file_nologo_share_word';
-        const LS_REMEMBER_USER = 'seldaOrderForm_rememberUser';
-        const LS_REMEMBERED_USERNAME = 'seldaOrderForm_rememberedUsername';
+        const AUTH_KEY_SESSION = 'seldaOrderForm_authenticated_v21_final_touches';
+        const LS_REMEMBER_USER = 'seldaOrderForm_rememberUser_v2';
+        const LS_REMEMBERED_USERNAME = 'seldaOrderForm_rememberedUsername_v2';
+        const LS_REMEMBERED_PASSWORD = 'seldaOrderForm_rememberedPassword_v2';
 
         let loginScreen, usernameInput, passwordInput, rememberMeCheckbox, loginButton, loginError;
         let pageWrapper, orderSenderNameInput, contactPhoneInput, branchSelect, manualBranchCheckbox, manualBranchInput,
@@ -268,11 +498,12 @@
                 "requestedDeliveryDateLabel": "Talep Edilen Teslim Tarihi:",
                 "contactPhoneLabel": "İletişim Telefonu (Şube):", "contactPhonePlaceholder": "Şube telefon numarası",
                 "productNameHeader": "Ürün Adı", "lbHeader": "Pound (LB)", "pcsUnitHeader": "Adet",
+                "quartHeader": "Quart", "kunefeSmallHeader": "Küçük", "kunefeLargeHeader": "Büyük",
                 "otherLabel": "Diğer:", "generalNotesTitle": "GENEL NOTLAR",
                 "generalNotesPlaceholder": "Siparişle ilgili genel notlarınız...",
                 "printButton": "YAZDIR", "sendOrderButton": "POSTA GÖNDER", "shareButtonText": "PAYLAŞ",
                 "orderSummaryTitle": "Sipariş Özeti", "emptySummaryText": "Henüz ürün seçilmedi.",
-                "totalLbLabel": "Toplam LB:", "totalPcsLabel": "Toplam Adet:",
+                "totalLbLabel": "Toplam LB:", "totalPcsLabel": "Toplam Adet:", "totalQuartLabel": "Toplam Quart:",
                 "footerCompanyName": "Selda Mediterranean - Merkezi Mutfak",
                 "alert_authPersonMissing": "Lütfen 'Sipariş Veren Yetkili' adını giriniz.",
                 "alert_orderDateInvalid": "Lütfen geçerli bir 'Sipariş Tarihi' seçiniz.",
@@ -281,7 +512,8 @@
                 "alert_noItemSelected": "Lütfen paylaşmadan/göndermeden önce en az bir ürün için miktar belirtin.",
                 "searchPlaceholder": "Ara...",
                 "manualBranchNotSpecified": "Belirtilmedi (Manuel)", "selectionBranchNotSpecified": "Belirtilmedi (Seçim)",
-                "summaryUnitLB": "LB", "summaryUnitPCS": "Adet", "summaryUnitManual": "(M)",
+                "summaryUnitLB": "LB", "summaryUnitPCS": "Adet", "summaryUnitQuart": "Quart",
+                "summaryUnitKunefeSmall": "Küçük", "summaryUnitKunefeLarge": "Büyük", "summaryUnitManual": "(M)",
                 "loginTitle": "Giriş Yap", "usernamePlaceholder": "Kullanıcı Adı", "passwordPlaceholder": "Şifre",
                 "loginButtonText": "GİRİŞ", "rememberMeLabel": "Beni Hatırla",
                 "alert_loginFailed": "Kullanıcı adı veya şifre hatalı.",
@@ -304,11 +536,12 @@
                 "requestedDeliveryDateLabel": "Requested Delivery Date:",
                 "contactPhoneLabel": "Contact Phone (Branch):", "contactPhonePlaceholder": "Branch phone number",
                 "productNameHeader": "Product Name", "lbHeader": "Pound (LB)", "pcsUnitHeader": "PCS",
+                "quartHeader": "Quart", "kunefeSmallHeader": "Small", "kunefeLargeHeader": "Large",
                 "otherLabel": "Other:", "generalNotesTitle": "GENERAL NOTES",
                 "generalNotesPlaceholder": "Your general notes about the order...",
                 "printButton": "PRINT", "sendOrderButton": "SEND E-MAIL", "shareButtonText": "SHARE",
                 "orderSummaryTitle": "Order Summary", "emptySummaryText": "No products selected yet.",
-                "totalLbLabel": "Total LB:", "totalPcsLabel": "Total PCS:",
+                "totalLbLabel": "Total LB:", "totalPcsLabel": "Total PCS:", "totalQuartLabel": "Total Quart:",
                 "footerCompanyName": "Selda Mediterranean - Central Kitchen",
                 "alert_authPersonMissing": "Please enter the 'Authorized Person' name.",
                 "alert_orderDateInvalid": "Please select a valid 'Order Date'.",
@@ -317,7 +550,8 @@
                 "alert_noItemSelected": "Please specify a quantity for at least one product before sharing/sending.",
                 "searchPlaceholder": "Search...",
                 "manualBranchNotSpecified": "Not Specified (Manual)", "selectionBranchNotSpecified": "Not Specified (Selection)",
-                "summaryUnitLB": "LB", "summaryUnitPCS": "PCS", "summaryUnitManual": "(M)",
+                "summaryUnitLB": "LB", "summaryUnitPCS": "PCS", "summaryUnitQuart": "Quart",
+                "summaryUnitKunefeSmall": "Small", "summaryUnitKunefeLarge": "Large", "summaryUnitManual": "(M)",
                 "loginTitle": "Login", "usernamePlaceholder": "Username", "passwordPlaceholder": "Password",
                 "loginButtonText": "LOGIN", "rememberMeLabel": "Remember Me",
                 "alert_loginFailed": "Invalid username or password.",
@@ -332,25 +566,33 @@
                 "webShareNotSupported": "Your browser does not support direct file sharing. You can download the file and share it manually."
             }
         };
-        let currentLanguage = 'en'; // Varsayılan dil İngilizce olarak ayarlandı
+        let currentLanguage = 'en';
 
         const productData = {
-            "SMALL BITES": ["Soup of the Day", "Hummus", "Grilled Eggplant Salad", "Tzatziki (Cacik)", "Spicy Ezme", "Saksuka", "Turkish Feta and Olives", "Cigar Borek", "Shishito Peppers", "Halloumi Cheese", "Stuffed Dates", "Falafel", "Fried Cauliflower", "Salmon and Grape Leaves", "Arnavut Cigeri", "Shrimp Garlic", "Cheese and Meat Platter"],
-            "A LITTLE MORE": ["Vegetarian Couscous", "Chicken Shish", "Chicken Adana", "Urfa Kebab", "Beef Shish", "Grilled Pistachio Meatballs", "Beyti Special", "Lamb Chops", "Lamb Shank", "Grilled Salmon", "Mixed Grill (2-4 Guests)", "Grilled Branzino", "Ali Nazik", "Lamb Shish"],
+            "SMALL BITES": ["Soup of the Day", "Hummus", "Grilled Eggplant Salad", "Tzatziki (Cacik)", "Spicy Ezme", "Saksuka", "Cigar Borek", "Shishito Peppers", "Halloumi Cheese", "Stuffed Dates", "Falafel", "Fried Cauliflower", "Salmon and Grape Leaves", "Arnavut Cigeri", "Shrimp Garlic", "Ali Nazik (meze)", "Bean Salad", "Avakado Sousce", "White Sousce", "Tomato Sousce"],
+            "A LITTLE MORE": ["Vegetarian Couscous", "Chicken Shish", "Chicken Adana", "Urfa Kebab", "Beef Shish", "Grilled Pistachio Meatballs", "Lamb Chops", "Lamb Shank", "Grilled Salmon", "Ali Nazik", "Lamb Shish"],
             "FROM THE OVEN": ["Vegetarian Pide", "Cheese Pide", "Meat Pide", "Spinach Feta Pide", "Lahmacun"],
-            "DESSERT": ["Baklava", "Turkish Flan", "Chocolate Mousse", "Kunefe"]
+            "DESSERT": ["Baklava", "Turkish Flan", "Chocolate Mousse", "Kunefe", "Trelece", "San Sebastian", "Fistikli Mouse"]
         };
         const BRANCH_OPTIONS = [ "SELDA - Belt Line", "SELDA - The Mayor's", "SELDA - San Antonio", "SELDA - Frisco", "SELDA - Doner" ];
 
-        const LS_LANGUAGE = 'seldaOrderForm_language_v1';
-        const LS_SENDER_NAME = 'seldaOrderForm_senderName_v5';
-        const LS_CONTACT_PHONE = 'seldaOrderForm_contactPhone_v5';
-        const LS_BRANCH_SELECT_VALUE = 'seldaOrderForm_branchSelectValue_v5';
-        const LS_MANUAL_BRANCH_VALUE = 'seldaOrderForm_manualBranchValue_v5';
-        const LS_MANUAL_BRANCH_ENABLED = 'seldaOrderForm_manualBranchEnabled_v5';
-        const LS_ORDER_DATE = 'seldaOrderForm_orderDate_v5'; // Sipariş tarihi için localStorage anahtarı
-        const LS_DELIVERY_DATE = 'seldaOrderForm_deliveryDate_v5'; // Teslim tarihi için localStorage anahtarı
-        const LS_ORDER_COUNTER = 'seldaOrderCounterV13';
+        const PCS_ONLY_PRODUCTS_SMALL_BITES = ["Cigar Borek", "Stuffed Dates", "Salmon and Grape Leaves"];
+        const LB_ONLY_PRODUCTS_SMALL_BITES = productData["SMALL BITES"].filter(p => !PCS_ONLY_PRODUCTS_SMALL_BITES.includes(p) && p !== "Soup of the Day" );
+
+        const LB_AND_PCS_PRODUCTS_A_LITTLE_MORE = ["Grilled Pistachio Meatballs", "Lamb Shank"];
+        const LB_ONLY_PRODUCTS_A_LITTLE_MORE = productData["A LITTLE MORE"].filter(p => !LB_AND_PCS_PRODUCTS_A_LITTLE_MORE.includes(p));
+
+
+        const LS_LANGUAGE = 'seldaOrderForm_language_v8_final_touches';
+        const LS_SENDER_NAME = 'seldaOrderForm_senderName_v12';
+        const LS_CONTACT_PHONE = 'seldaOrderForm_contactPhone_v12';
+        const LS_BRANCH_SELECT_VALUE = 'seldaOrderForm_branchSelectValue_v12';
+        const LS_MANUAL_BRANCH_VALUE = 'seldaOrderForm_manualBranchValue_v12';
+        const LS_MANUAL_BRANCH_ENABLED = 'seldaOrderForm_manualBranchEnabled_v12';
+        const LS_ORDER_DATE = 'seldaOrderForm_orderDate_v12';
+        const LS_DELIVERY_DATE = 'seldaOrderForm_deliveryDate_v12';
+        const LS_ORDER_COUNTER = 'seldaOrderCounterV20_final_touches';
+
 
         function assignLoginDOMElements() {
             loginScreen = document.getElementById('loginScreen');
@@ -403,6 +645,7 @@
                     sessionStorage.removeItem(key);
                 }
             }
+
             if (sessionStorage.getItem(AUTH_KEY_SESSION) === 'true') {
                 showMainForm();
                 if (!mainFormInitialized) {
@@ -410,14 +653,38 @@
                 }
                 return true;
             }
+
+            try {
+                const rememberedUser = localStorage.getItem(LS_REMEMBER_USER);
+                if (rememberedUser === 'true') {
+                    const rememberedUsername = localStorage.getItem(LS_REMEMBERED_USERNAME);
+                    const rememberedPassword = localStorage.getItem(LS_REMEMBERED_PASSWORD);
+                    if (rememberedUsername === CORRECT_USERNAME && rememberedPassword === CORRECT_PASSWORD) {
+                        sessionStorage.setItem(AUTH_KEY_SESSION, 'true');
+                        showMainForm();
+                        if (!mainFormInitialized) {
+                            initializeMainForm();
+                        }
+                        return true;
+                    } else {
+                        localStorage.removeItem(LS_REMEMBER_USER);
+                        localStorage.removeItem(LS_REMEMBERED_USERNAME);
+                        localStorage.removeItem(LS_REMEMBERED_PASSWORD);
+                    }
+                }
+            } catch (e) {
+                console.warn("localStorage 'Beni Hatırla' otomatik giriş kontrolü başarısız:", e);
+            }
+
             showLoginScreen();
             return false;
         }
 
+
         function handleLogin() {
             const enteredUsername = usernameInput.value.trim();
             const enteredPassword = passwordInput.value.trim();
-            const langSet = translations[currentLanguage] || translations.en; // Hata mesajları için dil seti
+            const langSet = translations[currentLanguage] || translations.en;
 
             if (!enteredUsername || !enteredPassword) {
                 loginError.textContent = langSet.alert_loginFieldsMissing;
@@ -433,11 +700,13 @@
                     try {
                         localStorage.setItem(LS_REMEMBER_USER, 'true');
                         localStorage.setItem(LS_REMEMBERED_USERNAME, enteredUsername);
+                        localStorage.setItem(LS_REMEMBERED_PASSWORD, enteredPassword);
                     } catch (e) { console.warn("localStorage 'Beni Hatırla' kaydı başarısız:", e); }
                 } else {
                     try {
                         localStorage.removeItem(LS_REMEMBER_USER);
                         localStorage.removeItem(LS_REMEMBERED_USERNAME);
+                        localStorage.removeItem(LS_REMEMBERED_PASSWORD);
                     } catch (e) { console.warn("localStorage 'Beni Hatırla' silme başarısız:", e); }
                 }
                 showMainForm();
@@ -449,6 +718,9 @@
                 loginError.style.display = 'block';
                 passwordInput.value = '';
                 passwordInput.focus();
+                 try {
+                    localStorage.removeItem(LS_REMEMBERED_PASSWORD);
+                } catch (e) { console.warn("localStorage şifre silme başarısız (hatalı giriş sonrası):", e); }
             }
         }
 
@@ -457,13 +729,20 @@
                 const rememberUser = localStorage.getItem(LS_REMEMBER_USER);
                 if (rememberUser === 'true') {
                     const rememberedUsername = localStorage.getItem(LS_REMEMBERED_USERNAME);
+                    const rememberedPassword = localStorage.getItem(LS_REMEMBERED_PASSWORD);
+
                     if (rememberedUsername && usernameInput) {
                         usernameInput.value = rememberedUsername;
+                    }
+                    if (rememberedPassword && passwordInput) {
+                        passwordInput.value = rememberedPassword;
                     }
                     if (rememberMeCheckbox) {
                         rememberMeCheckbox.checked = true;
                     }
-                    if(passwordInput && usernameInput.value) passwordInput.focus();
+                    if(passwordInput && usernameInput.value && !passwordInput.value) passwordInput.focus();
+                    else if (usernameInput && !usernameInput.value) usernameInput.focus();
+
                 } else {
                     if (rememberMeCheckbox) {
                         rememberMeCheckbox.checked = false;
@@ -473,6 +752,7 @@
                 console.warn("localStorage 'Beni Hatırla' okuma başarısız:", e);
             }
         }
+
 
         function setLanguage(lang) {
             currentLanguage = lang;
@@ -486,7 +766,7 @@
         }
 
         function updateUIForLanguage(lang) {
-            const translationSet = translations[lang] || translations.en; // Dil seti için İngilizce'ye fallback
+            const translationSet = translations[lang] || translations.en;
             if (!translationSet) return;
             if(document) document.title = translationSet.pageTitle;
 
@@ -512,23 +792,22 @@
             }
 
             if (mainFormInitialized) {
-                renderProducts(); // Dil değiştiğinde ürün listesini yeniden render et (Other: etiketi için)
-                updateOrderSummary(); // Dil değiştiğinde özeti yeniden render et (LB, Adet etiketleri için)
+                renderProducts();
+                updateOrderSummary();
             }
         }
 
         function loadLanguage() {
-            let savedLang = 'en'; // Varsayılan olarak İngilizce başla
+            let savedLang = 'en';
             try {
                 const langFromStorage = localStorage.getItem(LS_LANGUAGE);
                 if (langFromStorage === 'tr' || langFromStorage === 'en') {
                     savedLang = langFromStorage;
                 }
-                // Eğer localStorage'da geçerli bir dil yoksa, 'en' olarak kalır.
             } catch(e) {
                 console.warn("localStorage dil okuma başarısız, İngilizce'ye dönülüyor:", e);
             }
-            setLanguage(savedLang); // Bu fonksiyon dili UI'a uygular ve gerekirse localStorage'a kaydeder.
+            setLanguage(savedLang);
         }
 
         function formatDateForInput(date) {
@@ -555,9 +834,34 @@
             const container = document.getElementById('productSectionsContainer');
             if (!container) return;
             let htmlContent = '';
-            const langSet = translations[currentLanguage] || translations.en; // Dil seti için İngilizce'ye fallback
+            const langSet = translations[currentLanguage] || translations.en;
+
             Object.keys(productData).forEach((category) => {
                 const categoryId = `category-${category.replace(/\s+/g, '').toLowerCase()}`;
+                let headerRow;
+                const isDessertCategory = category === "DESSERT";
+                const hasKunefeInDessert = isDessertCategory && productData[category].includes("Kunefe");
+                const isSoupCategory = category === "SMALL BITES" && productData[category].includes("Soup of the Day");
+
+
+                if (isDessertCategory) {
+                     headerRow = `
+                        <th>${langSet.productNameHeader}</th>
+                        <th class="dessert-pcs-header" colspan="2" style="text-align:center;">${langSet.pcsUnitHeader}</th>`;
+                } else if (isSoupCategory) { // SMALL BITES ve Soup of the Day içeriyorsa
+                     headerRow = `
+                        <th>${langSet.productNameHeader}</th>
+                        <th style="width: 200px;">${langSet.lbHeader}</th> <!-- LB başlığı kalacak -->
+                        <th style="width: 200px;">${langSet.pcsUnitHeader}</th>`;
+                }
+                else { // Diğer tüm kategoriler
+                    headerRow = `
+                        <th>${langSet.productNameHeader}</th>
+                        <th style="width: 200px;">${langSet.lbHeader}</th>
+                        <th style="width: 200px;">${langSet.pcsUnitHeader}</th>`;
+                }
+
+
                 htmlContent += `
                     <div class="section-title collapsed" role="button" tabindex="0" data-category-id="${categoryId}" aria-expanded="false" aria-controls="${categoryId}">
                         <span class="category-title-text">${category.toUpperCase()}</span>
@@ -568,24 +872,145 @@
                     </div>
                     <div class="product-table-wrapper" id="${categoryId}">
                         <table class="product-table">
-                            <thead><tr><th>${langSet.productNameHeader}</th><th style="width: 200px;">${langSet.lbHeader}</th><th style="width: 200px;">${langSet.pcsUnitHeader}</th></tr></thead>
+                            <thead><tr>${headerRow}</tr></thead>
                             <tbody>`;
+
                 productData[category].forEach(productName => {
                     const safeProductName = productName.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
                     const baseId = `prod-${category.replace(/\s+/g, '')}-${safeProductName}`;
+                    let column1Html = '';
+                    let column2Html = '';
+                    const isFromOvenCategory = category === "FROM THE OVEN";
+
+                    if (isDessertCategory) {
+                        if (productName === "Kunefe") {
+                            column1Html = `
+                            <div class="kunefe-options-container">
+                                <div class="kunefe-options-group">
+                                    <span class="size-label">${langSet.kunefeSmallHeader}</span>
+                                    <div class="quantity-options" data-unit="Adet" data-size="Small">
+                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-small-adet" value="5"> 5</label>
+                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-small-adet" value="10"> 10</label>
+                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-small-adet" value="15"> 15</label>
+                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-small-adet" value="20"> 20</label>
+                                        <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-small-adet-manual" min="0" step="1"></label>
+                                    </div>
+                                </div>
+                                <div class="kunefe-options-group">
+                                    <span class="size-label">${langSet.kunefeLargeHeader}</span>
+                                    <div class="quantity-options" data-unit="Adet" data-size="Large">
+                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-large-adet" value="5"> 5</label>
+                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-large-adet" value="10"> 10</label>
+                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-large-adet" value="15"> 15</label>
+                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-large-adet" value="20"> 20</label>
+                                        <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-large-adet-manual" min="0" step="1"></label>
+                                    </div>
+                                </div>
+                            </div>`;
+                        } else if (productName === "Baklava") {
+                            column1Html = `
+                            <div class="quantity-options" data-unit="Adet">
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="1"> 1</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="2"> 2</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="3"> 3</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="4"> 4</label>
+                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
+                            </div>`;
+                        } else { // Diğer DESSERT ürünleri
+                            column1Html = `
+                            <div class="quantity-options" data-unit="Adet">
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="5"> 5</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="10"> 10</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="15"> 15</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="20"> 20</label>
+                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
+                            </div>`;
+                        }
+                        column2Html = ''; // DESSERT kategorisinde ikinci data sütunu yok
+                    } else if (productName === "Soup of the Day") {
+                        column1Html = `
+                        <div> <!-- LB Başlığı altında Quart seçenekleri -->
+                            <span class="specific-unit-label">${langSet.quartHeader}</span>
+                            <div class="quantity-options" data-unit="Quart">
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="5"> 5</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="10"> 10</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="15"> 15</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="20"> 20</label>
+                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-quart-manual" min="0" step="any"></label>
+                            </div>
+                        </div>`;
+                        column2Html = `<div>-</div>`; // PCS sütunu boş
+                    } else if (isFromOvenCategory) {
+                        column1Html = `
+                        <div class="quantity-options" data-unit="LB">
+                            <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
+                            <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label>
+                            <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label>
+                            <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label>
+                            <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label>
+                        </div>`;
+                        column2Html = `<div>-</div>`;
+                    } else if (category === "SMALL BITES") {
+                        if (PCS_ONLY_PRODUCTS_SMALL_BITES.includes(productName)) {
+                            column1Html = `<div>-</div>`;
+                            column2Html = `
+                            <div class="quantity-options" data-unit="Adet">
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="50"> 50</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="100"> 100</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="150"> 150</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="200"> 200</label>
+                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
+                            </div>`;
+                        } else {
+                            column1Html = `
+                            <div class="quantity-options" data-unit="LB">
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label>
+                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label>
+                            </div>`;
+                            column2Html = `<div>-</div>`;
+                        }
+                    } else if (category === "A LITTLE MORE") {
+                        if (LB_AND_PCS_PRODUCTS_A_LITTLE_MORE.includes(productName)) {
+                            column1Html = `
+                            <div class="quantity-options" data-unit="LB">
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label>
+                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label>
+                            </div>`;
+                            column2Html = `
+                            <div class="quantity-options" data-unit="Adet">
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="50"> 50</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="100"> 100</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="150"> 150</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="200"> 200</label>
+                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
+                            </div>`;
+                        } else {
+                             column1Html = `
+                            <div class="quantity-options" data-unit="LB">
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label>
+                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label>
+                            </div>`;
+                            column2Html = `<div>-</div>`;
+                        }
+                    }
+
                     htmlContent += `
                                 <tr class="product-row" data-product-name="${productName.toLowerCase()}" data-category-title-id="${categoryId}" id="row-${baseId}">
                                     <td>${productName}</td>
-                                    <td><div class="quantity-options" data-unit="LB">
-                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label> <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label>
-                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label> <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label>
-                                        <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label>
-                                    </div></td>
-                                    <td><div class="quantity-options" data-unit="Adet">
-                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="50"> 50</label> <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="100"> 100</label>
-                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="150"> 150</label> <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="200"> 200</label>
-                                        <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
-                                    </div></td></tr>`;
+                                    <td ${isDessertCategory && productName !== "Kunefe" ? 'colspan="2"' : ''}>${column1Html}</td>`;
+                    if (!isDessertCategory) { // DESSERT kategorisi (Künefe hariç) için 2. data sütunu yok
+                        htmlContent += `<td>${column2Html}</td>`;
+                    }
+                    htmlContent += `</tr>`;
                 });
                 htmlContent += '</tbody></table></div>';
             });
@@ -593,33 +1018,115 @@
             attachProductEventListeners();
         }
 
+
         function updateOrderSummary() {
             const summaryList = document.getElementById('summaryList');
             const emptySummaryText = document.getElementById('emptySummaryText');
             const totalLbEl = document.getElementById('totalLb');
             const totalAdetEl = document.getElementById('totalAdet');
-            if(!summaryList || !emptySummaryText || !totalLbEl || !totalAdetEl) return;
+            const totalQuartEl = document.getElementById('totalQuart');
+            const totalQuartRowEl = document.getElementById('totalQuartRow');
 
-            const langSet = translations[currentLanguage] || translations.en; // Dil seti için İngilizce'ye fallback
+            if(!summaryList || !emptySummaryText || !totalLbEl || !totalAdetEl || !totalQuartEl || !totalQuartRowEl) return;
+
+            const langSet = translations[currentLanguage] || translations.en;
             summaryList.innerHTML = '';
-            let hasItemsInSummary = false; let currentTotalLb = 0; let currentTotalAdet = 0;
+            let hasItemsInSummary = false;
+            let currentTotalLb = 0;
+            let currentTotalAdet = 0;
+            let currentTotalQuart = 0;
+
             document.querySelectorAll('.section-title[data-category-id]').forEach(title => title.classList.remove('has-selection'));
 
             document.querySelectorAll('.product-row').forEach(row => {
                 const productName = row.querySelector('td:first-child').textContent;
                 const categoryId = row.dataset.categoryTitleId;
                 const categoryTitleElement = document.querySelector(`.section-title[data-category-id="${categoryId}"]`);
-                let summaryDetail = ''; let isRowSelected = false; let rowLb = 0; let rowAdet = 0;
+                const categoryName = categoryTitleElement ? categoryTitleElement.querySelector('.category-title-text').textContent.toUpperCase() : "";
+                const isDessertCategory = categoryName === "DESSERT";
 
-                const lbOptions = row.querySelector('td:nth-child(2) .quantity-options');
-                lbOptions.querySelectorAll('input.qty-cb:checked').forEach(cb => { const val = parseFloat(cb.value); summaryDetail += `${val} ${langSet.summaryUnitLB} `; rowLb += val; isRowSelected = true; });
-                const lbManual = lbOptions.querySelector('.manual-qty-input');
-                if (lbManual && lbManual.value && parseFloat(lbManual.value) > 0) { const val = parseFloat(lbManual.value); summaryDetail += `${val} ${langSet.summaryUnitLB} ${langSet.summaryUnitManual} `; rowLb += val; isRowSelected = true;}
+                let summaryDetail = '';
+                let isRowSelected = false;
 
-                const adetOptions = row.querySelector('td:nth-child(3) .quantity-options');
-                adetOptions.querySelectorAll('input.qty-cb:checked').forEach(cb => { const val = parseInt(cb.value); summaryDetail += `${val} ${langSet.summaryUnitPCS} `; rowAdet += val; isRowSelected = true; });
-                const adetManual = adetOptions.querySelector('.manual-qty-input');
-                if (adetManual && adetManual.value && parseInt(adetManual.value) > 0) { const val = parseInt(adetManual.value); summaryDetail += `${val} ${langSet.summaryUnitPCS} ${langSet.summaryUnitManual} `; rowAdet += val; isRowSelected = true;}
+                if (productName === "Kunefe") {
+                    const kunefeCell = row.querySelector('td:nth-child(2)'); // colspan="2" nedeniyle tek data hücresi
+                    const smallOptions = kunefeCell.querySelector('.quantity-options[data-size="Small"]');
+                    const largeOptions = kunefeCell.querySelector('.quantity-options[data-size="Large"]');
+                    let kunefeSmallQty = 0;
+                    let kunefeLargeQty = 0;
+
+                    if (smallOptions) {
+                        smallOptions.querySelectorAll('input.qty-cb:checked').forEach(cb => { kunefeSmallQty += parseInt(cb.value); isRowSelected = true; });
+                        const smallManual = smallOptions.querySelector('.manual-qty-input');
+                        if (smallManual && smallManual.value && parseInt(smallManual.value) > 0) { kunefeSmallQty += parseInt(smallManual.value); isRowSelected = true;}
+                    }
+                    if (largeOptions) {
+                        largeOptions.querySelectorAll('input.qty-cb:checked').forEach(cb => { kunefeLargeQty += parseInt(cb.value); isRowSelected = true; });
+                        const largeManual = largeOptions.querySelector('.manual-qty-input');
+                        if (largeManual && largeManual.value && parseInt(largeManual.value) > 0) { kunefeLargeQty += parseInt(largeManual.value); isRowSelected = true;}
+                    }
+
+                    if (kunefeSmallQty > 0) {
+                        summaryDetail += `${kunefeSmallQty} ${langSet.summaryUnitKunefeSmall} `;
+                        if (smallOptions && smallOptions.querySelector('.manual-qty-input').value) summaryDetail += `${langSet.summaryUnitManual} `;
+                    }
+                    if (kunefeLargeQty > 0) {
+                        summaryDetail += `${kunefeLargeQty} ${langSet.summaryUnitKunefeLarge} `;
+                         if (largeOptions && largeOptions.querySelector('.manual-qty-input').value) summaryDetail += `${langSet.summaryUnitManual} `;
+                    }
+                    currentTotalAdet += kunefeSmallQty + kunefeLargeQty;
+
+                } else if (isDessertCategory) {
+                    const pcsOptions = row.querySelector('td:nth-child(2) .quantity-options');
+                    if (pcsOptions) {
+                        const unitType = pcsOptions.dataset.unit;
+                        let qty = 0;
+                        let isManual = false;
+                        pcsOptions.querySelectorAll('input.qty-cb:checked').forEach(cb => { qty += parseInt(cb.value); isRowSelected = true; });
+                        const manual = pcsOptions.querySelector('.manual-qty-input');
+                        if (manual && manual.value && parseInt(manual.value) > 0) { qty += parseInt(manual.value); isRowSelected = true; isManual = true;}
+                        
+                        if (qty > 0) {
+                           if (unitType === "Adet") { summaryDetail += `${qty} ${langSet.summaryUnitPCS} `; currentTotalAdet += qty; }
+                           if(isManual) summaryDetail += `${langSet.summaryUnitManual} `;
+                        }
+                    }
+                } else {
+                    const column1Cell = row.querySelector('td:nth-child(2)');
+                    const column2Cell = row.querySelector('td:nth-child(3)');
+                    const column1Options = column1Cell ? column1Cell.querySelector('.quantity-options') : null;
+                    const column2Options = column2Cell ? column2Cell.querySelector('.quantity-options') : null;
+
+                    if (column1Options) {
+                        const unitType = column1Options.dataset.unit;
+                        let qty = 0;
+                        let isManual = false;
+                        column1Options.querySelectorAll('input.qty-cb:checked').forEach(cb => { qty += parseFloat(cb.value); isRowSelected = true; });
+                        const manual = column1Options.querySelector('.manual-qty-input');
+                        if (manual && manual.value && parseFloat(manual.value) > 0) { qty += parseFloat(manual.value); isRowSelected = true; isManual = true;}
+
+                        if (qty > 0) {
+                            if (unitType === "Quart") { summaryDetail += `${qty} ${langSet.summaryUnitQuart} `; currentTotalQuart += qty; }
+                            else if (unitType === "LB") { summaryDetail += `${qty} ${langSet.summaryUnitLB} `; currentTotalLb += qty; }
+                            if(isManual) summaryDetail += `${langSet.summaryUnitManual} `;
+                        }
+                    }
+                    if (column2Options && column2Options.children.length > 0 && column2Options.firstElementChild.tagName !== 'DIV') {
+                        const unitType = column2Options.dataset.unit;
+                        if (unitType === "Adet") {
+                            let qty = 0;
+                            let isManual = false;
+                            column2Options.querySelectorAll('input.qty-cb:checked').forEach(cb => { qty += parseInt(cb.value); isRowSelected = true; });
+                            const manual = column2Options.querySelector('.manual-qty-input');
+                            if (manual && manual.value && parseInt(manual.value) > 0) { qty += parseInt(manual.value); isRowSelected = true; isManual = true;}
+                            
+                            if (qty > 0) {
+                               summaryDetail += `${qty} ${langSet.summaryUnitPCS} `; currentTotalAdet += qty;
+                               if(isManual) summaryDetail += `${langSet.summaryUnitManual} `;
+                            }
+                        }
+                    }
+                }
 
                 if (isRowSelected) {
                     row.classList.add('selected-row');
@@ -627,13 +1134,20 @@
                     const listItem = document.createElement('li');
                     listItem.innerHTML = `<span class="summary-product-name">${productName}</span> <span class="summary-product-qty">${summaryDetail.trim()}</span>`;
                     summaryList.appendChild(listItem);
-                    hasItemsInSummary = true; currentTotalLb += rowLb; currentTotalAdet += rowAdet;
-                } else { row.classList.remove('selected-row'); }
+                    hasItemsInSummary = true;
+                } else {
+                    row.classList.remove('selected-row');
+                }
             });
+
             emptySummaryText.style.display = hasItemsInSummary ? 'none' : 'block';
             totalLbEl.textContent = `${currentTotalLb.toFixed(2)} ${langSet.summaryUnitLB}`;
             totalAdetEl.textContent = `${currentTotalAdet} ${langSet.summaryUnitPCS}`;
+            totalQuartEl.textContent = `${currentTotalQuart.toFixed(2)} ${langSet.summaryUnitQuart}`;
+
+            totalQuartRowEl.style.display = currentTotalQuart > 0 ? 'flex' : 'none';
         }
+
 
         function attachProductEventListeners() {
             document.querySelectorAll('.section-title[data-category-id]').forEach((title) => {
@@ -677,7 +1191,7 @@
         function getCurrentBranchName() { const langSet = translations[currentLanguage] || translations.en; if(!manualBranchCheckbox || !manualBranchInput || !branchSelect) return langSet.selectionBranchNotSpecified; if (manualBranchCheckbox.checked) return manualBranchInput.value.trim() || langSet.manualBranchNotSpecified; return branchSelect.value || langSet.selectionBranchNotSpecified;}
 
         function saveFormSetting(key, value) { try { localStorage.setItem(key, value); } catch (e) { console.warn(`localStorage '${key}' kaydı başarısız:`, e); }}
-        function loadFormSettings() { // Bu fonksiyon tarihleri YÜKLEMEZ, sadece diğer ayarları yükler.
+        function loadFormSettings() {
             if(!mainFormInitialized) return;
             try {
                 orderSenderNameInput.value = localStorage.getItem(LS_SENDER_NAME) || '';
@@ -691,52 +1205,32 @@
 
         function setInitialDates() {
             if(!mainFormInitialized || !orderDateInput || !deliveryDateInput) return;
-
-            // 1. Sipariş Tarihi: Her zaman uygulamanın açıldığı güncel tarihle başlar.
             orderDateInput.value = formatDateForInput(new Date());
-            // Kullanıcı bu tarihi değiştirirse, 'change' event listener'ı değişikliği LS_ORDER_DATE'e kaydeder.
-            // Ancak bir sonraki uygulama açılışında bu satır yine güncel tarihi ayarlayacaktır.
-
-            // 2. Talep Edilen Teslim Tarihi:
             let savedDeliveryDate = null;
             try {
-                // Kullanıcının önceki teslim tarihi seçimini localStorage'dan yükle.
                 savedDeliveryDate = localStorage.getItem(LS_DELIVERY_DATE);
             } catch (e) { console.warn("localStorage teslim tarihi okuma hatası:", e); }
 
             if (savedDeliveryDate) {
-                // Eğer kayıtlı bir seçim varsa, onu kullan.
                 deliveryDateInput.value = savedDeliveryDate;
             } else {
-                // Kayıtlı bir seçim yoksa, sipariş tarihinden bir gün sonrası olarak ayarla.
-                // orderDateInput.value'nun (az önce bugünün tarihi olarak ayarlandı) ayrıştırılması:
                 let orderDateVal;
-                const parts = orderDateInput.value.split('-'); // Örn: "2023-10-27"
+                const parts = orderDateInput.value.split('-');
                 if (parts.length === 3) {
-                    // Date yapıcısında ay 0-indekslidir, bu yüzden 1 çıkar.
                     orderDateVal = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
                 } else {
-                    // formatDateForInput'un güvenilirliği nedeniyle bu bloğa girilmemeli.
-                    console.error("setInitialDates içinde orderDateInput.value ayrıştırılamadı. Teslimat hesaplaması için new Date() kullanılıyor.");
-                    orderDateVal = new Date(); // Hata durumunda yedek.
+                    console.error("setInitialDates içinde orderDateInput.value ayrıştırılamadı.");
+                    orderDateVal = new Date();
                 }
-
-                // orderDateVal'in geçerli bir tarih olduğundan emin ol.
                 if (isNaN(orderDateVal.getTime())) {
-                     console.error("setInitialDates içinde orderDateVal geçersiz. Teslimat hesaplaması için new Date() kullanılıyor.");
-                    orderDateVal = new Date(); // Ek yedek.
+                     console.error("setInitialDates içinde orderDateVal geçersiz.");
+                    orderDateVal = new Date();
                 }
-
-                const tomorrow = new Date(orderDateVal); // orderDateVal'den yeni bir Date nesnesi oluştur.
-                tomorrow.setDate(orderDateVal.getDate() + 1); // Bu yeni nesneyi değiştir.
+                const tomorrow = new Date(orderDateVal);
+                tomorrow.setDate(orderDateVal.getDate() + 1);
                 deliveryDateInput.value = formatDateForInput(tomorrow);
-
-                // Bu varsayılan teslim tarihini localStorage'a kaydet, böylece kullanıcı değiştirmezse hatırlanır.
-                // Kullanıcı değiştirirse, deliveryDateInput üzerindeki event listener bunu güncelleyecektir.
                 saveFormSetting(LS_DELIVERY_DATE, deliveryDateInput.value);
             }
-            // orderDateInput ve deliveryDateInput için 'change' event listener'ları
-            // kullanıcı tarafından yapılan değişiklikleri ilgili LS anahtarlarına kaydedecektir.
         }
 
 
@@ -766,23 +1260,25 @@
                 generalNotes: generalNotesInput ? (generalNotesInput.value.trim() || (forTextSummary ? 'None' : '')) : (forTextSummary ? 'None' : ''),
                 totalLbText: document.getElementById('totalLb') ? document.getElementById('totalLb').textContent : `0 ${langSet.summaryUnitLB}`,
                 totalPcsText: document.getElementById('totalAdet') ? document.getElementById('totalAdet').textContent : `0 ${langSet.summaryUnitPCS}`,
+                totalQuartText: document.getElementById('totalQuart') ? document.getElementById('totalQuart').textContent : `0 ${langSet.summaryUnitQuart}`,
                 summaryItems: Array.from(document.querySelectorAll('#summaryList li')).map(item => ({
                     name: item.querySelector('.summary-product-name').textContent,
                     quantity: item.querySelector('.summary-product-qty').textContent
                 }))
             };
             const displayLocale = currentLanguage === 'tr' ? 'tr-TR' : 'en-US';
-            details.formattedOrderDate = formatDateForDisplay(details.orderDate, 'en-US'); // PDF/Word için her zaman en-US
-            details.displayOrderDate = formatDateForDisplay(details.orderDate, displayLocale); // E-posta için yerel
-            details.formattedDeliveryDate = formatDateForDisplay(details.deliveryDate, 'en-US'); // PDF/Word için her zaman en-US
-            details.displayDeliveryDate = formatDateForDisplay(details.deliveryDate, displayLocale); // E-posta için yerel
+            details.formattedOrderDate = formatDateForDisplay(details.orderDate, 'en-US');
+            details.displayOrderDate = formatDateForDisplay(details.orderDate, displayLocale);
+            details.formattedDeliveryDate = formatDateForDisplay(details.deliveryDate, 'en-US');
+            details.displayDeliveryDate = formatDateForDisplay(details.deliveryDate, displayLocale);
             return details;
         }
 
+
         function generatePrintContent(forPdfOrWord = false) {
             const details = getOrderDetails();
-            const langSet = translations[currentLanguage] || translations.en;
-            const companyNamePrint = translations['en'].footerCompanyName; // PDF/Word için her zaman İngilizce şirket adı
+            const enLangSet = translations.en;
+            const companyNamePrint = translations['en'].footerCompanyName;
             const captureContainerWidth = forPdfOrWord ? '210mm' : '195mm';
             const containerPadding = forPdfOrWord ? '10mm' : '0';
             let logoSrcToUse = '';
@@ -799,36 +1295,89 @@
                  logoSrcToUse = 'https://via.placeholder.com/160x60?text=Selda+Logo';
             }
 
+            let usedUnits = { lb: false, quart: false, pcs: false, kunefeSmall: false, kunefeLarge: false };
+            let hasLb = false, hasQuart = false, hasPcs = false, hasKunefeSmall = false, hasKunefeLarge = false;
+
+            details.summaryItems.forEach(item => {
+                if (item.quantity.includes(enLangSet.summaryUnitLB)) hasLb = true;
+                if (item.quantity.includes(enLangSet.summaryUnitQuart)) hasQuart = true;
+                // PCS, Kunefe Small veya Kunefe Large'dan herhangi biri varsa genel PCS/Adet sütunu gösterilir
+                if (item.quantity.includes(enLangSet.summaryUnitPCS) || item.quantity.includes(enLangSet.summaryUnitKunefeSmall) || item.quantity.includes(enLangSet.summaryUnitKunefeLarge)) hasPcs = true;
+                if (item.name === "Kunefe" && item.quantity.includes(enLangSet.summaryUnitKunefeSmall)) hasKunefeSmall = true;
+                if (item.name === "Kunefe" && item.quantity.includes(enLangSet.summaryUnitKunefeLarge)) hasKunefeLarge = true;
+            });
+            usedUnits = { lb: hasLb, quart: hasQuart, pcs: hasPcs, kunefeSmall: hasKunefeSmall, kunefeLarge: hasKunefeLarge };
+
+
+            let headerHtml = `<th class="product-name-col">${enLangSet.productNameHeader}</th>`;
+            if (usedUnits.lb) headerHtml += `<th class="lb-col">${enLangSet.lbHeader}</th>`;
+            if (usedUnits.quart) headerHtml += `<th class="quart-col">${enLangSet.quartHeader}</th>`;
+            if (usedUnits.pcs) headerHtml += `<th class="pcs-col">${enLangSet.pcsUnitHeader}</th>`; // Genel PCS (Baklava, diğer dessertler)
+            if (usedUnits.kunefeSmall) headerHtml += `<th class="kunefe-s-col">${enLangSet.kunefeSmallHeader}</th>`;
+            if (usedUnits.kunefeLarge) headerHtml += `<th class="kunefe-l-col">${enLangSet.kunefeLargeHeader}</th>`;
+
+
             let productRowsHtml = '';
             if (details.summaryItems.length > 0) {
                 details.summaryItems.forEach(item => {
                     const productName = item.name;
                     const productQtyText = item.quantity;
-                    let lbQty = '-'; let pcsQty = '-';
-                    // PDF/Word için birimler her zaman İngilizce olacaksa, regex'ler 'en' dil setine göre ayarlanmalı.
-                    // Şimdilik mevcut dilin birimlerini kullanıyor.
-                    const lbRegexEn = new RegExp(`([\\d\\.]+)\\s*(LB)`); // İngilizce LB için
-                    const pcsRegexEn = new RegExp(`(\\d+)\\s*(PCS)`);   // İngilizce PCS için
-                    const manualRegexEn = new RegExp(`\\(M\\)`);          // İngilizce (M) için
+                    let rowDataHtml = `<td class="product-name-col">${productName}</td>`;
 
-
-                    const lbMatch = productQtyText.match(new RegExp(`([\\d\\.]+)\\s*(${translations.en.summaryUnitLB}|${translations.tr.summaryUnitLB})`));
-                    if (lbMatch) lbQty = lbMatch[1];
-
-                    const pcsMatch = productQtyText.match(new RegExp(`(\\d+)\\s*(${translations.en.summaryUnitPCS}|${translations.tr.summaryUnitPCS})`));
-                    if (pcsMatch) pcsQty = pcsMatch[1];
-
-                    if (lbMatch && (productQtyText.includes(translations.en.summaryUnitManual) || productQtyText.includes(translations.tr.summaryUnitManual))) lbQty += " (M)";
-                    if (pcsMatch && (productQtyText.includes(translations.en.summaryUnitManual) || productQtyText.includes(translations.tr.summaryUnitManual))) pcsQty += " (M)";
-
-                    productRowsHtml += `<tr><td class="product-name-col">${productName}</td><td class="qty-col">${lbQty}</td><td class="qty-col">${pcsQty}</td></tr>`;
+                    if (usedUnits.lb) {
+                        const lbMatch = productQtyText.match(new RegExp(`([\\d\\.]+)\\s*(${enLangSet.summaryUnitLB}|${translations.tr.summaryUnitLB})`));
+                        rowDataHtml += `<td class="lb-col">${lbMatch ? lbMatch[1] + (productQtyText.includes(enLangSet.summaryUnitManual) ? " (M)" : "") : '-'}</td>`;
+                    }
+                    if (usedUnits.quart) {
+                        const quartMatch = productQtyText.match(new RegExp(`([\\d\\.]+)\\s*(${enLangSet.summaryUnitQuart}|${translations.tr.summaryUnitQuart})`));
+                        rowDataHtml += `<td class="quart-col">${quartMatch ? quartMatch[1] + (productQtyText.includes(enLangSet.summaryUnitManual) ? " (M)" : "") : '-'}</td>`;
+                    }
+                    if (usedUnits.pcs) { // Genel PCS (Baklava, diğer dessertler, AMA KÜNEFE DEĞİL)
+                        let pcsVal = '-';
+                        if (productName !== "Kunefe") {
+                            const pcsMatch = productQtyText.match(new RegExp(`(\\d+)\\s*(${enLangSet.summaryUnitPCS}|${translations.tr.summaryUnitPCS})`));
+                            if (pcsMatch) pcsVal = pcsMatch[1] + (productQtyText.includes(enLangSet.summaryUnitManual) ? " (M)" : "");
+                        }
+                        rowDataHtml += `<td class="pcs-col">${pcsVal}</td>`;
+                    }
+                    if (usedUnits.kunefeSmall) {
+                        let kunefeSmallVal = '-';
+                        if (productName === "Kunefe") {
+                            const smallMatch = productQtyText.match(/(\d+)\s*(Small|Küçük)/i);
+                            if (smallMatch) kunefeSmallVal = smallMatch[1] + (productQtyText.includes(enLangSet.summaryUnitManual) ? " (M)" : "");
+                        }
+                        rowDataHtml += `<td class="kunefe-s-col">${kunefeSmallVal}</td>`;
+                    }
+                    if (usedUnits.kunefeLarge) {
+                        let kunefeLargeVal = '-';
+                         if (productName === "Kunefe") {
+                            const largeMatch = productQtyText.match(/(\d+)\s*(Large|Büyük)/i);
+                            if (largeMatch) kunefeLargeVal = largeMatch[1] + (productQtyText.includes(enLangSet.summaryUnitManual) ? " (M)" : "");
+                        }
+                        rowDataHtml += `<td class="kunefe-l-col">${kunefeLargeVal}</td>`;
+                    }
+                    productRowsHtml += `<tr>${rowDataHtml}</tr>`;
                 });
-            } else { productRowsHtml = `<tr><td colspan="3" style="text-align:center;">No products ordered.</td></tr>`; }
+            } else {
+                 let colspanCount = 1;
+                 if(usedUnits.lb) colspanCount++; if(usedUnits.quart) colspanCount++; if(usedUnits.pcs) colspanCount++;
+                 if(usedUnits.kunefeSmall) colspanCount++; if(usedUnits.kunefeLarge) colspanCount++;
+                 if (colspanCount === 1 && !usedUnits.lb && !usedUnits.quart && !usedUnits.pcs && !usedUnits.kunefeSmall && !usedUnits.kunefeLarge) colspanCount = 2; // Eğer hiç birim yoksa en az 2 sütun (ürün adı + boş)
+                 productRowsHtml = `<tr><td colspan="${colspanCount}" style="text-align:center;">No products ordered.</td></tr>`;
+            }
+
+
+            let totalsHtml = '';
+            if (usedUnits.lb) totalsHtml += `<p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested LB:</span><span style="margin-left:15px;">${details.totalLbText.replace(translations[currentLanguage].summaryUnitLB,enLangSet.summaryUnitLB)}</span></p>`;
+            if (usedUnits.quart) totalsHtml += `<p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested Quart:</span><span style="margin-left:15px;">${details.totalQuartText.replace(translations[currentLanguage].summaryUnitQuart,enLangSet.summaryUnitQuart)}</span></p>`;
+            if (usedUnits.pcs || usedUnits.kunefeSmall || usedUnits.kunefeLarge) totalsHtml += `<p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested PCS:</span><span style="margin-left:15px;">${details.totalPcsText.replace(translations[currentLanguage].summaryUnitPCS,enLangSet.summaryUnitPCS)}</span></p>`;
+            if(totalsHtml === '') totalsHtml = '<p style="text-align:right; font-weight:bold;">No quantities selected.</p>';
+
 
             const printHTML = `
                 <div id="captureForPdfOrWord" style="width:${captureContainerWidth};margin:0 auto;padding:${containerPadding};background:white;font-family:Arial,sans-serif;font-size:9pt;color:#000;box-sizing:border-box;">
                 <header class="print-header" style="box-sizing:border-box;">
-                    ${logoSrcToUse?`<img src="${logoSrcToUse}" alt="Selda Mediterranean Logo" class="print-logo" style="max-width:130px;height:auto;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;">`:''}
+                    ${logoSrcToUse?`<img src="${logoSrcToUse}" alt="Selda Mediterranean Logo" class="print-logo">`:''}
                     <h1 style="font-size:14pt;font-weight:700;margin-top:5px;margin-bottom:10px;text-align:center;color:#333;">PRODUCT ORDER FORM</h1>
                     <div class="print-order-info" style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px;font-size:9pt;box-sizing:border-box;">
                         <span style="margin:1px 0;"><strong>Order No:</strong> ${details.orderNo}</span>
@@ -847,12 +1396,13 @@
                 <section class="print-section" style="margin-bottom:10px;box-sizing:border-box;">
                     <h2 style="font-size:11pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:3px;margin-top:15px;margin-bottom:8px;text-align:left;color:#333;">REQUESTED PRODUCTS</h2>
                     <table class="print-product-table" style="width:100%;border-collapse:collapse;margin-top:8px;font-size:8.5pt;box-sizing:border-box;">
-                        <thead style="font-size:8.5pt;"><tr style="page-break-inside:avoid;"><th class="product-name-col" style="border:1px solid #ccc;padding:4px 6px;text-align:center;background-color:#f0f0f0;font-weight:700;width:50%;box-sizing:border-box;">Product Name</th><th class="qty-col" style="border:1px solid #ccc;padding:4px 6px;text-align:center;background-color:#f0f0f0;font-weight:700;width:25%;box-sizing:border-box;">Quantity (LB)</th><th class="qty-col" style="border:1px solid #ccc;padding:4px 6px;text-align:center;background-color:#f0f0f0;font-weight:700;width:25%;box-sizing:border-box;">Quantity (PCS)</th></tr></thead>
-                        <tbody style="font-size:8.5pt;">${productRowsHtml.replace(/<td/g,'<td style="border:1px solid #ccc;padding:4px 6px;text-align:left;vertical-align:top;box-sizing:border-box;word-break:break-word;"').replace(/class="product-name-col"/g,'style="width:50%;"').replace(/class="qty-col"/g,'style="width:25%;text-align:center;"')}</tbody>
+                        <thead style="font-size:8.5pt;"><tr style="page-break-inside:avoid;">
+                           ${headerHtml}
+                        </tr></thead>
+                        <tbody style="font-size:8.5pt;">${productRowsHtml.replace(/<td/g,'<td style="border:1px solid #ccc;padding:4px 6px;text-align:left;vertical-align:top;box-sizing:border-box;word-break:break-word;"')}</tbody>
                     </table>
                     <div class="print-totals" style="margin-top:10px;padding-top:10px;border-top:1px solid #666;font-size:9pt;box-sizing:border-box;">
-                        <p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested LB:</span><span style="margin-left:15px;">${details.totalLbText.replace(langSet.summaryUnitLB,translations.en.summaryUnitLB)}</span></p>
-                        <p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested PCS:</span><span style="margin-left:15px;">${details.totalPcsText.replace(langSet.summaryUnitPCS,translations.en.summaryUnitPCS)}</span></p>
+                        ${totalsHtml}
                     </div>
                 </section>
                 <section class="print-section" style="margin-bottom:10px;box-sizing:border-box;">
@@ -876,7 +1426,6 @@
             }
             return printHTML;
         }
-
 
         async function generatePdfBlob() {
             if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
@@ -906,17 +1455,14 @@
                     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
                 } else {
                     let numPages = Math.ceil(pdfHeight / pdf.internal.pageSize.getHeight());
-                    let yPositionOnCanvas = 0; // Y eksenindeki konumu tam tuval üzerinde takip et
-                    const canvasHeight = imgProps.height; // Tam tuvalin yüksekliği
-                    const pageHeightOnCanvas = (pdf.internal.pageSize.getHeight() / pdfWidth) * imgProps.width; // Bir PDF sayfasının tuval üzerindeki yüksekliği
+                    let yPositionOnCanvas = 0;
+                    const canvasHeight = imgProps.height;
+                    const pageHeightOnCanvas = (pdf.internal.pageSize.getHeight() / pdfWidth) * imgProps.width;
 
                     for (let i = 0; i < numPages; i++) {
                         if (i > 0) pdf.addPage();
-                        
-                        // Kesilecek parçanın yüksekliğini hesapla
                         let sliceHeightOnCanvas = Math.min(pageHeightOnCanvas, canvasHeight - yPositionOnCanvas);
-                        
-                        if (sliceHeightOnCanvas <= 0) break; // Kesilecek bir şey kalmadıysa döngüden çık
+                        if (sliceHeightOnCanvas <= 0) break;
 
                         const tempPageCanvas = document.createElement('canvas');
                         tempPageCanvas.width = imgProps.width;
@@ -924,16 +1470,10 @@
                         const tempPageCtx = tempPageCanvas.getContext('2d');
                         
                         const fullImage = new Image();
-                        fullImage.src = imgData; // imgData tam tuvalin resmidir
-                        // Tam resmin yüklenmesini bekle (genellikle zaten yüklüdür ama emin olmak için)
+                        fullImage.src = imgData;
                         await new Promise(resolve => { if (fullImage.complete && fullImage.naturalWidth !== 0) resolve(); else fullImage.onload = resolve; fullImage.onerror = resolve; });
 
-                        // Tam resimden ilgili parçayı kesip geçici tuvale çiz
-                        tempPageCtx.drawImage(fullImage, 
-                                              0, yPositionOnCanvas, // Kaynak (tam resim) x, y
-                                              imgProps.width, sliceHeightOnCanvas, // Kaynak genişlik, yükseklik
-                                              0, 0, // Hedef (geçici tuval) x, y
-                                              imgProps.width, sliceHeightOnCanvas); // Hedef genişlik, yükseklik
+                        tempPageCtx.drawImage(fullImage, 0, yPositionOnCanvas, imgProps.width, sliceHeightOnCanvas, 0, 0, imgProps.width, sliceHeightOnCanvas);
                         
                         const pageImgData = tempPageCanvas.toDataURL('image/png');
                         const pagePdfHeight = (sliceHeightOnCanvas * pdfWidth) / imgProps.width;
@@ -964,7 +1504,7 @@
                 const tempDiv = document.createElement('div'); tempDiv.innerHTML = contentHtml;
                 const converted = htmlDocx.asBlob(tempDiv.querySelector('#captureForPdfOrWord').innerHTML, {
                     orientation: 'portrait',
-                    margins: { top: 720, right: 720, bottom: 720, left: 720, header: 0, footer: 0, gutter: 0 } // 1 inç = 720 twips
+                    margins: { top: 720, right: 720, bottom: 720, left: 720, header: 0, footer: 0, gutter: 0 }
                 });
                 saveAs(converted, `Siparis_${orderNoInput.value || 'form'}.docx`);
                 shareModalMessage.textContent = langSet.shareModalMessageReady;
@@ -990,8 +1530,19 @@
             if (details.summaryItems.length > 0) {
                 details.summaryItems.forEach(item => { text += `- ${item.name}: ${item.quantity}\n`; });
             } else { text += `${langSet.emptySummaryText}\n`; }
-            text += `\n------------------------------------\n${langSet.totalLbLabel} ${details.totalLbText}\n`;
-            text += `${langSet.totalPcsLabel} ${details.totalPcsText}\n`;
+            text += `\n------------------------------------\n`;
+
+            let usedUnitsInSummary = { lb: false, quart: false, pcs: false };
+             details.summaryItems.forEach(item => {
+                if (item.quantity.includes(langSet.summaryUnitLB)) usedUnitsInSummary.lb = true;
+                if (item.quantity.includes(langSet.summaryUnitQuart)) usedUnitsInSummary.quart = true;
+                if (item.quantity.includes(langSet.summaryUnitPCS) || item.quantity.includes(langSet.summaryUnitKunefeSmall) || item.quantity.includes(langSet.summaryUnitKunefeLarge)) usedUnitsInSummary.pcs = true;
+            });
+
+            if (usedUnitsInSummary.lb) text += `${langSet.totalLbLabel} ${details.totalLbText}\n`;
+            if (usedUnitsInSummary.quart) text += `${langSet.totalQuartLabel} ${details.totalQuartText}\n`;
+            if (usedUnitsInSummary.pcs) text += `${langSet.totalPcsLabel} ${details.totalPcsText}\n`;
+            
             text += `\n${langSet.generalNotesTitle.toUpperCase()}:\n${details.generalNotes}\n`;
             text += `------------------------------------\n`;
             return text;
@@ -999,12 +1550,12 @@
 
         function initializeMainForm(){
             if (mainFormInitialized) return;
-            assignMainFormDOMElements(); // DOM elementlerini ata
+            assignMainFormDOMElements();
             mainFormInitialized = true;
 
             populateBranchSelect();
-            loadFormSettings(); // Tarihler hariç diğer ayarları yükle
-            setInitialDates();  // Tarihleri isteklere göre ayarla
+            loadFormSettings();
+            setInitialDates();
             setFooterInfo();
             setDeveloperSignature();
             renderProducts();
@@ -1019,19 +1570,17 @@
             const year = now.getFullYear().toString().slice(-2);
             const month = (now.getMonth() + 1).toString().padStart(2, '0');
             const day = now.getDate().toString().padStart(2, '0');
-            if(orderNoInput) orderNoInput.value = `S-${year}${month}${day}-${orderCounter.toString().padStart(3, '0')}-${(Math.floor(Math.random() * 900) + 100)}`;
+            if(orderNoInput) orderNoInput.value = `S${year}${month}${day}-${orderCounter.toString().padStart(3, '0')}`;
 
-            // Form ayarlarını localStorage'a kaydetmek için event listener'lar
+
             if(orderSenderNameInput) orderSenderNameInput.addEventListener('input', () => saveFormSetting(LS_SENDER_NAME, orderSenderNameInput.value));
             if(contactPhoneInput) contactPhoneInput.addEventListener('input', () => saveFormSetting(LS_CONTACT_PHONE, contactPhoneInput.value));
             if(branchSelect) branchSelect.addEventListener('change', () => saveFormSetting(LS_BRANCH_SELECT_VALUE, branchSelect.value));
             if(manualBranchInput) manualBranchInput.addEventListener('input', () => saveFormSetting(LS_MANUAL_BRANCH_VALUE, manualBranchInput.value));
             if(manualBranchCheckbox) manualBranchCheckbox.addEventListener('change', () => { updateBranchInputState(); saveFormSetting(LS_MANUAL_BRANCH_ENABLED, manualBranchCheckbox.checked); });
             
-            // Tarih değişikliklerini localStorage'a kaydetmek için event listener'lar
             if(orderDateInput) orderDateInput.addEventListener('change', () => saveFormSetting(LS_ORDER_DATE, orderDateInput.value));
             if(deliveryDateInput) deliveryDateInput.addEventListener('change', () => saveFormSetting(LS_DELIVERY_DATE, deliveryDateInput.value));
-
 
             if (mainFormLangTrBtn) mainFormLangTrBtn.addEventListener('click', () => setLanguage('tr'));
             if (mainFormLangEnBtn) mainFormLangEnBtn.addEventListener('click', () => setLanguage('en'));
@@ -1079,25 +1628,23 @@
 
         function onPageLoad() {
             console.log('DOM fully loaded and parsed.');
-            assignLoginDOMElements(); // Önce login DOM elementlerini ata
-            loadLanguage();         // Dili yükle (varsayılan EN)
-            loadRememberMe();       // "Beni Hatırla" ayarını yükle
+            assignLoginDOMElements();
+            loadLanguage();
+            loadRememberMe();
 
-            if (!checkAuth()) { // Eğer kimlik doğrulanmamışsa, login event'lerini ayarla
+            if (!checkAuth()) {
                 if (loginButton) loginButton.addEventListener('click', handleLogin);
                 if (passwordInput) passwordInput.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); handleLogin(); }});
                 if (usernameInput) usernameInput.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); if(passwordInput) passwordInput.focus(); }});
             }
-            // Eğer checkAuth() true dönerse, initializeMainForm() zaten içinde çağrılır.
         }
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', onPageLoad);
         } else {
-            onPageLoad(); // DOM zaten yüklenmişse doğrudan çalıştır
+            onPageLoad();
         }
 
-        // PWA Service Worker Kaydı
         console.log('PWA Script: Attempting to register Service Worker...');
         if ('serviceWorker' in navigator) {
             console.log('PWA Script: Service Worker API is available in navigator.');
