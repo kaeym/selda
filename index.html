@@ -43,9 +43,9 @@
             --macos-focus-ring: rgba(40, 167, 69, 0.25);
             --original-green: #28a745;
             --original-green-darker: #1e7e34;
-            --macos-section-header-bg: #F7F7F7;
+            --macos-section-header-bg-prominent: #E9E9EB;
             --macos-section-header-text: #333;
-            --macos-section-header-border: #E0E0E0;
+            --macos-section-header-border: #DCDCE0;
         }
         body {font-family: var(--font-family); margin: 0; padding: 0; background-color: var(--light-gray); color: var(--dark-gray); display: flex; flex-direction: column; align-items: center; min-height: 100vh;}
         #loginScreen {position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 1; visibility: visible; transition: opacity 0.5s ease, visibility 0.5s ease; overflow-y: auto;}
@@ -106,7 +106,8 @@
             text-transform: uppercase; letter-spacing: 0.5px;
         }
         .section-title {
-            background-color: var(--macos-section-header-bg); color: var(--macos-section-header-text);
+            background-color: var(--macos-section-header-bg-prominent);
+            color: var(--dark-gray);
             padding: 8px 12px;
             border-radius: var(--border-radius-md);
             margin-top: 15px;
@@ -117,9 +118,9 @@
             border-bottom-left-radius: 0; border-bottom-right-radius: 0;
             transition: background-color 0.2s ease;
         }
-        .section-title:hover { background-color: #EDEDED; }
+        .section-title:hover { background-color: #DADAE0; }
         .section-title:focus {outline: 2px solid var(--primary-color); outline-offset: 1px;}
-        .section-title.has-selection {background-color: #E6F2FF; border-color: #B3D7FF;}
+        .section-title.has-selection {background-color: #D0E8FF; border-color: #B3D7FF;}
         .category-title-text {flex-grow: 1;}
         .category-search-container {margin-left: 8px; display: flex; align-items: center;}
         .category-search-box {
@@ -171,7 +172,7 @@
             width: auto !important;
             text-align: center;
         }
-        .product-table th.kunefe-header { /* Künefe için Small/Large ana başlıkları */
+        .product-table th.kunefe-header {
             width: 50% !important;
         }
 
@@ -220,23 +221,22 @@
         .quantity-options label .manual-qty-input {
             min-width: 50px;
         }
-        /* Künefe için özel stil */
         .kunefe-options-container {
             display: flex;
-            gap: 0; /* Aradaki boşluğu kaldır, çizgiyle birleşsin */
+            gap: 0;
             align-items: flex-start;
-            width: 100%; /* td'yi tamamen kaplasın */
+            width: 100%;
         }
         .kunefe-options-group {
             flex: 1;
-            padding: 5px; /* İç boşluk */
+            padding: 5px;
         }
-        .kunefe-options-group:first-child { /* Small grubu */
-            border-right: 1px solid var(--border-color); /* Araya çizgi */
-            padding-right: 10px; /* Çizgi için sağda boşluk */
+        .kunefe-options-group:first-child {
+            border-right: 1px solid var(--border-color);
+            padding-right: 10px;
         }
-         .kunefe-options-group:last-child { /* Large grubu */
-            padding-left: 10px; /* Çizgi için solda boşluk */
+         .kunefe-options-group:last-child {
+            padding-left: 10px;
         }
 
         .kunefe-options-group .size-label {
@@ -247,7 +247,7 @@
             color: var(--dark-gray);
             text-align: center;
         }
-        .specific-unit-label { /* Soup of the Day için Quart başlığı */
+        .specific-unit-label {
             font-weight: 500;
             margin-bottom: 5px;
             display: block;
@@ -315,6 +315,8 @@
             .order-summary-list-container {max-height: 300px;} .order-summary-panel h3 {font-size: 1em;}
             .order-summary-list li {font-size: 0.8em;} .summary-totals {font-size: 0.85em;}
              .kunefe-options-container { flex-direction: column; gap: 5px;}
+             .kunefe-options-group:first-child { border-right: none; padding-right: 5px; }
+             .kunefe-options-group:last-child { padding-left: 5px; }
         }
         @media (max-width: 767px) {
             .page-header img {max-width: 120px;} .language-selector {top: 5px; right: 5px; gap: 4px;}
@@ -471,7 +473,7 @@
 
         const CORRECT_USERNAME = "Kitchen";
         const CORRECT_PASSWORD = "S8246";
-        const AUTH_KEY_SESSION = 'seldaOrderForm_authenticated_v21_final_touches';
+        const AUTH_KEY_SESSION = 'seldaOrderForm_authenticated_v22_manual_login_only';
         const LS_REMEMBER_USER = 'seldaOrderForm_rememberUser_v2';
         const LS_REMEMBERED_USERNAME = 'seldaOrderForm_rememberedUsername_v2';
         const LS_REMEMBERED_PASSWORD = 'seldaOrderForm_rememberedPassword_v2';
@@ -583,7 +585,7 @@
         const LB_ONLY_PRODUCTS_A_LITTLE_MORE = productData["A LITTLE MORE"].filter(p => !LB_AND_PCS_PRODUCTS_A_LITTLE_MORE.includes(p));
 
 
-        const LS_LANGUAGE = 'seldaOrderForm_language_v8_final_touches';
+        const LS_LANGUAGE = 'seldaOrderForm_language_v8_final_touches_v2';
         const LS_SENDER_NAME = 'seldaOrderForm_senderName_v12';
         const LS_CONTACT_PHONE = 'seldaOrderForm_contactPhone_v12';
         const LS_BRANCH_SELECT_VALUE = 'seldaOrderForm_branchSelectValue_v12';
@@ -591,7 +593,7 @@
         const LS_MANUAL_BRANCH_ENABLED = 'seldaOrderForm_manualBranchEnabled_v12';
         const LS_ORDER_DATE = 'seldaOrderForm_orderDate_v12';
         const LS_DELIVERY_DATE = 'seldaOrderForm_deliveryDate_v12';
-        const LS_ORDER_COUNTER = 'seldaOrderCounterV20_final_touches';
+        const LS_ORDER_COUNTER = 'seldaOrderCounterV20_final_touches_v2';
 
 
         function assignLoginDOMElements() {
@@ -639,13 +641,6 @@
         }
 
         function checkAuth() {
-            for (let i = 0; i < sessionStorage.length; i++) {
-                const key = sessionStorage.key(i);
-                if (key && key.startsWith('seldaOrderForm_authenticated_') && key !== AUTH_KEY_SESSION) {
-                    sessionStorage.removeItem(key);
-                }
-            }
-
             if (sessionStorage.getItem(AUTH_KEY_SESSION) === 'true') {
                 showMainForm();
                 if (!mainFormInitialized) {
@@ -653,33 +648,9 @@
                 }
                 return true;
             }
-
-            try {
-                const rememberedUser = localStorage.getItem(LS_REMEMBER_USER);
-                if (rememberedUser === 'true') {
-                    const rememberedUsername = localStorage.getItem(LS_REMEMBERED_USERNAME);
-                    const rememberedPassword = localStorage.getItem(LS_REMEMBERED_PASSWORD);
-                    if (rememberedUsername === CORRECT_USERNAME && rememberedPassword === CORRECT_PASSWORD) {
-                        sessionStorage.setItem(AUTH_KEY_SESSION, 'true');
-                        showMainForm();
-                        if (!mainFormInitialized) {
-                            initializeMainForm();
-                        }
-                        return true;
-                    } else {
-                        localStorage.removeItem(LS_REMEMBER_USER);
-                        localStorage.removeItem(LS_REMEMBERED_USERNAME);
-                        localStorage.removeItem(LS_REMEMBERED_PASSWORD);
-                    }
-                }
-            } catch (e) {
-                console.warn("localStorage 'Beni Hatırla' otomatik giriş kontrolü başarısız:", e);
-            }
-
             showLoginScreen();
             return false;
         }
-
 
         function handleLogin() {
             const enteredUsername = usernameInput.value.trim();
@@ -718,9 +689,6 @@
                 loginError.style.display = 'block';
                 passwordInput.value = '';
                 passwordInput.focus();
-                 try {
-                    localStorage.removeItem(LS_REMEMBERED_PASSWORD);
-                } catch (e) { console.warn("localStorage şifre silme başarısız (hatalı giriş sonrası):", e); }
             }
         }
 
@@ -735,18 +703,26 @@
                         usernameInput.value = rememberedUsername;
                     }
                     if (rememberedPassword && passwordInput) {
-                        passwordInput.value = rememberedPassword;
+                        passwordInput.value = rememberedPassword; // Şifreyi input'a doldur
                     }
                     if (rememberMeCheckbox) {
                         rememberMeCheckbox.checked = true;
                     }
-                    if(passwordInput && usernameInput.value && !passwordInput.value) passwordInput.focus();
-                    else if (usernameInput && !usernameInput.value) usernameInput.focus();
+                     // Otomatik focus mantığı
+                    if(passwordInput && usernameInput.value && passwordInput.value) { // Her ikisi de doluysa butona
+                        if(loginButton) loginButton.focus();
+                    } else if (passwordInput && usernameInput.value && !passwordInput.value) { // Sadece username doluysa password'a
+                        passwordInput.focus();
+                    } else if (usernameInput && !usernameInput.value) { // Username boşsa username'e
+                         usernameInput.focus();
+                    }
+
 
                 } else {
                     if (rememberMeCheckbox) {
                         rememberMeCheckbox.checked = false;
                     }
+                    if (usernameInput) usernameInput.focus(); // Hiçbir şey hatırlanmıyorsa username'e focus
                 }
             } catch (e) {
                 console.warn("localStorage 'Beni Hatırla' okuma başarısız:", e);
@@ -840,21 +816,12 @@
                 const categoryId = `category-${category.replace(/\s+/g, '').toLowerCase()}`;
                 let headerRow;
                 const isDessertCategory = category === "DESSERT";
-                const hasKunefeInDessert = isDessertCategory && productData[category].includes("Kunefe");
-                const isSoupCategory = category === "SMALL BITES" && productData[category].includes("Soup of the Day");
-
 
                 if (isDessertCategory) {
                      headerRow = `
                         <th>${langSet.productNameHeader}</th>
                         <th class="dessert-pcs-header" colspan="2" style="text-align:center;">${langSet.pcsUnitHeader}</th>`;
-                } else if (isSoupCategory) { // SMALL BITES ve Soup of the Day içeriyorsa
-                     headerRow = `
-                        <th>${langSet.productNameHeader}</th>
-                        <th style="width: 200px;">${langSet.lbHeader}</th> <!-- LB başlığı kalacak -->
-                        <th style="width: 200px;">${langSet.pcsUnitHeader}</th>`;
-                }
-                else { // Diğer tüm kategoriler
+                } else { // Diğer tüm kategoriler
                     headerRow = `
                         <th>${langSet.productNameHeader}</th>
                         <th style="width: 200px;">${langSet.lbHeader}</th>
@@ -879,7 +846,7 @@
                     const safeProductName = productName.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
                     const baseId = `prod-${category.replace(/\s+/g, '')}-${safeProductName}`;
                     let column1Html = '';
-                    let column2Html = '';
+                    let column2Html = ''; // Sadece standart 3 sütunlu tablolarda kullanılır
                     const isFromOvenCategory = category === "FROM THE OVEN";
 
                     if (isDessertCategory) {
@@ -926,10 +893,10 @@
                                 <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
                             </div>`;
                         }
-                        column2Html = ''; // DESSERT kategorisinde ikinci data sütunu yok
+                        column2Html = ''; // DESSERT için bu her zaman boş
                     } else if (productName === "Soup of the Day") {
                         column1Html = `
-                        <div> <!-- LB Başlığı altında Quart seçenekleri -->
+                        <div>
                             <span class="specific-unit-label">${langSet.quartHeader}</span>
                             <div class="quantity-options" data-unit="Quart">
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="5"> 5</label>
@@ -939,7 +906,7 @@
                                 <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-quart-manual" min="0" step="any"></label>
                             </div>
                         </div>`;
-                        column2Html = `<div>-</div>`; // PCS sütunu boş
+                        column2Html = `<div>-</div>`;
                     } else if (isFromOvenCategory) {
                         column1Html = `
                         <div class="quantity-options" data-unit="LB">
@@ -1006,8 +973,8 @@
                     htmlContent += `
                                 <tr class="product-row" data-product-name="${productName.toLowerCase()}" data-category-title-id="${categoryId}" id="row-${baseId}">
                                     <td>${productName}</td>
-                                    <td ${isDessertCategory && productName !== "Kunefe" ? 'colspan="2"' : ''}>${column1Html}</td>`;
-                    if (!isDessertCategory) { // DESSERT kategorisi (Künefe hariç) için 2. data sütunu yok
+                                    <td ${isDessertCategory ? 'colspan="2"' : ''}>${column1Html}</td>`; // DESSERT için colspan
+                    if (!isDessertCategory) { // Sadece DESSERT olmayan kategoriler için ikinci data sütunu
                         htmlContent += `<td>${column2Html}</td>`;
                     }
                     htmlContent += `</tr>`;
@@ -1049,7 +1016,7 @@
                 let isRowSelected = false;
 
                 if (productName === "Kunefe") {
-                    const kunefeCell = row.querySelector('td:nth-child(2)'); // colspan="2" nedeniyle tek data hücresi
+                    const kunefeCell = row.querySelector('td:nth-child(2)');
                     const smallOptions = kunefeCell.querySelector('.quantity-options[data-size="Small"]');
                     const largeOptions = kunefeCell.querySelector('.quantity-options[data-size="Large"]');
                     let kunefeSmallQty = 0;
@@ -1296,25 +1263,25 @@
             }
 
             let usedUnits = { lb: false, quart: false, pcs: false, kunefeSmall: false, kunefeLarge: false };
-            let hasLb = false, hasQuart = false, hasPcs = false, hasKunefeSmall = false, hasKunefeLarge = false;
-
             details.summaryItems.forEach(item => {
-                if (item.quantity.includes(enLangSet.summaryUnitLB)) hasLb = true;
-                if (item.quantity.includes(enLangSet.summaryUnitQuart)) hasQuart = true;
-                // PCS, Kunefe Small veya Kunefe Large'dan herhangi biri varsa genel PCS/Adet sütunu gösterilir
-                if (item.quantity.includes(enLangSet.summaryUnitPCS) || item.quantity.includes(enLangSet.summaryUnitKunefeSmall) || item.quantity.includes(enLangSet.summaryUnitKunefeLarge)) hasPcs = true;
-                if (item.name === "Kunefe" && item.quantity.includes(enLangSet.summaryUnitKunefeSmall)) hasKunefeSmall = true;
-                if (item.name === "Kunefe" && item.quantity.includes(enLangSet.summaryUnitKunefeLarge)) hasKunefeLarge = true;
+                if (item.quantity.includes(enLangSet.summaryUnitLB)) usedUnits.lb = true;
+                if (item.quantity.includes(enLangSet.summaryUnitQuart)) usedUnits.quart = true;
+                if (item.quantity.includes(enLangSet.summaryUnitPCS)) usedUnits.pcs = true;
+                if (item.name === "Kunefe" && item.quantity.includes(enLangSet.summaryUnitKunefeSmall)) usedUnits.kunefeSmall = true;
+                if (item.name === "Kunefe" && item.quantity.includes(enLangSet.summaryUnitKunefeLarge)) usedUnits.kunefeLarge = true;
             });
-            usedUnits = { lb: hasLb, quart: hasQuart, pcs: hasPcs, kunefeSmall: hasKunefeSmall, kunefeLarge: hasKunefeLarge };
 
 
             let headerHtml = `<th class="product-name-col">${enLangSet.productNameHeader}</th>`;
             if (usedUnits.lb) headerHtml += `<th class="lb-col">${enLangSet.lbHeader}</th>`;
             if (usedUnits.quart) headerHtml += `<th class="quart-col">${enLangSet.quartHeader}</th>`;
-            if (usedUnits.pcs) headerHtml += `<th class="pcs-col">${enLangSet.pcsUnitHeader}</th>`; // Genel PCS (Baklava, diğer dessertler)
+            if (usedUnits.pcs) headerHtml += `<th class="pcs-col">${enLangSet.pcsUnitHeader}</th>`;
             if (usedUnits.kunefeSmall) headerHtml += `<th class="kunefe-s-col">${enLangSet.kunefeSmallHeader}</th>`;
             if (usedUnits.kunefeLarge) headerHtml += `<th class="kunefe-l-col">${enLangSet.kunefeLargeHeader}</th>`;
+            // Eğer hiç birim seçilmediyse, en azından bir "Miktar" başlığı ekle
+            if (!usedUnits.lb && !usedUnits.quart && !usedUnits.pcs && !usedUnits.kunefeSmall && !usedUnits.kunefeLarge && details.summaryItems.length > 0) {
+                 headerHtml += `<th class="unit-col">Quantity</th>`;
+            }
 
 
             let productRowsHtml = '';
@@ -1332,7 +1299,7 @@
                         const quartMatch = productQtyText.match(new RegExp(`([\\d\\.]+)\\s*(${enLangSet.summaryUnitQuart}|${translations.tr.summaryUnitQuart})`));
                         rowDataHtml += `<td class="quart-col">${quartMatch ? quartMatch[1] + (productQtyText.includes(enLangSet.summaryUnitManual) ? " (M)" : "") : '-'}</td>`;
                     }
-                    if (usedUnits.pcs) { // Genel PCS (Baklava, diğer dessertler, AMA KÜNEFE DEĞİL)
+                    if (usedUnits.pcs) {
                         let pcsVal = '-';
                         if (productName !== "Kunefe") {
                             const pcsMatch = productQtyText.match(new RegExp(`(\\d+)\\s*(${enLangSet.summaryUnitPCS}|${translations.tr.summaryUnitPCS})`));
@@ -1356,14 +1323,18 @@
                         }
                         rowDataHtml += `<td class="kunefe-l-col">${kunefeLargeVal}</td>`;
                     }
+                     // Eğer hiçbir birim sütunu gösterilmiyorsa ama ürün varsa, genel miktarını göster
+                    if (!usedUnits.lb && !usedUnits.quart && !usedUnits.pcs && !usedUnits.kunefeSmall && !usedUnits.kunefeLarge) {
+                        rowDataHtml += `<td class="unit-col">${productQtyText}</td>`;
+                    }
                     productRowsHtml += `<tr>${rowDataHtml}</tr>`;
                 });
             } else {
                  let colspanCount = 1;
                  if(usedUnits.lb) colspanCount++; if(usedUnits.quart) colspanCount++; if(usedUnits.pcs) colspanCount++;
                  if(usedUnits.kunefeSmall) colspanCount++; if(usedUnits.kunefeLarge) colspanCount++;
-                 if (colspanCount === 1 && !usedUnits.lb && !usedUnits.quart && !usedUnits.pcs && !usedUnits.kunefeSmall && !usedUnits.kunefeLarge) colspanCount = 2; // Eğer hiç birim yoksa en az 2 sütun (ürün adı + boş)
-                 productRowsHtml = `<tr><td colspan="${colspanCount}" style="text-align:center;">No products ordered.</td></tr>`;
+                 if (colspanCount === 1 && !headerHtml.includes("<th")) colspanCount = 2;
+                 productRowsHtml = `<tr><td colspan="${colspanCount > 1 ? colspanCount : 2}" style="text-align:center;">No products ordered.</td></tr>`;
             }
 
 
@@ -1630,14 +1601,17 @@
             console.log('DOM fully loaded and parsed.');
             assignLoginDOMElements();
             loadLanguage();
-            loadRememberMe();
+            loadRememberMe(); // Sadece inputları doldurur, otomatik giriş yapmaz.
 
-            if (!checkAuth()) {
+            if (!checkAuth()) { // Sadece session'ı kontrol eder.
+                // Session yoksa, login ekranı zaten checkAuth içinde gösterildi.
+                // Şimdi login butonlarına event listener'ları bağla.
                 if (loginButton) loginButton.addEventListener('click', handleLogin);
                 if (passwordInput) passwordInput.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); handleLogin(); }});
                 if (usernameInput) usernameInput.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); if(passwordInput) passwordInput.focus(); }});
             }
         }
+
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', onPageLoad);
@@ -1645,6 +1619,9 @@
             onPageLoad();
         }
 
+        // PWA Service Worker Kaydı
+        // Yerel dosya sistemi üzerinden çalıştırırken bu kısım hata verecektir.
+        // Uygulamayı bir HTTP sunucusu üzerinden çalıştırdığınızda bu hatalar gider.
         console.log('PWA Script: Attempting to register Service Worker...');
         if ('serviceWorker' in navigator) {
             console.log('PWA Script: Service Worker API is available in navigator.');
@@ -1679,3 +1656,4 @@
     </script>
 </body>
 </html>
+```
