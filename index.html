@@ -370,7 +370,7 @@
             .print-totals p span:first-child{margin-right:12px}
             .print-notes-signatures-footer-group {
                 page-break-inside: avoid !important;
-                margin-top: auto; 
+                margin-top: auto;
                 padding-top: 10px;
                 flex-shrink: 0; /* Prevent shrinking if content is short */
             }
@@ -608,7 +608,7 @@
         let currentLanguage = 'en';
 
         const productData = {
-            "SMALL BITES": ["Soup of the Day", "Hummus", "Grilled Eggplant Salad", "Tzatziki (Cacik)", "Spicy Ezme", "Saksuka", "Cigar Borek", "Shishito Peppers", "Halloumi Cheese", "Stuffed Dates", "Falafel", "Fried Cauliflower", "Salmon and Grape Leaves", "Arnavut Cigeri", "Shrimp Garlic", "Ali Nazik (meze)", "Bean Salad", "Avakado Sousce", "White Sousce", "Tomato Sousce"],
+            "SMALL BITES": ["Soup of the Day", "Hummus", "Grilled Eggplant Salad", "Tzatziki (Cacik)", "Spicy Ezme", "Saksuka", "Cigar Borek", "Shishito Peppers", "Halloumi Cheese", "Stuffed Dates", "Falafel", "Fried Cauliflower", "Salmon and Grape Leaves", "Arnavut Cigeri", "Shrimp Garlic", "Ali Nazik (meze)", "Bean Salad", "Avakado Sousce", "White Sousce", "Tomato Sousce", "Shiracha Sousce"],
             "A LITTLE MORE": ["Vegetarian Couscous", "Chicken Shish", "Chicken Adana", "Urfa Kebab", "Beef Shish", "Grilled Pistachio Meatballs", "Lamb Chops", "Lamb Shank", "Grilled Salmon", "Ali Nazik", "Lamb Shish"],
             "FROM THE OVEN": ["Vegetarian Pide", "Cheese Pide", "Meat Pide", "Spinach Feta Pide", "Lahmacun"],
             "DESSERT": ["Baklava", "Turkish Flan", "Chocolate Mousse", "Vanilia Mousse", "Kunefe", "Trilece", "San Sebastian", "Fistikli Mousse", "Profiterol", "Chocolate Fistikli", "Tart", "Malaga", "Sutlac"]
@@ -616,10 +616,10 @@
         const BRANCH_OPTIONS = [ "SELDA - Belt Line", "SELDA - The Mayor's", "SELDA - San Antonio", "SELDA - Frisco", "SELDA - Doner" ];
 
         const PCS_ONLY_PRODUCTS_SMALL_BITES = ["Cigar Borek", "Stuffed Dates", "Salmon and Grape Leaves"];
-        const LB_ONLY_PRODUCTS_SMALL_BITES = productData["SMALL BITES"].filter(p => !PCS_ONLY_PRODUCTS_SMALL_BITES.includes(p) && p !== "Soup of the Day" );
+        // LB_ONLY_PRODUCTS_SMALL_BITES is derived dynamically in old code, will continue to work for "Shiracha Sousce" if it's not in PCS_ONLY.
 
-        const LB_AND_PCS_PRODUCTS_A_LITTLE_MORE = ["Grilled Pistachio Meatballs", "Lamb Shank"];
-        const LB_ONLY_PRODUCTS_A_LITTLE_MORE = productData["A LITTLE MORE"].filter(p => !LB_AND_PCS_PRODUCTS_A_LITTLE_MORE.includes(p));
+        const LB_AND_PCS_PRODUCTS_A_LITTLE_MORE = ["Grilled Pistachio Meatballs"]; // "Lamb Shank" removed
+        // LB_ONLY_PRODUCTS_A_LITTLE_MORE is derived dynamically. "Lamb Shank" will not be here, which is fine as it needs special handling.
 
 
         const LS_LANGUAGE = 'seldaOrderForm_language_v8_final_touches_v2';
@@ -889,8 +889,8 @@
                 productData[category].forEach(productName => {
                     const safeProductName = productName.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
                     const baseId = `prod-${category.replace(/\s+/g, '')}-${safeProductName}`;
-                    let column1Html = '';
-                    let column2Html = '';
+                    let column1Html = ''; // For LB or Quart or special (Kunefe small)
+                    let column2Html = ''; // For PCS or special (Kunefe large)
                     const isFromOvenCategory = category === "FROM THE OVEN";
 
                     if (isDessertCategory) {
@@ -937,7 +937,7 @@
                                 <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
                             </div>`;
                         }
-                        column2Html = '';
+                        column2Html = ''; // Not used for dessert category as colspan=2 on first data cell
                     } else if (productName === "Soup of the Day") {
                         column1Html = `
                         <div>
@@ -972,7 +972,7 @@
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="200"> 200</label>
                                 <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
                             </div>`;
-                        } else {
+                        } else { // This includes "Shiracha Sousce" and other LB-only items
                             column1Html = `
                             <div class="quantity-options" data-unit="LB">
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
@@ -984,7 +984,17 @@
                             column2Html = `<div>-</div>`;
                         }
                     } else if (category === "A LITTLE MORE") {
-                        if (LB_AND_PCS_PRODUCTS_A_LITTLE_MORE.includes(productName)) {
+                        if (productName === "Lamb Shank") {
+                             column1Html = `<div>-</div>`; // No LB for Lamb Shank
+                             column2Html = `
+                            <div class="quantity-options" data-unit="Adet">
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="5"> 5</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="10"> 10</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="15"> 15</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="20"> 20</label>
+                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
+                            </div>`;
+                        } else if (LB_AND_PCS_PRODUCTS_A_LITTLE_MORE.includes(productName)) {
                             column1Html = `
                             <div class="quantity-options" data-unit="LB">
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
@@ -1001,7 +1011,7 @@
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="200"> 200</label>
                                 <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
                             </div>`;
-                        } else {
+                        } else { // Default to LB_ONLY for other "A LITTLE MORE" items
                              column1Html = `
                             <div class="quantity-options" data-unit="LB">
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
@@ -1705,4 +1715,3 @@
     </script>
 </body>
 </html>
-```
