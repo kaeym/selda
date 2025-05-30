@@ -344,44 +344,64 @@
                  margin-left: 0;
             }
         }
+        
+        /* --- PRINT STYLES --- */
         @media print {
-            body {margin:0!important;padding:0!important;background-color:var(--white);font-family:Arial,sans-serif;font-size:8pt;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+            body {margin:0!important;padding:0!important;background-color:var(--white)!important;font-family:Arial,sans-serif;font-size:8pt!important;color:#000!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
             #loginScreen,.page-wrapper,.order-summary-panel,.page-footer,.buttons-area,.main-title-button,.language-selector,.developer-signature,#shareOptionsModal{display:none!important}
+            
             #printAreaContainer{display:block!important;margin:0 auto!important;padding:0!important;width:100%}
-            #printAreaContent{margin:0;padding:0; display: flex; flex-direction: column; min-height: 98vh;} /* Flex container for footer push */
-            #printAreaContent *,#printAreaContent *::before,#printAreaContent *::after{box-sizing:border-box}
+            #printAreaContent{ /* This is the direct parent for browser print content */
+                margin:0;padding:0; 
+                display: flex; flex-direction: column; /* For footer push in browser print */
+                min-height: 97vh; /* Adjusted slightly for better fit */
+                box-sizing: border-box;
+            }
+            #printAreaContent *, #printAreaContent *::before, #printAreaContent *::after{box-sizing:border-box}
+            
             .print-header{text-align:center;margin-bottom:10px;border-bottom:1.5px solid #000;padding-bottom:6px}
             .print-logo{max-width:80px !important; height:auto !important;margin-bottom:6px;display:block;margin-left:auto;margin-right:auto;}
-            #printAreaContent h1{font-size:13pt;font-weight:700;margin-top:4px;margin-bottom:8px;text-align:center;color:#333}
+            /* H1 specifically for #printAreaContent, not inside #captureForPdfOrWord */
+            #printAreaContent > h1, #printAreaContent > .print-header > h1 {font-size:13pt;font-weight:700;margin-top:4px;margin-bottom:8px;text-align:center;color:#333}
             .print-order-info{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:4px;font-size:8.5pt}
             .print-order-info span{margin:1px 0}
+            
             .print-section{margin-bottom:8px}
-            #printAreaContent h2{font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333}
+            /* H2 specifically for #printAreaContent */
+            #printAreaContent > .print-section > h2, #printAreaContent > .print-notes-signatures-footer-group > .print-section > h2 {font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333}
+            
             .print-info-compact .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px 12px;font-size:8.5pt}
             .print-info-compact .info-grid p{margin:1.5px 0}
+            
             .print-product-table{width:100%;border-collapse:collapse;margin-top:6px;font-size:8pt}
             .print-product-table th,.print-product-table td{border:1px solid #ccc;padding:3px 5px;text-align:left;word-break:break-word;overflow-wrap:break-word}
-            .print-product-table th{background-color:#f0f0f0;font-weight:700;text-align:center}
+            .print-product-table th{background-color:#f0f0f0!important;font-weight:700;text-align:center} /* Added !important for bg */
             .print-product-table td{vertical-align:top}
             .print-product-table .product-name-col{width:auto;}
             .print-product-table .unit-col{width:auto;text-align:center;}
+            
             .print-totals{margin-top:8px;padding-top:8px;border-top:1px solid #666;font-size:8.5pt}
             .print-totals p{margin:3px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline}
             .print-totals p span:first-child{margin-right:12px}
+            
             .print-notes-signatures-footer-group {
                 page-break-inside: avoid !important;
-                margin-top: auto;
+                margin-top: auto; /* This pushes footer down for browser printing due to #printAreaContent flex */
                 padding-top: 10px;
-                flex-shrink: 0; /* Prevent shrinking if content is short */
+                flex-shrink: 0; 
             }
             .print-notes{border:none;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:6px 0;min-height:30px;margin-top:4px;font-size:8pt;white-space:pre-wrap;word-break:break-word}
             .print-signatures{margin-top:25px;display:flex;justify-content:space-between;font-size:8pt;align-items:flex-end}
             .signature-block-print{width:45%;text-align:center}
             .signature-block-print p{margin:0;padding-top:12px;border-top:1px solid #666}
+            
             .print-footer{text-align:center;margin-top:15px;padding-top:6px;border-top:1px dashed #aaa;font-size:7pt;color:#555}
-            .print-section,.print-product-table tbody tr{page-break-inside:avoid}
+            
+            .print-section,.print-product-table tbody tr, .print-notes-signatures-footer-group{page-break-inside:avoid!important}
             @page{size:A4 portrait;margin:10mm}
         }
+        /* --- End PRINT STYLES --- */
+
         .modal {display:none;position:fixed;z-index:10000;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,.55);justify-content:center;align-items:center}
         .modal-content {
             background-color:var(--white); margin:auto; padding:30px;
@@ -487,6 +507,8 @@
         <p>Adres: <span id="footerCompanyAddress"></span> | Telefon: <span id="footerCompanyPhone"></span></p>
     </footer>
     <div class="developer-signature"></div>
+    
+    <!-- Container for browser print content -->
     <div id="printAreaContainer" style="display: none;">
         <div id="printAreaContent"></div>
     </div>
@@ -538,7 +560,7 @@
                 "contactPhoneLabel": "İletişim Telefonu (Şube):", "contactPhonePlaceholder": "Şube telefon numarası",
                 "productNameHeader": "Ürün Adı", "lbHeader": "Pound (LB)", "pcsUnitHeader": "Adet",
                 "quartHeader": "Quart", "kunefeSmallHeader": "Küçük", "kunefeLargeHeader": "Büyük",
-                "otherLabel": "Diğer:", "generalNotesTitle": "GENEL NOTLAR",
+                "otherLabel": "Diğer:", "generalNotesTitle": "GENEL NOTLAR", "generalNotesTitleHeader": "NOTLAR", // Added for print header
                 "generalNotesPlaceholder": "Siparişle ilgili genel notlarınız...",
                 "printButton": "YAZDIR", "sendOrderButton": "POSTA GÖNDER", "shareButtonText": "PAYLAŞ",
                 "orderSummaryTitle": "Sipariş Özeti", "emptySummaryText": "Henüz ürün seçilmedi.",
@@ -576,7 +598,7 @@
                 "contactPhoneLabel": "Contact Phone (Branch):", "contactPhonePlaceholder": "Branch phone number",
                 "productNameHeader": "Product Name", "lbHeader": "Pound (LB)", "pcsUnitHeader": "PCS",
                 "quartHeader": "Quart", "kunefeSmallHeader": "Small", "kunefeLargeHeader": "Large",
-                "otherLabel": "Other:", "generalNotesTitle": "GENERAL NOTES",
+                "otherLabel": "Other:", "generalNotesTitle": "GENERAL NOTES", "generalNotesTitleHeader": "NOTES", // Added for print header
                 "generalNotesPlaceholder": "Your general notes about the order...",
                 "printButton": "PRINT", "sendOrderButton": "SEND E-MAIL", "shareButtonText": "SHARE",
                 "orderSummaryTitle": "Order Summary", "emptySummaryText": "No products selected yet.",
@@ -616,10 +638,7 @@
         const BRANCH_OPTIONS = [ "SELDA - Belt Line", "SELDA - The Mayor's", "SELDA - San Antonio", "SELDA - Frisco", "SELDA - Doner" ];
 
         const PCS_ONLY_PRODUCTS_SMALL_BITES = ["Cigar Borek", "Stuffed Dates", "Salmon and Grape Leaves"];
-        // LB_ONLY_PRODUCTS_SMALL_BITES is derived dynamically in old code, will continue to work for "Shiracha Sousce" if it's not in PCS_ONLY.
-
-        const LB_AND_PCS_PRODUCTS_A_LITTLE_MORE = ["Grilled Pistachio Meatballs"]; // "Lamb Shank" removed
-        // LB_ONLY_PRODUCTS_A_LITTLE_MORE is derived dynamically. "Lamb Shank" will not be here, which is fine as it needs special handling.
+        const LB_AND_PCS_PRODUCTS_A_LITTLE_MORE = ["Grilled Pistachio Meatballs"]; 
 
 
         const LS_LANGUAGE = 'seldaOrderForm_language_v8_final_touches_v2';
@@ -835,7 +854,6 @@
             if (parts.length === 3) {
                 const dateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
                 if (!isNaN(dateObj.getTime())) {
-                     // Madde 2: Dosya adı için tarih formatı (AA-GG-YYYY)
                     return dateObj.toLocaleDateString(locale, { month: '2-digit', day: '2-digit', year: 'numeric' });
                 }
             }
@@ -846,7 +864,7 @@
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             const day = date.getDate().toString().padStart(2, '0');
             const year = date.getFullYear();
-            return `${month}-${day}-${year}`; // AA-GG-YYYY
+            return `${month}-${day}-${year}`; 
         }
 
 
@@ -889,8 +907,8 @@
                 productData[category].forEach(productName => {
                     const safeProductName = productName.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
                     const baseId = `prod-${category.replace(/\s+/g, '')}-${safeProductName}`;
-                    let column1Html = ''; // For LB or Quart or special (Kunefe small)
-                    let column2Html = ''; // For PCS or special (Kunefe large)
+                    let column1Html = ''; 
+                    let column2Html = ''; 
                     const isFromOvenCategory = category === "FROM THE OVEN";
 
                     if (isDessertCategory) {
@@ -927,7 +945,7 @@
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="4"> 4</label>
                                 <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
                             </div>`;
-                        } else { // Diğer DESSERT ürünleri
+                        } else { 
                             column1Html = `
                             <div class="quantity-options" data-unit="Adet">
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="5"> 5</label>
@@ -937,7 +955,7 @@
                                 <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
                             </div>`;
                         }
-                        column2Html = ''; // Not used for dessert category as colspan=2 on first data cell
+                        column2Html = ''; 
                     } else if (productName === "Soup of the Day") {
                         column1Html = `
                         <div>
@@ -972,7 +990,7 @@
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="200"> 200</label>
                                 <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
                             </div>`;
-                        } else { // This includes "Shiracha Sousce" and other LB-only items
+                        } else { 
                             column1Html = `
                             <div class="quantity-options" data-unit="LB">
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
@@ -985,7 +1003,7 @@
                         }
                     } else if (category === "A LITTLE MORE") {
                         if (productName === "Lamb Shank") {
-                             column1Html = `<div>-</div>`; // No LB for Lamb Shank
+                             column1Html = `<div>-</div>`; 
                              column2Html = `
                             <div class="quantity-options" data-unit="Adet">
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="5"> 5</label>
@@ -1011,7 +1029,7 @@
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="200"> 200</label>
                                 <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
                             </div>`;
-                        } else { // Default to LB_ONLY for other "A LITTLE MORE" items
+                        } else { 
                              column1Html = `
                             <div class="quantity-options" data-unit="LB">
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
@@ -1089,11 +1107,11 @@
 
                     if (kunefeSmallQty > 0) {
                         summaryDetail += `${kunefeSmallQty} ${langSet.summaryUnitKunefeSmall} `;
-                        if (smallOptions && smallOptions.querySelector('.manual-qty-input').value) summaryDetail += `${langSet.summaryUnitManual} `;
+                        if (smallOptions && smallOptions.querySelector('.manual-qty-input').value && parseInt(smallOptions.querySelector('.manual-qty-input').value) > 0 && smallOptions.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `;
                     }
                     if (kunefeLargeQty > 0) {
                         summaryDetail += `${kunefeLargeQty} ${langSet.summaryUnitKunefeLarge} `;
-                         if (largeOptions && largeOptions.querySelector('.manual-qty-input').value) summaryDetail += `${langSet.summaryUnitManual} `;
+                         if (largeOptions && largeOptions.querySelector('.manual-qty-input').value && parseInt(largeOptions.querySelector('.manual-qty-input').value) > 0 && largeOptions.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `;
                     }
                     currentTotalAdet += kunefeSmallQty + kunefeLargeQty;
 
@@ -1109,7 +1127,7 @@
                         
                         if (qty > 0) {
                            if (unitType === "Adet") { summaryDetail += `${qty} ${langSet.summaryUnitPCS} `; currentTotalAdet += qty; }
-                           if(isManual) summaryDetail += `${langSet.summaryUnitManual} `;
+                           if(isManual && pcsOptions.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `;
                         }
                     }
                 } else {
@@ -1129,7 +1147,7 @@
                         if (qty > 0) {
                             if (unitType === "Quart") { summaryDetail += `${qty} ${langSet.summaryUnitQuart} `; currentTotalQuart += qty; }
                             else if (unitType === "LB") { summaryDetail += `${qty} ${langSet.summaryUnitLB} `; currentTotalLb += qty; }
-                            if(isManual) summaryDetail += `${langSet.summaryUnitManual} `;
+                            if(isManual && column1Options.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `;
                         }
                     }
                     if (column2Options && column2Options.children.length > 0 && column2Options.firstElementChild.tagName !== 'DIV') {
@@ -1143,7 +1161,7 @@
                             
                             if (qty > 0) {
                                summaryDetail += `${qty} ${langSet.summaryUnitPCS} `; currentTotalAdet += qty;
-                               if(isManual) summaryDetail += `${langSet.summaryUnitManual} `;
+                               if(isManual && column2Options.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `;
                             }
                         }
                     }
@@ -1271,6 +1289,7 @@
 
         function getOrderDetails(forTextSummary = false) {
             const langSet = translations[currentLanguage] || translations.en;
+            const notesValue = generalNotesInput ? generalNotesInput.value.trim() : '';
             const details = {
                 orderNo: orderNoInput ? orderNoInput.value : 'N/A',
                 orderDate: orderDateInput ? orderDateInput.value : '',
@@ -1278,7 +1297,7 @@
                 branchName: getCurrentBranchName().replace(langSet.manualBranchNotSpecified, "Not Specified (Manual)").replace(langSet.selectionBranchNotSpecified, "Not Specified (Selection)"),
                 contactPhone: contactPhoneInput ? (contactPhoneInput.value.trim() || 'N/A') : 'N/A',
                 deliveryDate: deliveryDateInput ? deliveryDateInput.value : '',
-                generalNotes: generalNotesInput ? (generalNotesInput.value.trim() || (forTextSummary ? 'None' : '')) : (forTextSummary ? 'None' : ''),
+                generalNotes: notesValue || (forTextSummary && !notesValue ? 'None' : ''), // Ensure empty string if no notes, 'None' only for text summary if truly empty
                 totalLbText: document.getElementById('totalLb') ? document.getElementById('totalLb').textContent : `0 ${langSet.summaryUnitLB}`,
                 totalPcsText: document.getElementById('totalAdet') ? document.getElementById('totalAdet').textContent : `0 ${langSet.summaryUnitPCS}`,
                 totalQuartText: document.getElementById('totalQuart') ? document.getElementById('totalQuart').textContent : `0 ${langSet.summaryUnitQuart}`,
@@ -1288,7 +1307,6 @@
                 }))
             };
             const displayLocale = currentLanguage === 'tr' ? 'tr-TR' : 'en-US';
-            // Tarih formatı (AA-GG-YYYY)
             details.formattedOrderDate = formatDateForDisplay(details.orderDate, 'en-US');
             details.displayOrderDate = formatDateForDisplay(details.orderDate, displayLocale);
             details.formattedDeliveryDate = formatDateForDisplay(details.deliveryDate, 'en-US');
@@ -1298,11 +1316,12 @@
 
 
         function generatePrintContent(forPdfOrWord = false) {
-            const details = getOrderDetails();
-            const enLangSet = translations.en;
-            const companyNamePrint = translations['en'].footerCompanyName;
-            const captureContainerWidth = forPdfOrWord ? '210mm' : '195mm';
-            const containerPadding = forPdfOrWord ? '10mm' : '0';
+            const details = getOrderDetails(); // forPdfOrWord flag is not needed by getOrderDetails for this logic
+            const enLangSet = translations.en; // Use English for structural consistency in PDF/Word
+            const currentLangSet = translations[currentLanguage] || translations.en;
+
+            const companyNamePrint = translations['en'].footerCompanyName; // Use EN version for consistency
+            
             let logoSrcToUse = '';
             const logoImgElement = document.querySelector('.page-header img');
             if (logoImgElement) {
@@ -1311,7 +1330,7 @@
                 } else if (logoImgElement.complete && logoImgElement.naturalWidth !== 0) {
                     logoSrcToUse = logoImgElement.src;
                 } else {
-                    logoSrcToUse = 'https://via.placeholder.com/160x60?text=Selda+Logo';
+                    logoSrcToUse = 'https://via.placeholder.com/160x60?text=Selda+Logo'; // Fallback
                 }
             } else {
                  logoSrcToUse = 'https://via.placeholder.com/160x60?text=Selda+Logo';
@@ -1319,11 +1338,11 @@
 
             let usedUnits = { lb: false, quart: false, pcs: false, kunefeSmall: false, kunefeLarge: false };
             details.summaryItems.forEach(item => {
-                if (item.quantity.includes(enLangSet.summaryUnitLB)) usedUnits.lb = true;
-                if (item.quantity.includes(enLangSet.summaryUnitQuart)) usedUnits.quart = true;
-                if (item.quantity.includes(enLangSet.summaryUnitPCS)) usedUnits.pcs = true;
-                if (item.name === "Kunefe" && item.quantity.includes(enLangSet.summaryUnitKunefeSmall)) usedUnits.kunefeSmall = true;
-                if (item.name === "Kunefe" && item.quantity.includes(enLangSet.summaryUnitKunefeLarge)) usedUnits.kunefeLarge = true;
+                if (item.quantity.includes(enLangSet.summaryUnitLB) || item.quantity.includes(translations.tr.summaryUnitLB)) usedUnits.lb = true;
+                if (item.quantity.includes(enLangSet.summaryUnitQuart) || item.quantity.includes(translations.tr.summaryUnitQuart)) usedUnits.quart = true;
+                if (item.quantity.includes(enLangSet.summaryUnitPCS) || item.quantity.includes(translations.tr.summaryUnitPCS)) usedUnits.pcs = true;
+                if (item.name === "Kunefe" && (item.quantity.includes(enLangSet.summaryUnitKunefeSmall) || item.quantity.includes(translations.tr.summaryUnitKunefeSmall))) usedUnits.kunefeSmall = true;
+                if (item.name === "Kunefe" && (item.quantity.includes(enLangSet.summaryUnitKunefeLarge) || item.quantity.includes(translations.tr.summaryUnitKunefeLarge))) usedUnits.kunefeLarge = true;
             });
 
 
@@ -1333,7 +1352,7 @@
             if (usedUnits.pcs) headerHtml += `<th class="pcs-col">${enLangSet.pcsUnitHeader}</th>`;
             if (usedUnits.kunefeSmall) headerHtml += `<th class="kunefe-s-col">${enLangSet.kunefeSmallHeader}</th>`;
             if (usedUnits.kunefeLarge) headerHtml += `<th class="kunefe-l-col">${enLangSet.kunefeLargeHeader}</th>`;
-            if (!usedUnits.lb && !usedUnits.quart && !usedUnits.pcs && !usedUnits.kunefeSmall && !usedUnits.kunefeLarge && details.summaryItems.length > 0) {
+             if (!usedUnits.lb && !usedUnits.quart && !usedUnits.pcs && !usedUnits.kunefeSmall && !usedUnits.kunefeLarge && details.summaryItems.length > 0 && !headerHtml.includes("Quantity")) { // Check if any unit based header was added
                  headerHtml += `<th class="unit-col">Quantity</th>`;
             }
 
@@ -1342,40 +1361,46 @@
             if (details.summaryItems.length > 0) {
                 details.summaryItems.forEach(item => {
                     const productName = item.name;
-                    const productQtyText = item.quantity;
+                    const productQtyText = item.quantity; // This text is already localized and includes "(M)"
                     let rowDataHtml = `<td class="product-name-col">${productName}</td>`;
 
+                    const extractQty = (text, unitEn, unitTr) => {
+                        const regex = new RegExp(`([\\d\\.]+)\\s*(${unitEn}|${unitTr})`);
+                        const match = text.match(regex);
+                        if (match) {
+                            return match[1] + (text.includes(enLangSet.summaryUnitManual) || text.includes(translations.tr.summaryUnitManual) ? " (M)" : "");
+                        }
+                        return '-';
+                    };
+                    
+                    const extractKunefeQty = (text, sizeEn, sizeTr) => {
+                        const regex = new RegExp(`(\\d+)\\s*(${sizeEn}|${sizeTr})`, 'i');
+                        const match = text.match(regex);
+                         if (match) {
+                            return match[1] + (text.includes(enLangSet.summaryUnitManual) || text.includes(translations.tr.summaryUnitManual) ? " (M)" : "");
+                        }
+                        return '-';
+                    };
+
+
                     if (usedUnits.lb) {
-                        const lbMatch = productQtyText.match(new RegExp(`([\\d\\.]+)\\s*(${enLangSet.summaryUnitLB}|${translations.tr.summaryUnitLB})`));
-                        rowDataHtml += `<td class="lb-col">${lbMatch ? lbMatch[1] + (productQtyText.includes(enLangSet.summaryUnitManual) ? " (M)" : "") : '-'}</td>`;
+                        rowDataHtml += `<td class="lb-col">${extractQty(productQtyText, enLangSet.summaryUnitLB, translations.tr.summaryUnitLB)}</td>`;
                     }
                     if (usedUnits.quart) {
-                        const quartMatch = productQtyText.match(new RegExp(`([\\d\\.]+)\\s*(${enLangSet.summaryUnitQuart}|${translations.tr.summaryUnitQuart})`));
-                        rowDataHtml += `<td class="quart-col">${quartMatch ? quartMatch[1] + (productQtyText.includes(enLangSet.summaryUnitManual) ? " (M)" : "") : '-'}</td>`;
+                        rowDataHtml += `<td class="quart-col">${extractQty(productQtyText, enLangSet.summaryUnitQuart, translations.tr.summaryUnitQuart)}</td>`;
                     }
                     if (usedUnits.pcs) {
                         let pcsVal = '-';
-                        if (productName !== "Kunefe") {
-                            const pcsMatch = productQtyText.match(new RegExp(`(\\d+)\\s*(${enLangSet.summaryUnitPCS}|${translations.tr.summaryUnitPCS})`));
-                            if (pcsMatch) pcsVal = pcsMatch[1] + (productQtyText.includes(enLangSet.summaryUnitManual) ? " (M)" : "");
+                        if (productName !== "Kunefe") { // Kunefe handled by specific columns if present
+                            pcsVal = extractQty(productQtyText, enLangSet.summaryUnitPCS, translations.tr.summaryUnitPCS);
                         }
                         rowDataHtml += `<td class="pcs-col">${pcsVal}</td>`;
                     }
                     if (usedUnits.kunefeSmall) {
-                        let kunefeSmallVal = '-';
-                        if (productName === "Kunefe") {
-                            const smallMatch = productQtyText.match(/(\d+)\s*(Small|Küçük)/i);
-                            if (smallMatch) kunefeSmallVal = smallMatch[1] + (productQtyText.includes(enLangSet.summaryUnitManual) ? " (M)" : "");
-                        }
-                        rowDataHtml += `<td class="kunefe-s-col">${kunefeSmallVal}</td>`;
+                         rowDataHtml += `<td class="kunefe-s-col">${productName === "Kunefe" ? extractKunefeQty(productQtyText, enLangSet.summaryUnitKunefeSmall, translations.tr.summaryUnitKunefeSmall) : '-'}</td>`;
                     }
                     if (usedUnits.kunefeLarge) {
-                        let kunefeLargeVal = '-';
-                         if (productName === "Kunefe") {
-                            const largeMatch = productQtyText.match(/(\d+)\s*(Large|Büyük)/i);
-                            if (largeMatch) kunefeLargeVal = largeMatch[1] + (productQtyText.includes(enLangSet.summaryUnitManual) ? " (M)" : "");
-                        }
-                        rowDataHtml += `<td class="kunefe-l-col">${kunefeLargeVal}</td>`;
+                         rowDataHtml += `<td class="kunefe-l-col">${productName === "Kunefe" ? extractKunefeQty(productQtyText, enLangSet.summaryUnitKunefeLarge, translations.tr.summaryUnitKunefeLarge) : '-'}</td>`;
                     }
                     if (!usedUnits.lb && !usedUnits.quart && !usedUnits.pcs && !usedUnits.kunefeSmall && !usedUnits.kunefeLarge) {
                         rowDataHtml += `<td class="unit-col">${productQtyText}</td>`;
@@ -1383,41 +1408,44 @@
                     productRowsHtml += `<tr>${rowDataHtml}</tr>`;
                 });
             } else {
-                 let colspanCount = 1;
-                 if(usedUnits.lb) colspanCount++; if(usedUnits.quart) colspanCount++; if(usedUnits.pcs) colspanCount++;
-                 if(usedUnits.kunefeSmall) colspanCount++; if(usedUnits.kunefeLarge) colspanCount++;
-                 if (colspanCount === 1 && !headerHtml.includes("<th")) colspanCount = 2;
-                 productRowsHtml = `<tr><td colspan="${colspanCount > 1 ? colspanCount : 2}" style="text-align:center;">No products ordered.</td></tr>`;
+                 let colspanCount = 1 + (usedUnits.lb?1:0) + (usedUnits.quart?1:0) + (usedUnits.pcs?1:0) + (usedUnits.kunefeSmall?1:0) + (usedUnits.kunefeLarge?1:0);
+                 if (colspanCount === 1 && headerHtml.includes("Quantity")) colspanCount = 2; // Product Name + Quantity
+                 else if (colspanCount === 1) colspanCount = 2; // Default if no units (should not happen if items exist)
+                 
+                 productRowsHtml = `<tr><td colspan="${colspanCount}" style="text-align:center;">No products ordered.</td></tr>`;
             }
 
 
             let totalsHtml = '';
-            if (usedUnits.lb) totalsHtml += `<p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested LB:</span><span style="margin-left:15px;">${details.totalLbText.replace(translations[currentLanguage].summaryUnitLB,enLangSet.summaryUnitLB)}</span></p>`;
-            if (usedUnits.quart) totalsHtml += `<p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested Quart:</span><span style="margin-left:15px;">${details.totalQuartText.replace(translations[currentLanguage].summaryUnitQuart,enLangSet.summaryUnitQuart)}</span></p>`;
-            if (usedUnits.pcs || usedUnits.kunefeSmall || usedUnits.kunefeLarge) totalsHtml += `<p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested PCS:</span><span style="margin-left:15px;">${details.totalPcsText.replace(translations[currentLanguage].summaryUnitPCS,enLangSet.summaryUnitPCS)}</span></p>`;
+            if (usedUnits.lb) totalsHtml += `<p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested LB:</span><span style="margin-left:15px;">${details.totalLbText.replace(currentLangSet.summaryUnitLB, enLangSet.summaryUnitLB)}</span></p>`;
+            if (usedUnits.quart) totalsHtml += `<p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested Quart:</span><span style="margin-left:15px;">${details.totalQuartText.replace(currentLangSet.summaryUnitQuart, enLangSet.summaryUnitQuart)}</span></p>`;
+            if (usedUnits.pcs || usedUnits.kunefeSmall || usedUnits.kunefeLarge) totalsHtml += `<p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested PCS:</span><span style="margin-left:15px;">${details.totalPcsText.replace(currentLangSet.summaryUnitPCS, enLangSet.summaryUnitPCS)}</span></p>`;
             if(totalsHtml === '') totalsHtml = '<p style="text-align:right; font-weight:bold;">No quantities selected.</p>';
 
-
-            const printHTML = `
-                <div id="captureForPdfOrWord" style="width:${captureContainerWidth};margin:0 auto;padding:${containerPadding};background:white;font-family:Arial,sans-serif;font-size:8pt;color:#000;box-sizing:border-box;">
-                <header class="print-header" style="box-sizing:border-box;">
-                    <img src="${logoSrcToUse}" alt="Selda Mediterranean Logo" class="print-logo" style="max-width: 80px; height: auto; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto;">
-                    <h1 style="font-size:13pt;font-weight:700;margin-top:4px;margin-bottom:8px;text-align:center;color:#333;">PRODUCT ORDER FORM</h1>
-                    <div class="print-order-info" style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:4px;font-size:8.5pt;box-sizing:border-box;">
-                        <span style="margin:1px 0;"><strong>Order No:</strong> ${details.orderNo}</span>
-                        <span style="margin:1px 0;"><strong>Order Date:</strong> ${details.formattedOrderDate}</span>
+            const notesContentForPrint = details.generalNotes ? details.generalNotes.replace(/\n/g, '<br>') : (forPdfOrWord ? '<i>No notes provided.</i>' : '<i>'+currentLangSet.emptySummaryText+'</i>');
+            
+            // This is the core HTML content that will be styled differently for browser print vs. PDF/Word wrapper
+            const mainPrintableHtml = `
+                <header class="print-header" style="box-sizing:border-box; text-align:center; margin-bottom:10px; border-bottom:1.5px solid #000; padding-bottom:6px;">
+                    <img src="${logoSrcToUse}" alt="Selda Mediterranean Logo" class="print-logo" style="max-width:80px; height:auto; margin-bottom:6px; display:block; margin-left:auto; margin-right:auto;">
+                    <h1 style="font-size:13pt; font-weight:700; margin-top:4px; margin-bottom:8px; text-align:center; color:#333;">${enLangSet.orderFormTitle}</h1>
+                    <div class="print-order-info" style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:4px; font-size:8.5pt; box-sizing:border-box;">
+                        <span style="margin:1px 0;"><strong>${enLangSet.orderNoLabel}</strong> ${details.orderNo}</span>
+                        <span style="margin:1px 0;"><strong>${enLangSet.orderDateLabel}</strong> ${details.formattedOrderDate}</span>
                     </div>
                 </header>
-                <section class="print-section" style="margin-bottom:8px;box-sizing:border-box;">
-                    <h2 style="font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333;">BRANCH INFORMATION</h2>
-                    <div class="print-info-compact"><div class="info-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:2px 12px;font-size:8.5pt;box-sizing:border-box;">
-                        <p style="margin:1.5px 0;"><strong>Branch Name:</strong> ${details.branchName}</p>
-                        <p style="margin:1.5px 0;"><strong>Authorized Person:</strong> ${details.senderName}</p>
-                        <p style="margin:1.5px 0;"><strong>Contact Phone:</strong> ${details.contactPhone}</p>
-                        <p style="margin:1.5px 0;"><strong>Requested Delivery Date:</strong> ${details.formattedDeliveryDate}</p>
-                    </div></div>
+                <section class="print-section" style="margin-bottom:8px; box-sizing:border-box;">
+                    <h2 style="font-size:10pt; font-weight:700; border-bottom:1px solid #ccc; padding-bottom:2px; margin-top:12px; margin-bottom:6px; text-align:left; color:#333;">BRANCH INFORMATION</h2>
+                    <div class="print-info-compact" style="font-size:8.5pt; box-sizing:border-box;">
+                        <div class="info-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:2px 12px;">
+                            <p style="margin:1.5px 0;"><strong>${enLangSet.branchNameLabel}</strong> ${details.branchName}</p>
+                            <p style="margin:1.5px 0;"><strong>${enLangSet.authorizedPersonLabel}</strong> ${details.senderName}</p>
+                            <p style="margin:1.5px 0;"><strong>${enLangSet.contactPhoneLabel}</strong> ${details.contactPhone}</p>
+                            <p style="margin:1.5px 0;"><strong>${enLangSet.requestedDeliveryDateLabel}</strong> ${details.formattedDeliveryDate}</p>
+                        </div>
+                    </div>
                 </section>
-                <section class="print-section" style="margin-bottom:8px;box-sizing:border-box;">
+                <section class="print-section" style="margin-bottom:8px; box-sizing:border-box;">
                     <h2 style="font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333;">REQUESTED PRODUCTS</h2>
                     <table class="print-product-table" style="width:100%;border-collapse:collapse;margin-top:6px;font-size:8pt;box-sizing:border-box;">
                         <thead style="font-size:8pt;"><tr style="page-break-inside:avoid;">
@@ -1429,10 +1457,10 @@
                         ${totalsHtml}
                     </div>
                 </section>
-                <div class="print-notes-signatures-footer-group">
+                <div class="print-notes-signatures-footer-group" style="padding-top: 10px; page-break-inside: avoid !important; flex-shrink: 0; ${forPdfOrWord ? 'margin-top: 20px;' : 'margin-top: auto;'}">
                     <section class="print-section" style="margin-bottom:8px;box-sizing:border-box;">
-                        <h2 style="font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333;">NOTES</h2>
-                        <div class="print-notes" style="border:none;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:6px 0;min-height:30px;margin-top:4px;font-size:8pt;white-space:pre-wrap;word-break:break-word;box-sizing:border-box;">${details.generalNotes.replace(/\n/g,'<br>')}</div>
+                        <h2 style="font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333;">${enLangSet.generalNotesTitleHeader}</h2>
+                        <div class="print-notes" style="border:none;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:6px 0;min-height:30px;margin-top:4px;font-size:8pt;white-space:pre-wrap;word-break:break-word;box-sizing:border-box;">${notesContentForPrint}</div>
                     </section>
                     <div style="height:1em;page-break-before:auto;"></div>
                     <div class="print-signatures" style="margin-top:25px;display:flex;justify-content:space-between;font-size:8pt;align-items:flex-end;box-sizing:border-box;">
@@ -1443,12 +1471,23 @@
                         <p>${companyNamePrint}</p>
                         <p>Address: ${COMPANY_ADDRESS_PRINT} | Phone: ${COMPANY_PHONE_PRINT}</p>
                     </footer>
-                </div>
                 </div>`;
-            if(document.getElementById('printAreaContent') && !forPdfOrWord) {
-                document.getElementById('printAreaContent').innerHTML = printHTML;
+
+            if (forPdfOrWord) {
+                // For PDF/Word, wrap the content in #captureForPdfOrWord with pixel dimensions
+                const A4_WIDTH_PX_FOR_CANVAS = 794; // Approx 210mm at 96DPI
+                const PAGE_MARGIN_PX_FOR_CANVAS = 38; // Approx 10mm at 96DPI
+                const pdfWordCaptureWrapperStyle = `width:${A4_WIDTH_PX_FOR_CANVAS}px; padding:${PAGE_MARGIN_PX_FOR_CANVAS}px; background:white; font-family:Arial,sans-serif; font-size:8pt; color:#000; box-sizing:border-box; margin:0 auto;`;
+                return `<div id="captureForPdfOrWord" style="${pdfWordCaptureWrapperStyle}">${mainPrintableHtml}</div>`;
+            } else {
+                // For browser print, inject directly into #printAreaContent
+                // The #printAreaContent itself is styled by @media print to be flex, min-height, etc.
+                const printAreaContentEl = document.getElementById('printAreaContent');
+                if (printAreaContentEl) {
+                    printAreaContentEl.innerHTML = mainPrintableHtml;
+                }
+                return mainPrintableHtml; // Or void, as it modified DOM. For consistency, return.
             }
-            return printHTML;
         }
 
         async function generatePdfBlob() {
@@ -1460,51 +1499,91 @@
             }
 
             const { jsPDF } = window.jspdf;
-            const contentHtml = generatePrintContent(true);
+            const completeHtmlForPdf = generatePrintContent(true); // Get HTML wrapped with #captureForPdfOrWord
+            
             const tempDiv = document.createElement('div');
-            tempDiv.style.position = 'absolute'; tempDiv.style.left = '-9999px'; tempDiv.innerHTML = contentHtml;
+            tempDiv.style.position = 'absolute'; 
+            tempDiv.style.left = '-99999px'; // Further off-screen
+            tempDiv.style.top = '0px';
+            // tempDiv.style.width = '210mm'; // Optional: provide a context width for the capture div.
+                                        // #captureForPdfOrWord already has pixel width, so this might not be needed.
             document.body.appendChild(tempDiv);
+            tempDiv.innerHTML = completeHtmlForPdf; // Add the wrapped HTML
             const elementToCapture = tempDiv.querySelector('#captureForPdfOrWord');
 
-            try {
-                const canvas = await html2canvas(elementToCapture, { scale: 2, useCORS: true, logging: false });
+            if (!elementToCapture) {
+                console.error("#captureForPdfOrWord element not found in tempDiv");
                 document.body.removeChild(tempDiv);
+                return null;
+            }
+            
+            try {
+                const canvas = await html2canvas(elementToCapture, { 
+                    scale: 2, 
+                    useCORS: true, 
+                    logging: false,
+                    width: elementToCapture.offsetWidth, // Explicitly use offsetWidth
+                    height: elementToCapture.offsetHeight // Explicitly use offsetHeight
+                });
+                document.body.removeChild(tempDiv);
+
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+                
                 const imgProps = pdf.getImageProperties(imgData);
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                const pdfPageWidth = pdf.internal.pageSize.getWidth();
+                const pdfPageHeight = pdf.internal.pageSize.getHeight();
+                
+                const imgWidth = imgProps.width;
+                const imgHeight = imgProps.height;
 
-                if (pdfHeight <= pdf.internal.pageSize.getHeight()) {
-                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                // Calculate the aspect ratio of the image and the PDF page
+                const imgAspectRatio = imgWidth / imgHeight;
+                const pdfPageAspectRatio = pdfPageWidth / pdfPageHeight;
+
+                let finalImgWidthOnPdf, finalImgHeightOnPdf;
+
+                // Scale image to fit PDF page width, height will adjust by aspect ratio
+                finalImgWidthOnPdf = pdfPageWidth;
+                finalImgHeightOnPdf = pdfPageWidth / imgAspectRatio;
+
+
+                if (finalImgHeightOnPdf <= pdfPageHeight) {
+                    // Image fits on one page
+                    pdf.addImage(imgData, 'PNG', 0, 0, finalImgWidthOnPdf, finalImgHeightOnPdf);
                 } else {
-                    let numPages = Math.ceil(pdfHeight / pdf.internal.pageSize.getHeight());
-                    let yPositionOnCanvas = 0;
-                    const canvasHeight = imgProps.height;
-                    const pageHeightOnCanvas = (pdf.internal.pageSize.getHeight() / pdfWidth) * imgProps.width;
+                    // Image is taller than one page, needs pagination
+                    let numPages = Math.ceil(finalImgHeightOnPdf / pdfPageHeight);
+                    let yPositionOnCanvas = 0; // Current Y position on the source canvas (imgData)
+                    
+                    // Calculate how much of the source canvas height corresponds to one PDF page height
+                    const singlePdfPageHeightOnCanvas = (pdfPageHeight / finalImgHeightOnPdf) * imgHeight;
+
 
                     for (let i = 0; i < numPages; i++) {
                         if (i > 0) pdf.addPage();
-                        let sliceHeightOnCanvas = Math.min(pageHeightOnCanvas, canvasHeight - yPositionOnCanvas);
+                        
+                        let sliceHeightOnCanvas = Math.min(singlePdfPageHeightOnCanvas, imgHeight - yPositionOnCanvas);
                         if (sliceHeightOnCanvas <= 0) break;
 
                         const tempPageCanvas = document.createElement('canvas');
-                        tempPageCanvas.width = imgProps.width;
+                        tempPageCanvas.width = imgWidth; // Source canvas width
                         tempPageCanvas.height = sliceHeightOnCanvas;
                         const tempPageCtx = tempPageCanvas.getContext('2d');
                         
-                        const fullImage = new Image();
-                        fullImage.src = imgData;
-                        await new Promise(resolve => { if (fullImage.complete && fullImage.naturalWidth !== 0) resolve(); else fullImage.onload = resolve; fullImage.onerror = resolve; });
-
-                        tempPageCtx.drawImage(fullImage, 0, yPositionOnCanvas, imgProps.width, sliceHeightOnCanvas, 0, 0, imgProps.width, sliceHeightOnCanvas);
+                        // Draw the slice from the original large canvas to the temporary small canvas
+                        // The original `canvas` object from html2canvas can be used here directly
+                        tempPageCtx.drawImage(canvas, 
+                                              0, yPositionOnCanvas, // sx, sy (source)
+                                              imgWidth, sliceHeightOnCanvas, // sWidth, sHeight (source)
+                                              0, 0, // dx, dy (destination)
+                                              imgWidth, sliceHeightOnCanvas); // dWidth, dHeight (destination)
                         
                         const pageImgData = tempPageCanvas.toDataURL('image/png');
-                        const pagePdfHeight = (sliceHeightOnCanvas * pdfWidth) / imgProps.width;
-                        pdf.addImage(pageImgData, 'PNG', 0, 0, pdfWidth, pagePdfHeight);
+                        pdf.addImage(pageImgData, 'PNG', 0, 0, pdfPageWidth, pdfPageHeight); // Stretch slice to fill PDF page (or maintain aspect)
                         
                         yPositionOnCanvas += sliceHeightOnCanvas;
-                        if (yPositionOnCanvas >= canvasHeight) break;
+                        if (yPositionOnCanvas >= imgHeight) break;
                     }
                 }
                 return pdf.output('blob');
@@ -1524,11 +1603,15 @@
             shareModalMessage.textContent = "Word dosyası oluşturuluyor...";
             shareButtonsContainer.style.display = 'none';
             try {
-                const contentHtml = generatePrintContent(true);
-                const tempDiv = document.createElement('div'); tempDiv.innerHTML = contentHtml;
-                const converted = htmlDocx.asBlob(tempDiv.querySelector('#captureForPdfOrWord').innerHTML, {
+                const completeHtmlForWord = generatePrintContent(true); // Get HTML wrapped with #captureForPdfOrWord
+                const tempDiv = document.createElement('div'); 
+                tempDiv.innerHTML = completeHtmlForWord;
+                // html-docx-js expects the innerHTML of the element to convert
+                const contentToConvert = tempDiv.querySelector('#captureForPdfOrWord').innerHTML;
+
+                const converted = htmlDocx.asBlob(contentToConvert, {
                     orientation: 'portrait',
-                    margins: { top: 720, right: 720, bottom: 720, left: 720, header: 0, footer: 0, gutter: 0 }
+                    margins: { top: 720, right: 720, bottom: 720, left: 720, header: 0, footer: 0, gutter: 0 } // 1 inch margins
                 });
                 const today = new Date();
                 const formattedDate = formatDateForFileName(today);
@@ -1571,7 +1654,7 @@
             if (usedUnitsInSummary.quart) text += `${langSet.totalQuartLabel} ${details.totalQuartText}\n`;
             if (usedUnitsInSummary.pcs) text += `${langSet.totalPcsLabel} ${details.totalPcsText}\n`;
             
-            text += `\n${langSet.generalNotesTitle.toUpperCase()}:\n${details.generalNotes}\n`;
+            text += `\n${langSet.generalNotesTitle.toUpperCase()}:\n${details.generalNotes || langSet.emptySummaryText}\n`; // Display notes or "empty"
             text += `------------------------------------\n`;
             return text;
         }
@@ -1613,7 +1696,11 @@
             if (mainFormLangTrBtn) mainFormLangTrBtn.addEventListener('click', () => setLanguage('tr'));
             if (mainFormLangEnBtn) mainFormLangEnBtn.addEventListener('click', () => setLanguage('en'));
 
-            if (printButton) printButton.onclick = function() { if(!mainFormInitialized || !validateOrderForm()) return; generatePrintContent(false); window.print(); };
+            if (printButton) printButton.onclick = function() { 
+                if(!mainFormInitialized || !validateOrderForm()) return; 
+                generatePrintContent(false); // This injects HTML into #printAreaContent
+                window.print(); 
+            };
 
             if (sendEmailBtn) sendEmailBtn.addEventListener('click', function() {
                 if(!mainFormInitialized || !validateOrderForm()) return;
