@@ -633,7 +633,7 @@
             "SMALL BITES": ["Soup of the Day", "Hummus", "Grilled Eggplant Salad(Babagannus)", "Tzatziki (Cacik)", "Spicy Ezme", "Saksuka", "Cigar Borek", "Shishito Peppers", "Halloumi Cheese", "Stuffed Dates", "Falafel", "Fried Cauliflower", "Salmon and Grape Leaves", "Arnavut Cigeri", "Shrimp Garlic", "Ali Nazik (Sauce)","Avakado Sauce", "White Sauce(yogurt)", "Tomato Sauce", "Shiracha Sauce"],
             "A LITTLE MORE": ["Vegetarian Couscous", "Chicken Shish", "Chicken Adana", "Urfa Kebab", "Beef Shish", "Grilled Pistachio Meatballs", "Lamb Chops", "Lamb Shank", "Grilled Salmon", "Ali Nazik", "Lamb Shish"],
             "FROM THE OVEN": ["Vegetarian Pide", "Cheese Pide", "Meat Pide", "Spinach Feta Pide", "Lahmacun"],
-            "DESSERT": ["Quinn", "Fistikli Mousse", "Vanilia Mousse", "Kunefe", "Trilece", "San Sebastian", "Profiterol", "Chocolate Fistikli", "Tart", "Malaga", "Sutlac"]
+            "DESSERT": ["Quinn", "Fistikli Mousse", "Vanilia Mousse", "Kunefe", "Trilece", "San Sebastian", "Profiterol", "Chocolate Fistikli", "Lotus", "Oreo", "Tart", "Malaga", "Sutlac"]
         };
         const BRANCH_OPTIONS = [ "SELDA - Belt Line", "SELDA - The Mayor's", "SELDA - San Antonio", "SELDA - Frisco", "SELDA - Doner" ];
 
@@ -1010,6 +1010,16 @@
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="10"> 10</label>
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="15"> 15</label>
                                 <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="20"> 20</label>
+                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
+                            </div>`;
+                        } else if (productName === "Grilled Salmon") {
+                            column1Html = `<div>-</div>`; // No LB options for Grilled Salmon
+                            column2Html = `
+                            <div class="quantity-options" data-unit="Adet">
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="20"> 20</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="30"> 30</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="40"> 40</label>
+                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="50"> 50</label>
                                 <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
                             </div>`;
                         } else if (LB_AND_PCS_PRODUCTS_A_LITTLE_MORE.includes(productName)) {
@@ -1802,3 +1812,5 @@
     </script>
 </body>
 </html>
+```
+257.7s
