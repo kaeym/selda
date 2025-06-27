@@ -270,8 +270,8 @@
         .buttons-area button:active { transform: translateY(1px); }
         .buttons-area button.print-btn {background-color: var(--primary-color);}
         .buttons-area button.print-btn:hover {background-color: #0068d6;}
-        .buttons-area button#sendEmailBtn {background-color: var(--secondary-color);}
-        .buttons-area button#sendEmailBtn:hover {background-color: #7a7a7e;}
+        .buttons-area button#sendOrderBtn {background-color: var(--original-green); }
+        .buttons-area button#sendOrderBtn:hover {background-color: var(--original-green-darker); }
         .buttons-area button.share-btn {background-color: #34C759;}
         .buttons-area button.share-btn:hover {background-color: #2baa4f;}
 
@@ -351,23 +351,21 @@
             #loginScreen,.page-wrapper,.order-summary-panel,.page-footer,.buttons-area,.main-title-button,.language-selector,.developer-signature,#shareOptionsModal{display:none!important}
             
             #printAreaContainer{display:block!important;margin:0 auto!important;padding:0!important;width:100%}
-            #printAreaContent{ /* This is the direct parent for browser print content */
+            #printAreaContent{
                 margin:0;padding:0; 
-                display: flex; flex-direction: column; /* For footer push in browser print */
-                min-height: 97vh; /* Adjusted slightly for better fit */
+                display: flex; flex-direction: column;
+                min-height: 97vh;
                 box-sizing: border-box;
             }
             #printAreaContent *, #printAreaContent *::before, #printAreaContent *::after{box-sizing:border-box}
             
             .print-header{text-align:center;margin-bottom:10px;border-bottom:1.5px solid #000;padding-bottom:6px}
             .print-logo{max-width:80px !important; height:auto !important;margin-bottom:6px;display:block;margin-left:auto;margin-right:auto;}
-            /* H1 specifically for #printAreaContent, not inside #captureForPdfOrWord */
             #printAreaContent > h1, #printAreaContent > .print-header > h1 {font-size:13pt;font-weight:700;margin-top:4px;margin-bottom:8px;text-align:center;color:#333}
             .print-order-info{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:4px;font-size:8.5pt}
             .print-order-info span{margin:1px 0}
             
             .print-section{margin-bottom:8px}
-            /* H2 specifically for #printAreaContent */
             #printAreaContent > .print-section > h2, #printAreaContent > .print-notes-signatures-footer-group > .print-section > h2 {font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333}
             
             .print-info-compact .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px 12px;font-size:8.5pt}
@@ -375,7 +373,7 @@
             
             .print-product-table{width:100%;border-collapse:collapse;margin-top:6px;font-size:8pt}
             .print-product-table th,.print-product-table td{border:1px solid #ccc;padding:3px 5px;text-align:left;word-break:break-word;overflow-wrap:break-word}
-            .print-product-table th{background-color:#f0f0f0!important;font-weight:700;text-align:center} /* Added !important for bg */
+            .print-product-table th{background-color:#f0f0f0!important;font-weight:700;text-align:center}
             .print-product-table td{vertical-align:top}
             .print-product-table .product-name-col{width:auto;}
             .print-product-table .unit-col{width:auto;text-align:center;}
@@ -386,7 +384,7 @@
             
             .print-notes-signatures-footer-group {
                 page-break-inside: avoid !important;
-                margin-top: auto; /* This pushes footer down for browser printing due to #printAreaContent flex */
+                margin-top: auto;
                 padding-top: 10px;
                 flex-shrink: 0; 
             }
@@ -453,37 +451,41 @@
                 <div class="main-title-button" data-translate="orderFormTitle">ÜRÜN SİPARİŞ FORMU</div>
                 <form id="orderForm">
                     <table class="info-table">
-                        <tr>
-                            <th data-translate="orderNoLabel">Sipariş No:</th>
-                            <td><input type="text" id="orderNo" readonly></td>
-                            <th data-translate="orderDateLabel">Sipariş Tarihi:</th>
-                            <td><input type="date" id="orderDate"></td>
-                        </tr>
-                        <tr>
-                            <th data-translate="authorizedPersonLabel">Sipariş Veren Yetkili:</th>
-                            <td><input type="text" id="orderSenderName" data-translate-placeholder="authPersonPlaceholder" placeholder="Adınız Soyadınız" required></td>
-                            <th data-translate="branchNameLabel">Şube Adı:</th>
-                            <td>
-                                <div class="branch-input-container">
-                                    <select id="branchSelect"></select>
-                                    <input type="checkbox" id="manualBranchCheckbox" data-translate-title="manualBranchCheckboxTitle" title="Elle Şube Adı Gir">
-                                </div>
-                                <input type="text" id="manualBranchInput" data-translate-placeholder="manualBranchInputPlaceholder" placeholder="Şube adını buraya yazın..." style="display: none;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th data-translate="requestedDeliveryDateLabel">Talep Edilen Teslim Tarihi:</th>
-                            <td><input type="date" id="deliveryDate"></td>
-                            <th data-translate="contactPhoneLabel">İletişim Telefonu (Şube):</th>
-                            <td><input type="text" id="contactPhone" data-translate-placeholder="contactPhonePlaceholder" placeholder="Şube telefon numarası"></td>
-                        </tr>
+                       <tr style="display: none;">
+                          <th data-translate="orderNoLabel">Sipariş No:</th>
+                          <td><input type="text" id="orderNo" readonly></td>
+                          <th data-translate="orderDateLabel">Sipariş Tarihi:</th>
+                          <td><input type="date" id="orderDate"></td>
+                       </tr>
+                       <tr>
+                          <th data-translate="authorizedPersonLabel">Sipariş Veren Yetkili:</th>
+                          <td><input type="text" id="orderSenderName" data-translate-placeholder="authPersonPlaceholder" placeholder="Adınız Soyadınız" required></td>
+                          <th data-translate="branchNameLabel">Şube Adı:</th>
+                          <td>
+                             <div class="branch-input-container">
+                                  <select id="branchSelect"></select>
+                                  <input type="checkbox" id="manualBranchCheckbox" data-translate-title="manualBranchCheckboxTitle" title="Elle Şube Adı Gir">
+                             </div>
+                             <input type="text" id="manualBranchInput" data-translate-placeholder="manualBranchInputPlaceholder" placeholder="Şube adını buraya yazın..." style="display: none;">
+                        </td>
+                      </tr>
+                      <tr>
+                           <th data-translate="requestedDeliveryDateLabel">Talep Edilen Teslim Tarihi:</th>
+                           <td colspan="3">
+                           <input type="date" id="deliveryDate">
+                     </td>
+                     </tr>
+                         <tr style="display: none;">
+                             <th data-translate="contactPhoneLabel">İletişim Telefonu (Şube):</th>
+                             <td><input type="text" id="contactPhone" data-translate-placeholder="contactPhonePlaceholder" placeholder="Şube telefon numarası"></td>
+                      </tr>
                     </table>
                     <div id="productSectionsContainer"></div>
                     <div class="section-title general-notes-title-styling" style="margin-top:10px;" data-translate="generalNotesTitle">GENEL NOTLAR</div>
                     <textarea id="generalNotes" data-translate-placeholder="generalNotesPlaceholder" placeholder="Siparişle ilgili genel notlarınız..."></textarea>
                     <div class="buttons-area">
                         <button type="button" class="print-btn" data-translate="printButton">YAZDIR</button>
-                        <button type="button" id="sendEmailBtn" data-translate="sendOrderButton">POSTA GÖNDER</button>
+                        <button type="button" id="sendOrderBtn" data-translate="sendOrderButton">SİPARİŞ GÖNDER</button> 
                         <button type="button" id="shareButton" class="share-btn" data-translate="shareButtonText">PAYLAŞ</button>
                     </div>
                 </form>
@@ -508,7 +510,6 @@
     </footer>
     <div class="developer-signature"></div>
     
-    <!-- Container for browser print content -->
     <div id="printAreaContainer" style="display: none;">
         <div id="printAreaContent"></div>
     </div>
@@ -541,105 +542,20 @@
         let pageWrapper, orderSenderNameInput, contactPhoneInput, branchSelect, manualBranchCheckbox, manualBranchInput,
             orderDateInput, deliveryDateInput, orderNoInput, generalNotesInput,
             mainFormLangTrBtn, mainFormLangEnBtn,
-            printButton, sendEmailBtn, shareButton,
+            printButton, sendOrderBtn, shareButton,
             shareOptionsModal, closeShareModalButton, downloadPdfButton, downloadWordButton,
             shareModalMessage, shareButtonsContainer;
 
         const COMPANY_ADDRESS_PRINT = "14902 Preston Rd Ste 512A, TX 75254";
         const COMPANY_PHONE_PRINT = "214-377-7716";
-        const EMAIL_RECIPIENT = "kadireymurus@gmail.com";
 
-        const translations = {
-            "tr": {
-                "pageTitle": "Selda Mediterranean - Ürün Sipariş Formu", "orderFormTitle": "ÜRÜN SİPARİŞ FORMU",
-                "orderNoLabel": "Sipariş No:", "orderDateLabel": "Sipariş Tarihi:",
-                "authorizedPersonLabel": "Sipariş Veren Yetkili:", "authPersonPlaceholder": "Adınız Soyadınız",
-                "branchNameLabel": "Şube Adı:", "manualBranchCheckboxTitle": "Elle Şube Adı Gir",
-                "manualBranchInputPlaceholder": "Şube adını buraya yazın...",
-                "requestedDeliveryDateLabel": "Talep Edilen Teslim Tarihi:",
-                "contactPhoneLabel": "İletişim Telefonu (Şube):", "contactPhonePlaceholder": "Şube telefon numarası",
-                "productNameHeader": "Ürün Adı", "lbHeader": "Pound (LB)", "pcsUnitHeader": "Adet",
-                "quartHeader": "Quart", "kunefeSmallHeader": "Küçük", "kunefeLargeHeader": "Büyük",
-                "otherLabel": "Diğer:", "generalNotesTitle": "GENEL NOTLAR", "generalNotesTitleHeader": "NOTLAR", // Added for print header
-                "generalNotesPlaceholder": "Siparişle ilgili genel notlarınız...",
-                "printButton": "YAZDIR", "sendOrderButton": "POSTA GÖNDER", "shareButtonText": "PAYLAŞ",
-                "orderSummaryTitle": "Sipariş Özeti", "emptySummaryText": "Henüz ürün seçilmedi.",
-                "totalLbLabel": "Toplam LB:", "totalPcsLabel": "Toplam Adet:", "totalQuartLabel": "Toplam Quart:",
-                "footerCompanyName": "Selda Mediterranean - Merkezi Mutfak",
-                "alert_authPersonMissing": "Lütfen 'Sipariş Veren Yetkili' adını giriniz.",
-                "alert_orderDateInvalid": "Lütfen geçerli bir 'Sipariş Tarihi' seçiniz.",
-                "alert_deliveryDateInvalid": "Lütfen 'Talep Edilen Teslim Tarihi' seçiniz.",
-                "alert_branchNameInvalid": "Lütfen geçerli bir 'Şube Adı' seçiniz veya giriniz.",
-                "alert_noItemSelected": "Lütfen paylaşmadan/göndermeden önce en az bir ürün için miktar belirtin.",
-                "searchPlaceholder": "Ara...",
-                "manualBranchNotSpecified": "Belirtilmedi (Manuel)", "selectionBranchNotSpecified": "Belirtilmedi (Seçim)",
-                "summaryUnitLB": "LB", "summaryUnitPCS": "Adet", "summaryUnitQuart": "Quart",
-                "summaryUnitKunefeSmall": "Küçük", "summaryUnitKunefeLarge": "Büyük", "summaryUnitManual": "(M)",
-                "loginTitle": "Giriş Yap", "usernamePlaceholder": "Kullanıcı Adı", "passwordPlaceholder": "Şifre",
-                "loginButtonText": "GİRİŞ", "rememberMeLabel": "Beni Hatırla",
-                "alert_loginFailed": "Kullanıcı adı veya şifre hatalı.",
-                "alert_loginFieldsMissing": "Kullanıcı adı ve şifre alanları doldurulmalıdır.",
-                "shareModalTitle": "Sipariş Formunu Paylaş",
-                "shareModalMessage": "Dosya(lar) hazırlanıyor, lütfen bekleyin...",
-                "shareModalMessageReady": "Dosya paylaşıma hazır veya aşağıdaki seçenekleri kullanın:",
-                "downloadPdfButton": "PDF İndir", "downloadWordButton": "Word Olarak İndir",
-                "wordGenerationFailed": "Word dosyası oluşturulamadı. Lütfen tekrar deneyin.",
-                "pdfGenerationFailed": "PDF oluşturulamadı. Lütfen tekrar deneyin.",
-                "closeButton": "Kapat",
-                "webShareNotSupported": "Tarayıcınız doğrudan dosya paylaşımını desteklemiyor. Dosyayı indirip manuel olarak paylaşabilirsiniz."
-            },
-            "en": {
-                "pageTitle": "Selda Mediterranean - Product Order Form", "orderFormTitle": "PRODUCT ORDER FORM",
-                "orderNoLabel": "Order No:", "orderDateLabel": "Order Date:",
-                "authorizedPersonLabel": "Authorized Person:", "authPersonPlaceholder": "Your Name",
-                "branchNameLabel": "Branch Name:", "manualBranchCheckboxTitle": "Enter Branch Name Manually",
-                "manualBranchInputPlaceholder": "Enter branch name here...",
-                "requestedDeliveryDateLabel": "Requested Delivery Date:",
-                "contactPhoneLabel": "Contact Phone (Branch):", "contactPhonePlaceholder": "Branch phone number",
-                "productNameHeader": "Product Name", "lbHeader": "Pound (LB)", "pcsUnitHeader": "PCS",
-                "quartHeader": "Quart", "kunefeSmallHeader": "Small", "kunefeLargeHeader": "Large",
-                "otherLabel": "Other:", "generalNotesTitle": "GENERAL NOTES", "generalNotesTitleHeader": "NOTES", // Added for print header
-                "generalNotesPlaceholder": "Your general notes about the order...",
-                "printButton": "PRINT", "sendOrderButton": "SEND E-MAIL", "shareButtonText": "SHARE",
-                "orderSummaryTitle": "Order Summary", "emptySummaryText": "No products selected yet.",
-                "totalLbLabel": "Total LB:", "totalPcsLabel": "Total PCS:", "totalQuartLabel": "Total Quart:",
-                "footerCompanyName": "Selda Mediterranean - Central Kitchen",
-                "alert_authPersonMissing": "Please enter the 'Authorized Person' name.",
-                "alert_orderDateInvalid": "Please select a valid 'Order Date'.",
-                "alert_deliveryDateInvalid": "Please select a 'Requested Delivery Date'.",
-                "alert_branchNameInvalid": "Please select or enter a valid 'Branch Name'.",
-                "alert_noItemSelected": "Please specify a quantity for at least one product before sharing/sending.",
-                "searchPlaceholder": "Search...",
-                "manualBranchNotSpecified": "Not Specified (Manual)", "selectionBranchNotSpecified": "Not Specified (Selection)",
-                "summaryUnitLB": "LB", "summaryUnitPCS": "PCS", "summaryUnitQuart": "Quart",
-                "summaryUnitKunefeSmall": "Small", "summaryUnitKunefeLarge": "Large", "summaryUnitManual": "(M)",
-                "loginTitle": "Login", "usernamePlaceholder": "Username", "passwordPlaceholder": "Password",
-                "loginButtonText": "LOGIN", "rememberMeLabel": "Remember Me",
-                "alert_loginFailed": "Invalid username or password.",
-                "alert_loginFieldsMissing": "Username and password fields must be filled.",
-                "shareModalTitle": "Share Order Form",
-                "shareModalMessage": "Generating file(s), please wait...",
-                "shareModalMessageReady": "File is ready for sharing or use options below:",
-                "downloadPdfButton": "Download PDF", "downloadWordButton": "Download as Word",
-                "wordGenerationFailed": "Failed to generate Word file. Please try again.",
-                "pdfGenerationFailed": "Failed to generate PDF. Please try again.",
-                "closeButton": "Close",
-                "webShareNotSupported": "Your browser does not support direct file sharing. You can download the file and share it manually."
-            }
-        };
+        const translations = { "tr": { "pageTitle": "Selda Mediterranean - Ürün Sipariş Formu", "orderFormTitle": "ÜRÜN SİPARİŞ FORMU", "orderNoLabel": "Sipariş No:", "orderDateLabel": "Sipariş Tarihi:", "authorizedPersonLabel": "Sipariş Veren Yetkili:", "authPersonPlaceholder": "Adınız Soyadınız", "branchNameLabel": "Şube Adı:", "manualBranchCheckboxTitle": "Elle Şube Adı Gir", "manualBranchInputPlaceholder": "Şube adını buraya yazın...", "requestedDeliveryDateLabel": "Talep Edilen Teslim Tarihi:", "contactPhoneLabel": "İletişim Telefonu (Şube):", "contactPhonePlaceholder": "Şube telefon numarası", "productNameHeader": "Ürün Adı", "lbHeader": "Pound (LB)", "pcsUnitHeader": "Adet", "quartHeader": "Quart", "kunefeSmallHeader": "Küçük", "kunefeLargeHeader": "Büyük", "otherLabel": "Diğer:", "generalNotesTitle": "GENEL NOTLAR", "generalNotesTitleHeader": "NOTLAR", "printButton": "YAZDIR", "sendOrderButton": "SİPARİŞ GÖNDER", "shareButtonText": "PAYLAŞ", "orderSummaryTitle": "Sipariş Özeti", "emptySummaryText": "Henüz ürün seçilmedi.", "totalLbLabel": "Toplam LB:", "totalPcsLabel": "Toplam Adet:", "totalQuartLabel": "Toplam Quart:", "footerCompanyName": "Selda Mediterranean - Merkezi Mutfak", "alert_authPersonMissing": "Lütfen 'Sipariş Veren Yetkili' adını giriniz.", "alert_orderDateInvalid": "Lütfen geçerli bir 'Sipariş Tarihi' seçiniz.", "alert_deliveryDateInvalid": "Lütfen 'Talep Edilen Teslim Tarihi' seçiniz.", "alert_branchNameInvalid": "Lütfen geçerli bir 'Şube Adı' seçiniz veya giriniz.", "alert_noItemSelected": "Lütfen paylaşmadan/göndermeden önce en az bir ürün için miktar belirtin.", "searchPlaceholder": "Ara...", "manualBranchNotSpecified": "Belirtilmedi (Manuel)", "selectionBranchNotSpecified": "Belirtilmedi (Seçim)", "summaryUnitLB": "LB", "summaryUnitPCS": "Adet", "summaryUnitQuart": "Quart", "summaryUnitKunefeSmall": "Küçük", "summaryUnitKunefeLarge": "Büyük", "summaryUnitManual": "(M)", "loginTitle": "Giriş Yap", "usernamePlaceholder": "Kullanıcı Adı", "passwordPlaceholder": "Şifre", "loginButtonText": "GİRİŞ", "rememberMeLabel": "Beni Hatırla", "alert_loginFailed": "Kullanıcı adı veya şifre hatalı.", "alert_loginFieldsMissing": "Kullanıcı adı ve şifre alanları doldurulmalıdır.", "shareModalTitle": "Sipariş Formunu Paylaş", "shareModalMessage": "Dosya(lar) hazırlanıyor, lütfen bekleyin...", "shareModalMessageReady": "Dosya paylaşıma hazır veya aşağıdaki seçenekleri kullanın:", "downloadPdfButton": "PDF İndir", "downloadWordButton": "Word Olarak İndir", "wordGenerationFailed": "Word dosyası oluşturulamadı. Lütfen tekrar deneyin.", "pdfGenerationFailed": "PDF oluşturulamadı. Lütfen tekrar deneyin.", "closeButton": "Kapat", "webShareNotSupported": "Tarayıcınız doğrudan dosya paylaşımını desteklemiyor. Dosyayı indirip manuel olarak paylaşabilirsiniz." }, "en": { "pageTitle": "Selda Mediterranean - Product Order Form", "orderFormTitle": "PRODUCT ORDER FORM", "orderNoLabel": "Order No:", "orderDateLabel": "Order Date:", "authorizedPersonLabel": "Authorized Person:", "authPersonPlaceholder": "Your Name", "branchNameLabel": "Branch Name:", "manualBranchCheckboxTitle": "Enter Branch Name Manually", "manualBranchInputPlaceholder": "Enter branch name here...", "requestedDeliveryDateLabel": "Requested Delivery Date:", "contactPhoneLabel": "Contact Phone (Branch):", "contactPhonePlaceholder": "Branch phone number", "productNameHeader": "Product Name", "lbHeader": "Pound (LB)", "pcsUnitHeader": "PCS", "quartHeader": "Quart", "kunefeSmallHeader": "Small", "kunefeLargeHeader": "Large", "otherLabel": "Other:", "generalNotesTitle": "GENERAL NOTES", "generalNotesTitleHeader": "NOTES", "printButton": "PRINT", "sendOrderButton": "SEND ORDER", "shareButtonText": "SHARE", "orderSummaryTitle": "Order Summary", "emptySummaryText": "No products selected yet.", "totalLbLabel": "Total LB:", "totalPcsLabel": "Total PCS:", "totalQuartLabel": "Total Quart:", "footerCompanyName": "Selda Mediterranean - Central Kitchen", "alert_authPersonMissing": "Please enter the 'Authorized Person' name.", "alert_orderDateInvalid": "Please select a valid 'Order Date'.", "alert_deliveryDateInvalid": "Please select a 'Requested Delivery Date'.", "alert_branchNameInvalid": "Please select or enter a valid 'Branch Name'.", "alert_noItemSelected": "Please specify a quantity for at least one product before sharing/sending.", "searchPlaceholder": "Search...", "manualBranchNotSpecified": "Not Specified (Manual)", "selectionBranchNotSpecified": "Not Specified (Selection)", "summaryUnitLB": "LB", "summaryUnitPCS": "PCS", "summaryUnitQuart": "Quart", "summaryUnitKunefeSmall": "Small", "summaryUnitKunefeLarge": "Large", "summaryUnitManual": "(M)", "loginTitle": "Login", "usernamePlaceholder": "Username", "passwordPlaceholder": "Password", "loginButtonText": "LOGIN", "rememberMeLabel": "Remember Me", "alert_loginFailed": "Invalid username or password.", "alert_loginFieldsMissing": "Username and password fields must be filled.", "shareModalTitle": "Share Order Form", "shareModalMessage": "Generating file(s), please wait...", "shareModalMessageReady": "File is ready for sharing or use options below:", "downloadPdfButton": "Download PDF", "downloadWordButton": "Download as Word", "wordGenerationFailed": "Failed to generate Word file. Please try again.", "pdfGenerationFailed": "Failed to generate PDF. Please try again.", "closeButton": "Close", "webShareNotSupported": "Your browser does not support direct file sharing. You can download the file and share it manually." } };
         let currentLanguage = 'en';
 
-        const productData = {
-            "SMALL BITES": ["Soup of the Day", "Hummus", "Falafel", "Grilled Eggplant Salad(Babagannus)", "Tzatziki (Cacik)", "Spicy Ezme", "Saksuka", "Cigar Borek", "Stuffed Dates", "Salmon and Grape Leaves", "Arnavut Cigeri", "Ali Nazik (Sauce)","Avakado Sauce", "White Sauce(yogurt)", "Tomato Sauce", "Shiracha Sauce"],
-            "A LITTLE MORE": ["Chicken Shish", "Chicken Adana", "Urfa Kebab", "Beef Shish", "Grilled Pistachio Meatballs", "Lamb Chops", "Lamb Shank", "Grilled Salmon", "Lamb Shish"],
-            "FROM THE OVEN": ["Lahmacun"],
-            "DESSERT": ["Quinn", "Fistikli Mousse", "Vanilia Mousse", "Kunefe", "Rulo (Sarma)", "Turkish Flan", "Trilece", "San Sebastian", "Profiterol", "Chocolate Fistikli", "Lotus", "Oreo", "Tart", "Malaga", "Sutlac"]
-        };
+        const productData = { "SMALL BITES": ["Soup of the Day", "Hummus", "Grilled Eggplant Salad(Babagannus)", "Tzatziki (Cacik)", "Spicy Ezme", "Saksuka", "Cigar Borek", "Stuffed Dates", "Salmon and Grape Leaves", "Arnavut Cigeri", "Ali Nazik (Sauce)","Avakado Sauce", "White Sauce(yogurt)", "Tomato Sauce", "Shiracha Sauce"], "A LITTLE MORE": ["Chicken Shish", "Chicken Adana", "Urfa Kebab", "Beef Shish", "Grilled Pistachio Meatballs", "Lamb Chops", "Lamb Shank", "Grilled Salmon", "Lamb Shish"], "FROM THE OVEN": ["Lahmacun"], "DESSERT": ["Quinn", "Fistikli Mousse", "Vanilia Mousse", "Kunefe", "Rulo (Sarma)", "Turkish Flan", "Trilece", "San Sebastian", "Profiterol", "Chocolate Fistikli", "Lotus", "Oreo", "Tart", "Malaga", "Sutlac"] };
         const BRANCH_OPTIONS = [ "SELDA - Belt Line", "SELDA - The Mayor's", "SELDA - San Antonio", "SELDA - Frisco", "SELDA - Doner" ];
-
-        const PCS_ONLY_PRODUCTS_SMALL_BITES = ["Cigar Borek", "Stuffed Dates"];
+        const PCS_ONLY_PRODUCTS_SMALL_BITES = ["Cigar Borek", "Stuffed Dates", "Salmon and Grape Leaves"];
         const LB_AND_PCS_PRODUCTS_A_LITTLE_MORE = []; 
-
 
         const LS_LANGUAGE = 'seldaOrderForm_language_v8_final_touches_v2';
         const LS_SENDER_NAME = 'seldaOrderForm_senderName_v12';
@@ -648,60 +564,18 @@
         const LS_MANUAL_BRANCH_VALUE = 'seldaOrderForm_manualBranchValue_v12';
         const LS_MANUAL_BRANCH_ENABLED = 'seldaOrderForm_manualBranchEnabled_v12';
         const LS_ORDER_DATE = 'seldaOrderForm_orderDate_v12';
-        const LS_DELIVERY_DATE = 'seldaOrderForm_deliveryDate_v12';
+        // const LS_DELIVERY_DATE = 'seldaOrderForm_deliveryDate_v12'; // DEĞİŞİKLİK 1: Bu satır silindi.
         const LS_ORDER_COUNTER = 'seldaOrderCounterV20_final_touches_v2';
 
-
-        function assignLoginDOMElements() {
-            loginScreen = document.getElementById('loginScreen');
-            usernameInput = document.getElementById('username');
-            passwordInput = document.getElementById('password');
-            rememberMeCheckbox = document.getElementById('rememberMeCheckbox');
-            loginButton = document.getElementById('loginButton');
-            loginError = document.getElementById('loginError');
-            pageWrapper = document.querySelector('.page-wrapper');
-        }
-
-        function assignMainFormDOMElements() {
-            orderSenderNameInput = document.getElementById('orderSenderName');
-            contactPhoneInput = document.getElementById('contactPhone');
-            branchSelect = document.getElementById('branchSelect');
-            manualBranchCheckbox = document.getElementById('manualBranchCheckbox');
-            manualBranchInput = document.getElementById('manualBranchInput');
-            orderDateInput = document.getElementById('orderDate');
-            deliveryDateInput = document.getElementById('deliveryDate');
-            orderNoInput = document.getElementById('orderNo');
-            generalNotesInput = document.getElementById('generalNotes');
-            mainFormLangTrBtn = document.getElementById('langTrBtn');
-            mainFormLangEnBtn = document.getElementById('langEnBtn');
-            printButton = document.querySelector('.print-btn');
-            sendEmailBtn = document.getElementById('sendEmailBtn');
-            shareButton = document.getElementById('shareButton');
-            shareOptionsModal = document.getElementById('shareOptionsModal');
-            closeShareModalButton = document.getElementById('closeShareModalButton');
-            downloadPdfButton = document.getElementById('downloadPdfButton');
-            downloadWordButton = document.getElementById('downloadWordButton');
-            shareModalMessage = document.getElementById('shareModalMessage');
-            shareButtonsContainer = document.getElementById('shareButtonsContainer');
-        }
-
-        function showLoginScreen() {
-            if (loginScreen) loginScreen.classList.remove('hidden');
-            if (pageWrapper) pageWrapper.style.display = 'none';
-            if (usernameInput) usernameInput.focus();
-        }
-
-        function showMainForm() {
-            if (loginScreen) loginScreen.classList.add('hidden');
-            if (pageWrapper) pageWrapper.style.display = 'flex';
-        }
+        function assignLoginDOMElements() { loginScreen = document.getElementById('loginScreen'); usernameInput = document.getElementById('username'); passwordInput = document.getElementById('password'); rememberMeCheckbox = document.getElementById('rememberMeCheckbox'); loginButton = document.getElementById('loginButton'); loginError = document.getElementById('loginError'); pageWrapper = document.querySelector('.page-wrapper'); }
+        function assignMainFormDOMElements() { orderSenderNameInput = document.getElementById('orderSenderName'); contactPhoneInput = document.getElementById('contactPhone'); branchSelect = document.getElementById('branchSelect'); manualBranchCheckbox = document.getElementById('manualBranchCheckbox'); manualBranchInput = document.getElementById('manualBranchInput'); orderDateInput = document.getElementById('orderDate'); deliveryDateInput = document.getElementById('deliveryDate'); orderNoInput = document.getElementById('orderNo'); generalNotesInput = document.getElementById('generalNotes'); mainFormLangTrBtn = document.getElementById('langTrBtn'); mainFormLangEnBtn = document.getElementById('langEnBtn'); printButton = document.querySelector('.print-btn'); sendOrderBtn = document.getElementById('sendOrderBtn'); shareButton = document.getElementById('shareButton'); shareOptionsModal = document.getElementById('shareOptionsModal'); closeShareModalButton = document.getElementById('closeShareModalButton'); downloadPdfButton = document.getElementById('downloadPdfButton'); downloadWordButton = document.getElementById('downloadWordButton'); shareModalMessage = document.getElementById('shareModalMessage'); shareButtonsContainer = document.getElementById('shareButtonsContainer'); }
+        function showLoginScreen() { if (loginScreen) loginScreen.classList.remove('hidden'); if (pageWrapper) pageWrapper.style.display = 'none'; if (usernameInput) usernameInput.focus(); }
+        function showMainForm() { if (loginScreen) loginScreen.classList.add('hidden'); if (pageWrapper) pageWrapper.style.display = 'flex'; }
 
         function checkAuth() {
             if (sessionStorage.getItem(AUTH_KEY_SESSION) === 'true') {
                 showMainForm();
-                if (!mainFormInitialized) {
-                    initializeMainForm();
-                }
+                if (!mainFormInitialized) { initializeMainForm(); }
                 return true;
             }
             showLoginScreen();
@@ -712,131 +586,59 @@
             const enteredUsername = usernameInput.value.trim();
             const enteredPassword = passwordInput.value.trim();
             const langSet = translations[currentLanguage] || translations.en;
-
-            if (!enteredUsername || !enteredPassword) {
-                loginError.textContent = langSet.alert_loginFieldsMissing;
-                loginError.style.display = 'block';
-                return;
-            }
-
+            if (!enteredUsername || !enteredPassword) { loginError.textContent = langSet.alert_loginFieldsMissing; loginError.style.display = 'block'; return; }
             if (enteredUsername === CORRECT_USERNAME && enteredPassword === CORRECT_PASSWORD) {
                 sessionStorage.setItem(AUTH_KEY_SESSION, 'true');
                 loginError.style.display = 'none';
-
                 if (rememberMeCheckbox.checked) {
-                    try {
-                        localStorage.setItem(LS_REMEMBER_USER, 'true');
-                        localStorage.setItem(LS_REMEMBERED_USERNAME, enteredUsername);
-                        localStorage.setItem(LS_REMEMBERED_PASSWORD, enteredPassword);
-                    } catch (e) { console.warn("localStorage 'Beni Hatırla' kaydı başarısız:", e); }
+                    try { localStorage.setItem(LS_REMEMBER_USER, 'true'); localStorage.setItem(LS_REMEMBERED_USERNAME, enteredUsername); localStorage.setItem(LS_REMEMBERED_PASSWORD, enteredPassword); } catch (e) { console.warn("localStorage 'Beni Hatırla' kaydı başarısız:", e); }
                 } else {
-                    try {
-                        localStorage.removeItem(LS_REMEMBER_USER);
-                        localStorage.removeItem(LS_REMEMBERED_USERNAME);
-                        localStorage.removeItem(LS_REMEMBERED_PASSWORD);
-                    } catch (e) { console.warn("localStorage 'Beni Hatırla' silme başarısız:", e); }
+                    try { localStorage.removeItem(LS_REMEMBER_USER); localStorage.removeItem(LS_REMEMBERED_USERNAME); localStorage.removeItem(LS_REMEMBERED_PASSWORD); } catch (e) { console.warn("localStorage 'Beni Hatırla' silme başarısız:", e); }
                 }
                 showMainForm();
-                if (!mainFormInitialized) {
-                     initializeMainForm();
-                }
-            } else {
-                loginError.textContent = langSet.alert_loginFailed;
-                loginError.style.display = 'block';
-                passwordInput.value = '';
-                passwordInput.focus();
-            }
+                if (!mainFormInitialized) { initializeMainForm(); }
+            } else { loginError.textContent = langSet.alert_loginFailed; loginError.style.display = 'block'; passwordInput.value = ''; passwordInput.focus(); }
         }
 
         function loadRememberMe() {
             try {
-                const rememberUser = localStorage.getItem(LS_REMEMBER_USER);
-                if (rememberUser === 'true') {
-                    const rememberedUsername = localStorage.getItem(LS_REMEMBERED_USERNAME);
-                    const rememberedPassword = localStorage.getItem(LS_REMEMBERED_PASSWORD);
-
-                    if (rememberedUsername && usernameInput) {
-                        usernameInput.value = rememberedUsername;
-                    }
-                    if (rememberedPassword && passwordInput) {
-                        passwordInput.value = rememberedPassword;
-                    }
-                    if (rememberMeCheckbox) {
-                        rememberMeCheckbox.checked = true;
-                    }
-
-                    if(usernameInput.value && passwordInput.value) {
-                        if(loginButton) loginButton.focus();
-                    } else if (usernameInput.value && !passwordInput.value) {
-                        if(passwordInput) passwordInput.focus();
-                    } else {
-                         if(usernameInput) usernameInput.focus();
-                    }
-                } else {
-                    if (rememberMeCheckbox) {
-                        rememberMeCheckbox.checked = false;
-                    }
-                    if (usernameInput) usernameInput.focus();
-                }
-            } catch (e) {
-                console.warn("localStorage 'Beni Hatırla' okuma başarısız:", e);
-            }
+                if (localStorage.getItem(LS_REMEMBER_USER) === 'true') {
+                    if (usernameInput) usernameInput.value = localStorage.getItem(LS_REMEMBERED_USERNAME) || '';
+                    if (passwordInput) passwordInput.value = localStorage.getItem(LS_REMEMBERED_PASSWORD) || '';
+                    if (rememberMeCheckbox) rememberMeCheckbox.checked = true;
+                    if(usernameInput.value && passwordInput.value) { if(loginButton) loginButton.focus(); } 
+                    else if (usernameInput.value && !passwordInput.value) { if(passwordInput) passwordInput.focus(); } 
+                    else { if(usernameInput) usernameInput.focus(); }
+                } else { if (rememberMeCheckbox) { rememberMeCheckbox.checked = false; } if (usernameInput) usernameInput.focus(); }
+            } catch (e) { console.warn("localStorage 'Beni Hatırla' okuma başarısız:", e); }
         }
-
 
         function setLanguage(lang) {
             currentLanguage = lang;
             try { localStorage.setItem(LS_LANGUAGE, lang); } catch(e) { console.warn("localStorage dil kaydı başarısız:", e); }
             if (document.documentElement) document.documentElement.lang = lang;
             updateUIForLanguage(lang);
-            if (mainFormInitialized && mainFormLangTrBtn && mainFormLangEnBtn) {
-                mainFormLangTrBtn.classList.toggle('active', lang === 'tr');
-                mainFormLangEnBtn.classList.toggle('active', lang === 'en');
-            }
+            if (mainFormInitialized && mainFormLangTrBtn && mainFormLangEnBtn) { mainFormLangTrBtn.classList.toggle('active', lang === 'tr'); mainFormLangEnBtn.classList.toggle('active', lang === 'en'); }
         }
 
         function updateUIForLanguage(lang) {
             const translationSet = translations[lang] || translations.en;
             if (!translationSet) return;
             if(document) document.title = translationSet.pageTitle;
-
-            document.querySelectorAll('[data-translate]').forEach(el => {
-                const key = el.dataset.translate;
-                if (translationSet[key]) el.textContent = translationSet[key];
-            });
-            document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
-                const key = el.dataset.translatePlaceholder;
-                if (translationSet[key]) el.placeholder = translationSet[key];
-            });
-            document.querySelectorAll('[data-translate-title]').forEach(el => {
-                const key = el.dataset.translateTitle;
-                if (translationSet[key]) el.title = translationSet[key];
-            });
-
+            document.querySelectorAll('[data-translate]').forEach(el => { const key = el.dataset.translate; if (translationSet[key]) el.textContent = translationSet[key]; });
+            document.querySelectorAll('[data-translate-placeholder]').forEach(el => { const key = el.dataset.translatePlaceholder; if (translationSet[key]) el.placeholder = translationSet[key]; });
+            document.querySelectorAll('[data-translate-title]').forEach(el => { const key = el.dataset.translateTitle; if (translationSet[key]) el.title = translationSet[key]; });
             if (loginError && loginError.style.display !== 'none') {
-                 if (loginError.textContent.includes("hatalı") || loginError.textContent.includes("Invalid")) {
-                     loginError.textContent = translationSet.alert_loginFailed;
-                 } else if (loginError.textContent.includes("doldurulmalıdır") || loginError.textContent.includes("must be filled")) {
-                     loginError.textContent = translationSet.alert_loginFieldsMissing;
-                 }
+                 if (loginError.textContent.includes("hatalı") || loginError.textContent.includes("Invalid")) { loginError.textContent = translationSet.alert_loginFailed; } 
+                 else if (loginError.textContent.includes("doldurulmalıdır") || loginError.textContent.includes("must be filled")) { loginError.textContent = translationSet.alert_loginFieldsMissing; }
             }
-
-            if (mainFormInitialized) {
-                renderProducts();
-                updateOrderSummary();
-            }
+            if (mainFormInitialized) { renderProducts(); updateOrderSummary(); }
         }
 
         function loadLanguage() {
             let savedLang = 'en';
-            try {
-                const langFromStorage = localStorage.getItem(LS_LANGUAGE);
-                if (langFromStorage === 'tr' || langFromStorage === 'en') {
-                    savedLang = langFromStorage;
-                }
-            } catch(e) {
-                console.warn("localStorage dil okuma başarısız, İngilizce'ye dönülüyor:", e);
-            }
+            try { const langFromStorage = localStorage.getItem(LS_LANGUAGE); if (langFromStorage === 'tr' || langFromStorage === 'en') { savedLang = langFromStorage; } } 
+            catch(e) { console.warn("localStorage dil okuma başarısız, İngilizce'ye dönülüyor:", e); }
             setLanguage(savedLang);
         }
 
@@ -853,9 +655,7 @@
             const parts = dateString.split('-');
             if (parts.length === 3) {
                 const dateObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-                if (!isNaN(dateObj.getTime())) {
-                    return dateObj.toLocaleDateString(locale, { month: '2-digit', day: '2-digit', year: 'numeric' });
-                }
+                if (!isNaN(dateObj.getTime())) { return dateObj.toLocaleDateString(locale, { month: '2-digit', day: '2-digit', year: 'numeric' }); }
             }
             return 'N/A';
         }
@@ -867,198 +667,59 @@
             return `${month}-${day}-${year}`; 
         }
 
-
         function renderProducts() {
             const container = document.getElementById('productSectionsContainer');
             if (!container) return;
             let htmlContent = '';
             const langSet = translations[currentLanguage] || translations.en;
-
             Object.keys(productData).forEach((category) => {
                 const categoryId = `category-${category.replace(/\s+/g, '').toLowerCase()}`;
                 let headerRow;
                 const isDessertCategory = category === "DESSERT";
-
-                if (isDessertCategory) {
-                     headerRow = `
-                        <th>${langSet.productNameHeader}</th>
-                        <th class="dessert-pcs-header" colspan="2" style="text-align:center;">${langSet.pcsUnitHeader}</th>`;
-                } else {
-                    headerRow = `
-                        <th>${langSet.productNameHeader}</th>
-                        <th style="width: 200px;">${langSet.lbHeader}</th>
-                        <th style="width: 200px;">${langSet.pcsUnitHeader}</th>`;
-                }
-
-
-                htmlContent += `
-                    <div class="section-title collapsed" role="button" tabindex="0" data-category-id="${categoryId}" aria-expanded="false" aria-controls="${categoryId}">
-                        <span class="category-title-text">${category.toUpperCase()}</span>
-                        <div class="category-search-container">
-                            <input type="text" class="category-search-box" placeholder="${langSet.searchPlaceholder}" onclick="event.stopPropagation();">
-                        </div>
-                        <span class="toggle-icon" aria-hidden="true"></span>
-                    </div>
-                    <div class="product-table-wrapper" id="${categoryId}">
-                        <table class="product-table">
-                            <thead><tr>${headerRow}</tr></thead>
-                            <tbody>`;
-
+                if (isDessertCategory) { headerRow = `<th>${langSet.productNameHeader}</th><th class="dessert-pcs-header" colspan="2" style="text-align:center;">${langSet.pcsUnitHeader}</th>`; } 
+                else { headerRow = `<th>${langSet.productNameHeader}</th><th style="width: 200px;">${langSet.lbHeader}</th><th style="width: 200px;">${langSet.pcsUnitHeader}</th>`; }
+                htmlContent += `<div class="section-title collapsed" role="button" tabindex="0" data-category-id="${categoryId}" aria-expanded="false" aria-controls="${categoryId}"><span class="category-title-text">${category.toUpperCase()}</span><div class="category-search-container"><input type="text" class="category-search-box" placeholder="${langSet.searchPlaceholder}" onclick="event.stopPropagation();"></div><span class="toggle-icon" aria-hidden="true"></span></div><div class="product-table-wrapper" id="${categoryId}"><table class="product-table"><thead><tr>${headerRow}</tr></thead><tbody>`;
                 productData[category].forEach(productName => {
                     const safeProductName = productName.replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
                     const baseId = `prod-${category.replace(/\s+/g, '')}-${safeProductName}`;
-                    let column1Html = ''; 
-                    let column2Html = ''; 
+                    let column1Html = ''; let column2Html = ''; 
                     const isFromOvenCategory = category === "FROM THE OVEN";
-
                     if (isDessertCategory) {
-                        if (productName === "Kunefe") {
-                            column1Html = `
-                            <div class="kunefe-options-container">
-                                <div class="kunefe-options-group">
-                                    <span class="size-label">${langSet.kunefeSmallHeader}</span>
-                                    <div class="quantity-options" data-unit="Adet" data-size="Small">
-                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-small-adet" value="5"> 5</label>
-                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-small-adet" value="10"> 10</label>
-                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-small-adet" value="15"> 15</label>
-                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-small-adet" value="20"> 20</label>
-                                        <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-small-adet-manual" min="0" step="1"></label>
-                                    </div>
-                                </div>
-                                <div class="kunefe-options-group">
-                                    <span class="size-label">${langSet.kunefeLargeHeader}</span>
-                                    <div class="quantity-options" data-unit="Adet" data-size="Large">
-                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-large-adet" value="5"> 5</label>
-                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-large-adet" value="10"> 10</label>
-                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-large-adet" value="15"> 15</label>
-                                        <label><input type="checkbox" class="qty-cb" name="${baseId}-large-adet" value="20"> 20</label>
-                                        <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-large-adet-manual" min="0" step="1"></label>
-                                    </div>
-                                </div>
-                            </div>`;
-                        } else if (productName === "Baklava") {
-                            column1Html = `
-                            <div class="quantity-options" data-unit="Adet">
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="1"> 1</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="2"> 2</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="3"> 3</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="4"> 4</label>
-                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
-                            </div>`;
-                        } else { 
-                            column1Html = `
-                            <div class="quantity-options" data-unit="Adet">
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="5"> 5</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="10"> 10</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="15"> 15</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="20"> 20</label>
-                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
-                            </div>`;
-                        }
+                        if (productName === "Kunefe") { column1Html = `<div class="kunefe-options-container"><div class="kunefe-options-group"><span class="size-label">${langSet.kunefeSmallHeader}</span><div class="quantity-options" data-unit="Adet" data-size="Small"><label><input type="checkbox" class="qty-cb" name="${baseId}-small-adet" value="5"> 5</label><label><input type="checkbox" class="qty-cb" name="${baseId}-small-adet" value="10"> 10</label><label><input type="checkbox" class="qty-cb" name="${baseId}-small-adet" value="15"> 15</label><label><input type="checkbox" class="qty-cb" name="${baseId}-small-adet" value="20"> 20</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-small-adet-manual" min="0" step="1"></label></div></div><div class="kunefe-options-group"><span class="size-label">${langSet.kunefeLargeHeader}</span><div class="quantity-options" data-unit="Adet" data-size="Large"><label><input type="checkbox" class="qty-cb" name="${baseId}-large-adet" value="5"> 5</label><label><input type="checkbox" class="qty-cb" name="${baseId}-large-adet" value="10"> 10</label><label><input type="checkbox" class="qty-cb" name="${baseId}-large-adet" value="15"> 15</label><label><input type="checkbox" class="qty-cb" name="${baseId}-large-adet" value="20"> 20</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-large-adet-manual" min="0" step="1"></label></div></div></div>`; } 
+                        else if (productName === "Baklava") { column1Html = `<div class="quantity-options" data-unit="Adet"><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="1"> 1</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="2"> 2</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="3"> 3</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="4"> 4</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label></div>`; } 
+                        else { column1Html = `<div class="quantity-options" data-unit="Adet"><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="5"> 5</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="10"> 10</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="15"> 15</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="20"> 20</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label></div>`; }
                         column2Html = ''; 
                     } else if (productName === "Soup of the Day") {
-                        column1Html = `
-                        <div>
-                            <span class="specific-unit-label">${langSet.quartHeader}</span>
-                            <div class="quantity-options" data-unit="Quart">
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="5"> 5</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="10"> 10</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="15"> 15</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="20"> 20</label>
-                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-quart-manual" min="0" step="any"></label>
-                            </div>
-                        </div>`;
+                        column1Html = `<div><span class="specific-unit-label">${langSet.quartHeader}</span><div class="quantity-options" data-unit="Quart"><label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="5"> 5</label><label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="10"> 10</label><label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="15"> 15</label><label><input type="checkbox" class="qty-cb" name="${baseId}-quart" value="20"> 20</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-quart-manual" min="0" step="any"></label></div></div>`;
                         column2Html = `<div>-</div>`;
                     } else if (isFromOvenCategory) {
-                        column1Html = `
-                        <div class="quantity-options" data-unit="LB">
-                            <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
-                            <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label>
-                            <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label>
-                            <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label>
-                            <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label>
-                        </div>`;
+                        column1Html = `<div class="quantity-options" data-unit="LB"><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label></div>`;
                         column2Html = `<div>-</div>`;
                     } else if (category === "SMALL BITES") {
                         if (PCS_ONLY_PRODUCTS_SMALL_BITES.includes(productName)) {
                             column1Html = `<div>-</div>`;
-                            column2Html = `
-                            <div class="quantity-options" data-unit="Adet">
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="50"> 50</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="100"> 100</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="150"> 150</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="200"> 200</label>
-                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
-                            </div>`;
+                            column2Html = `<div class="quantity-options" data-unit="Adet"><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="50"> 50</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="100"> 100</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="150"> 150</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="200"> 200</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label></div>`;
                         } else { 
-                            column1Html = `
-                            <div class="quantity-options" data-unit="LB">
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label>
-                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label>
-                            </div>`;
+                            column1Html = `<div class="quantity-options" data-unit="LB"><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label></div>`;
                             column2Html = `<div>-</div>`;
                         }
                     } else if (category === "A LITTLE MORE") {
                         if (productName === "Lamb Shank") {
                              column1Html = `<div>-</div>`; 
-                             column2Html = `
-                            <div class="quantity-options" data-unit="Adet">
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="5"> 5</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="10"> 10</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="15"> 15</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="20"> 20</label>
-                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
-                            </div>`;
+                             column2Html = `<div class="quantity-options" data-unit="Adet"><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="5"> 5</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="10"> 10</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="15"> 15</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="20"> 20</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label></div>`;
                         } else if (productName === "Grilled Salmon") {
-                            column1Html = `<div>-</div>`; // No LB options for Grilled Salmon
-                            column2Html = `
-                            <div class="quantity-options" data-unit="Adet">
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="20"> 20</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="30"> 30</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="40"> 40</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="50"> 50</label>
-                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
-                            </div>`;
+                            column1Html = `<div>-</div>`;
+                            column2Html = `<div class="quantity-options" data-unit="Adet"><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="20"> 20</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="30"> 30</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="40"> 40</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="50"> 50</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label></div>`;
                         } else if (LB_AND_PCS_PRODUCTS_A_LITTLE_MORE.includes(productName)) {
-                            column1Html = `
-                            <div class="quantity-options" data-unit="LB">
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label>
-                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label>
-                            </div>`;
-                            column2Html = `
-                            <div class="quantity-options" data-unit="Adet">
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="50"> 50</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="100"> 100</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="150"> 150</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="200"> 200</label>
-                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label>
-                            </div>`;
+                            column1Html = `<div class="quantity-options" data-unit="LB"><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label></div>`;
+                            column2Html = `<div class="quantity-options" data-unit="Adet"><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="50"> 50</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="100"> 100</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="150"> 150</label><label><input type="checkbox" class="qty-cb" name="${baseId}-adet" value="200"> 200</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-adet-manual" min="0" step="1"></label></div>`;
                         } else { 
-                             column1Html = `
-                            <div class="quantity-options" data-unit="LB">
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label>
-                                <label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label>
-                                <label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label>
-                            </div>`;
-                            column2Html = `<div>-</div>`;
+                             column1Html = `<div class="quantity-options" data-unit="LB"><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="5"> 5</label><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="10"> 10</label><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="15"> 15</label><label><input type="checkbox" class="qty-cb" name="${baseId}-lb" value="20"> 20</label><label><span class="qty-label-text">${langSet.otherLabel}</span> <input type="number" class="manual-qty-input" name="${baseId}-lb-manual" min="0" step="any"></label></div>`;
+                             column2Html = `<div>-</div>`;
                         }
                     }
-
-                    htmlContent += `
-                                <tr class="product-row" data-product-name="${productName.toLowerCase()}" data-category-title-id="${categoryId}" id="row-${baseId}">
-                                    <td>${productName}</td>
-                                    <td ${isDessertCategory ? 'colspan="2"' : ''}>${column1Html}</td>`;
-                    if (!isDessertCategory) {
-                        htmlContent += `<td>${column2Html}</td>`;
-                    }
+                    htmlContent += `<tr class="product-row" data-product-name="${productName.toLowerCase()}" data-category-title-id="${categoryId}" id="row-${baseId}"><td>${productName}</td><td ${isDessertCategory ? 'colspan="2"' : ''}>${column1Html}</td>`;
+                    if (!isDessertCategory) { htmlContent += `<td>${column2Html}</td>`; }
                     htmlContent += `</tr>`;
                 });
                 htmlContent += '</tbody></table></div>';
@@ -1067,7 +728,6 @@
             attachProductEventListeners();
         }
 
-
         function updateOrderSummary() {
             const summaryList = document.getElementById('summaryList');
             const emptySummaryText = document.getElementById('emptySummaryText');
@@ -1075,35 +735,23 @@
             const totalAdetEl = document.getElementById('totalAdet');
             const totalQuartEl = document.getElementById('totalQuart');
             const totalQuartRowEl = document.getElementById('totalQuartRow');
-
             if(!summaryList || !emptySummaryText || !totalLbEl || !totalAdetEl || !totalQuartEl || !totalQuartRowEl) return;
-
             const langSet = translations[currentLanguage] || translations.en;
             summaryList.innerHTML = '';
-            let hasItemsInSummary = false;
-            let currentTotalLb = 0;
-            let currentTotalAdet = 0;
-            let currentTotalQuart = 0;
-
+            let hasItemsInSummary = false; let currentTotalLb = 0; let currentTotalAdet = 0; let currentTotalQuart = 0;
             document.querySelectorAll('.section-title[data-category-id]').forEach(title => title.classList.remove('has-selection'));
-
             document.querySelectorAll('.product-row').forEach(row => {
                 const productName = row.querySelector('td:first-child').textContent;
                 const categoryId = row.dataset.categoryTitleId;
                 const categoryTitleElement = document.querySelector(`.section-title[data-category-id="${categoryId}"]`);
                 const categoryName = categoryTitleElement ? categoryTitleElement.querySelector('.category-title-text').textContent.toUpperCase() : "";
                 const isDessertCategory = categoryName === "DESSERT";
-
-                let summaryDetail = '';
-                let isRowSelected = false;
-
+                let summaryDetail = ''; let isRowSelected = false;
                 if (productName === "Kunefe") {
                     const kunefeCell = row.querySelector('td:nth-child(2)');
                     const smallOptions = kunefeCell.querySelector('.quantity-options[data-size="Small"]');
                     const largeOptions = kunefeCell.querySelector('.quantity-options[data-size="Large"]');
-                    let kunefeSmallQty = 0;
-                    let kunefeLargeQty = 0;
-
+                    let kunefeSmallQty = 0; let kunefeLargeQty = 0;
                     if (smallOptions) {
                         smallOptions.querySelectorAll('input.qty-cb:checked').forEach(cb => { kunefeSmallQty += parseInt(cb.value); isRowSelected = true; });
                         const smallManual = smallOptions.querySelector('.manual-qty-input');
@@ -1114,46 +762,28 @@
                         const largeManual = largeOptions.querySelector('.manual-qty-input');
                         if (largeManual && largeManual.value && parseInt(largeManual.value) > 0) { kunefeLargeQty += parseInt(largeManual.value); isRowSelected = true;}
                     }
-
-                    if (kunefeSmallQty > 0) {
-                        summaryDetail += `${kunefeSmallQty} ${langSet.summaryUnitKunefeSmall} `;
-                        if (smallOptions && smallOptions.querySelector('.manual-qty-input').value && parseInt(smallOptions.querySelector('.manual-qty-input').value) > 0 && smallOptions.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `;
-                    }
-                    if (kunefeLargeQty > 0) {
-                        summaryDetail += `${kunefeLargeQty} ${langSet.summaryUnitKunefeLarge} `;
-                         if (largeOptions && largeOptions.querySelector('.manual-qty-input').value && parseInt(largeOptions.querySelector('.manual-qty-input').value) > 0 && largeOptions.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `;
-                    }
+                    if (kunefeSmallQty > 0) { summaryDetail += `${kunefeSmallQty} ${langSet.summaryUnitKunefeSmall} `; if (smallOptions && smallOptions.querySelector('.manual-qty-input').value && parseInt(smallOptions.querySelector('.manual-qty-input').value) > 0 && smallOptions.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `; }
+                    if (kunefeLargeQty > 0) { summaryDetail += `${kunefeLargeQty} ${langSet.summaryUnitKunefeLarge} `; if (largeOptions && largeOptions.querySelector('.manual-qty-input').value && parseInt(largeOptions.querySelector('.manual-qty-input').value) > 0 && largeOptions.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `; }
                     currentTotalAdet += kunefeSmallQty + kunefeLargeQty;
-
                 } else if (isDessertCategory) {
                     const pcsOptions = row.querySelector('td:nth-child(2) .quantity-options');
                     if (pcsOptions) {
-                        const unitType = pcsOptions.dataset.unit;
-                        let qty = 0;
-                        let isManual = false;
+                        const unitType = pcsOptions.dataset.unit; let qty = 0; let isManual = false;
                         pcsOptions.querySelectorAll('input.qty-cb:checked').forEach(cb => { qty += parseInt(cb.value); isRowSelected = true; });
                         const manual = pcsOptions.querySelector('.manual-qty-input');
                         if (manual && manual.value && parseInt(manual.value) > 0) { qty += parseInt(manual.value); isRowSelected = true; isManual = true;}
-                        
-                        if (qty > 0) {
-                           if (unitType === "Adet") { summaryDetail += `${qty} ${langSet.summaryUnitPCS} `; currentTotalAdet += qty; }
-                           if(isManual && pcsOptions.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `;
-                        }
+                        if (qty > 0) { if (unitType === "Adet") { summaryDetail += `${qty} ${langSet.summaryUnitPCS} `; currentTotalAdet += qty; } if(isManual && pcsOptions.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `; }
                     }
                 } else {
                     const column1Cell = row.querySelector('td:nth-child(2)');
                     const column2Cell = row.querySelector('td:nth-child(3)');
                     const column1Options = column1Cell ? column1Cell.querySelector('.quantity-options') : null;
                     const column2Options = column2Cell ? column2Cell.querySelector('.quantity-options') : null;
-
                     if (column1Options) {
-                        const unitType = column1Options.dataset.unit;
-                        let qty = 0;
-                        let isManual = false;
+                        const unitType = column1Options.dataset.unit; let qty = 0; let isManual = false;
                         column1Options.querySelectorAll('input.qty-cb:checked').forEach(cb => { qty += parseFloat(cb.value); isRowSelected = true; });
                         const manual = column1Options.querySelector('.manual-qty-input');
                         if (manual && manual.value && parseFloat(manual.value) > 0) { qty += parseFloat(manual.value); isRowSelected = true; isManual = true;}
-
                         if (qty > 0) {
                             if (unitType === "Quart") { summaryDetail += `${qty} ${langSet.summaryUnitQuart} `; currentTotalQuart += qty; }
                             else if (unitType === "LB") { summaryDetail += `${qty} ${langSet.summaryUnitLB} `; currentTotalLb += qty; }
@@ -1163,20 +793,14 @@
                     if (column2Options && column2Options.children.length > 0 && column2Options.firstElementChild.tagName !== 'DIV') {
                         const unitType = column2Options.dataset.unit;
                         if (unitType === "Adet") {
-                            let qty = 0;
-                            let isManual = false;
+                            let qty = 0; let isManual = false;
                             column2Options.querySelectorAll('input.qty-cb:checked').forEach(cb => { qty += parseInt(cb.value); isRowSelected = true; });
                             const manual = column2Options.querySelector('.manual-qty-input');
                             if (manual && manual.value && parseInt(manual.value) > 0) { qty += parseInt(manual.value); isRowSelected = true; isManual = true;}
-                            
-                            if (qty > 0) {
-                               summaryDetail += `${qty} ${langSet.summaryUnitPCS} `; currentTotalAdet += qty;
-                               if(isManual && column2Options.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `;
-                            }
+                            if (qty > 0) { summaryDetail += `${qty} ${langSet.summaryUnitPCS} `; currentTotalAdet += qty; if(isManual && column2Options.querySelectorAll('input.qty-cb:checked').length === 0) summaryDetail += `${langSet.summaryUnitManual} `; }
                         }
                     }
                 }
-
                 if (isRowSelected) {
                     row.classList.add('selected-row');
                     if (categoryTitleElement) categoryTitleElement.classList.add('has-selection');
@@ -1184,26 +808,20 @@
                     listItem.innerHTML = `<span class="summary-product-name">${productName}</span> <span class="summary-product-qty">${summaryDetail.trim()}</span>`;
                     summaryList.appendChild(listItem);
                     hasItemsInSummary = true;
-                } else {
-                    row.classList.remove('selected-row');
-                }
+                } else { row.classList.remove('selected-row'); }
             });
-
             emptySummaryText.style.display = hasItemsInSummary ? 'none' : 'block';
             totalLbEl.textContent = `${currentTotalLb.toFixed(2)} ${langSet.summaryUnitLB}`;
             totalAdetEl.textContent = `${currentTotalAdet} ${langSet.summaryUnitPCS}`;
             totalQuartEl.textContent = `${currentTotalQuart.toFixed(2)} ${langSet.summaryUnitQuart}`;
-
             totalQuartRowEl.style.display = currentTotalQuart > 0 ? 'flex' : 'none';
         }
-
 
         function attachProductEventListeners() {
             document.querySelectorAll('.section-title[data-category-id]').forEach((title) => {
                 const toggleCategory = () => { title.classList.toggle('collapsed'); title.setAttribute('aria-expanded', !title.classList.contains('collapsed')); };
                 title.addEventListener('click', (event) => { if (!event.target.classList.contains('category-search-box')) toggleCategory(); });
                 title.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); if (!event.target.classList.contains('category-search-box')) toggleCategory();}});
-
                 const searchBox = title.querySelector('.category-search-box');
                 const productTableWrapper = document.getElementById(title.dataset.categoryId);
                 if (searchBox && productTableWrapper) {
@@ -1238,8 +856,8 @@
         function populateBranchSelect() { if(!branchSelect) return; branchSelect.innerHTML = ''; BRANCH_OPTIONS.forEach(text => { const opt = document.createElement('option'); opt.value = text; opt.textContent = text; branchSelect.appendChild(opt); });}
         function updateBranchInputState() { if(!manualBranchCheckbox || !manualBranchInput || !branchSelect) return; const isManual = manualBranchCheckbox.checked; manualBranchInput.style.display = isManual ? 'block' : 'none'; manualBranchInput.disabled = !isManual; branchSelect.disabled = isManual;}
         function getCurrentBranchName() { const langSet = translations[currentLanguage] || translations.en; if(!manualBranchCheckbox || !manualBranchInput || !branchSelect) return langSet.selectionBranchNotSpecified; if (manualBranchCheckbox.checked) return manualBranchInput.value.trim() || langSet.manualBranchNotSpecified; return branchSelect.value || langSet.selectionBranchNotSpecified;}
-
         function saveFormSetting(key, value) { try { localStorage.setItem(key, value); } catch (e) { console.warn(`localStorage '${key}' kaydı başarısız:`, e); }}
+        
         function loadFormSettings() {
             if(!mainFormInitialized) return;
             try {
@@ -1252,36 +870,17 @@
             updateBranchInputState();
         }
 
+        // *** DEĞİŞİKLİK 2: Fonksiyon tamamen basitleştirildi. ***
         function setInitialDates() {
             if(!mainFormInitialized || !orderDateInput || !deliveryDateInput) return;
-            orderDateInput.value = formatDateForInput(new Date());
-            let savedDeliveryDate = null;
-            try {
-                savedDeliveryDate = localStorage.getItem(LS_DELIVERY_DATE);
-            } catch (e) { console.warn("localStorage teslim tarihi okuma hatası:", e); }
 
-            if (savedDeliveryDate) {
-                deliveryDateInput.value = savedDeliveryDate;
-            } else {
-                let orderDateVal;
-                const parts = orderDateInput.value.split('-');
-                if (parts.length === 3) {
-                    orderDateVal = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-                } else {
-                    console.error("setInitialDates içinde orderDateInput.value ayrıştırılamadı.");
-                    orderDateVal = new Date();
-                }
-                if (isNaN(orderDateVal.getTime())) {
-                     console.error("setInitialDates içinde orderDateVal geçersiz.");
-                    orderDateVal = new Date();
-                }
-                const tomorrow = new Date(orderDateVal);
-                tomorrow.setDate(orderDateVal.getDate() + 1);
-                deliveryDateInput.value = formatDateForInput(tomorrow);
-                saveFormSetting(LS_DELIVERY_DATE, deliveryDateInput.value);
-            }
+            const today = new Date();
+            orderDateInput.value = formatDateForInput(today);
+
+            const tomorrow = new Date();
+            tomorrow.setDate(today.getDate() + 1);
+            deliveryDateInput.value = formatDateForInput(tomorrow);
         }
-
 
         function setFooterInfo() { if(!mainFormInitialized) return; const addr = document.getElementById('footerCompanyAddress'); const phone = document.getElementById('footerCompanyPhone'); if(addr) addr.textContent = COMPANY_ADDRESS_PRINT; if(phone) phone.textContent = COMPANY_PHONE_PRINT;}
         function setDeveloperSignature() { if(!mainFormInitialized) return; const devSign = document.querySelector('.developer-signature'); if (devSign) devSign.innerHTML = `Developed by K.E.`;}
@@ -1296,6 +895,39 @@
             if (document.querySelectorAll('#summaryList li').length === 0) { alert(langSet.alert_noItemSelected); return false; }
             return true;
         }
+        
+        async function sendOrderToControlPanel() {
+            const langSet = translations[currentLanguage] || translations.en;
+            const orderData = {
+                siparis_no: orderNoInput.value,
+                sube_adi: getCurrentBranchName(),
+                yetkili_adi: orderSenderNameInput.value,
+                talep_tarihi: deliveryDateInput.value,
+                iletisim_tel: contactPhoneInput.value,
+                notlar: generalNotesInput.value,
+                kalemler: []
+            };
+            document.querySelectorAll('#summaryList li').forEach(item => {
+                const name = item.querySelector('.summary-product-name').textContent;
+                const qtyText = item.querySelector('.summary-product-qty').textContent;
+                const match = qtyText.match(/([\d\.]+)\s*(.*)/);
+                if(match) { orderData.kalemler.push({ urun_adi: name, miktar: parseFloat(match[1]), birim: match[2].trim().replace('(M)','').trim() }); }
+            });
+            if (orderData.kalemler.length === 0) { alert(langSet.alert_noItemSelected); return; }
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/yeni_siparis', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-API-KEY': 'S3LD@-Sip@ris-@P!-K3Y-2o24' },
+                    body: JSON.stringify(orderData)
+                });
+                const result = await response.json();
+                if (result.success) { alert("Siparişiniz başarıyla merkezi sisteme gönderildi!"); } 
+                else { alert(`Sipariş gönderilemedi: ${result.message}`); }
+            } catch (error) {
+                console.error('Sipariş gönderme hatası:', error);
+                alert('Merkezi sisteme bağlanırken bir hata oluştu. (Kontrol paneli uygulamasının çalıştığından emin misiniz?)');
+            }
+        }
 
         function getOrderDetails(forTextSummary = false) {
             const langSet = translations[currentLanguage] || translations.en;
@@ -1307,14 +939,11 @@
                 branchName: getCurrentBranchName().replace(langSet.manualBranchNotSpecified, "Not Specified (Manual)").replace(langSet.selectionBranchNotSpecified, "Not Specified (Selection)"),
                 contactPhone: contactPhoneInput ? (contactPhoneInput.value.trim() || 'N/A') : 'N/A',
                 deliveryDate: deliveryDateInput ? deliveryDateInput.value : '',
-                generalNotes: notesValue || (forTextSummary && !notesValue ? 'None' : ''), // Ensure empty string if no notes, 'None' only for text summary if truly empty
+                generalNotes: notesValue || (forTextSummary && !notesValue ? 'None' : ''),
                 totalLbText: document.getElementById('totalLb') ? document.getElementById('totalLb').textContent : `0 ${langSet.summaryUnitLB}`,
                 totalPcsText: document.getElementById('totalAdet') ? document.getElementById('totalAdet').textContent : `0 ${langSet.summaryUnitPCS}`,
                 totalQuartText: document.getElementById('totalQuart') ? document.getElementById('totalQuart').textContent : `0 ${langSet.summaryUnitQuart}`,
-                summaryItems: Array.from(document.querySelectorAll('#summaryList li')).map(item => ({
-                    name: item.querySelector('.summary-product-name').textContent,
-                    quantity: item.querySelector('.summary-product-qty').textContent
-                }))
+                summaryItems: Array.from(document.querySelectorAll('#summaryList li')).map(item => ({ name: item.querySelector('.summary-product-name').textContent, quantity: item.querySelector('.summary-product-qty').textContent }))
             };
             const displayLocale = currentLanguage === 'tr' ? 'tr-TR' : 'en-US';
             details.formattedOrderDate = formatDateForDisplay(details.orderDate, 'en-US');
@@ -1324,28 +953,18 @@
             return details;
         }
 
-
         function generatePrintContent(forPdfOrWord = false) {
-            const details = getOrderDetails(); // forPdfOrWord flag is not needed by getOrderDetails for this logic
-            const enLangSet = translations.en; // Use English for structural consistency in PDF/Word
+            const details = getOrderDetails();
+            const enLangSet = translations.en;
             const currentLangSet = translations[currentLanguage] || translations.en;
-
-            const companyNamePrint = translations['en'].footerCompanyName; // Use EN version for consistency
-            
+            const companyNamePrint = translations['en'].footerCompanyName;
             let logoSrcToUse = '';
             const logoImgElement = document.querySelector('.page-header img');
             if (logoImgElement) {
-                if (logoImgElement.src.startsWith('data:image') || logoImgElement.src.includes('via.placeholder.com')) {
-                    logoSrcToUse = logoImgElement.src;
-                } else if (logoImgElement.complete && logoImgElement.naturalWidth !== 0) {
-                    logoSrcToUse = logoImgElement.src;
-                } else {
-                    logoSrcToUse = 'https://via.placeholder.com/160x60?text=Selda+Logo'; // Fallback
-                }
-            } else {
-                 logoSrcToUse = 'https://via.placeholder.com/160x60?text=Selda+Logo';
-            }
-
+                if (logoImgElement.src.startsWith('data:image') || logoImgElement.src.includes('via.placeholder.com')) { logoSrcToUse = logoImgElement.src; } 
+                else if (logoImgElement.complete && logoImgElement.naturalWidth !== 0) { logoSrcToUse = logoImgElement.src; } 
+                else { logoSrcToUse = 'https://via.placeholder.com/160x60?text=Selda+Logo'; }
+            } else { logoSrcToUse = 'https://via.placeholder.com/160x60?text=Selda+Logo'; }
             let usedUnits = { lb: false, quart: false, pcs: false, kunefeSmall: false, kunefeLarge: false };
             details.summaryItems.forEach(item => {
                 if (item.quantity.includes(enLangSet.summaryUnitLB) || item.quantity.includes(translations.tr.summaryUnitLB)) usedUnits.lb = true;
@@ -1354,326 +973,130 @@
                 if (item.name === "Kunefe" && (item.quantity.includes(enLangSet.summaryUnitKunefeSmall) || item.quantity.includes(translations.tr.summaryUnitKunefeSmall))) usedUnits.kunefeSmall = true;
                 if (item.name === "Kunefe" && (item.quantity.includes(enLangSet.summaryUnitKunefeLarge) || item.quantity.includes(translations.tr.summaryUnitKunefeLarge))) usedUnits.kunefeLarge = true;
             });
-
-
             let headerHtml = `<th class="product-name-col">${enLangSet.productNameHeader}</th>`;
             if (usedUnits.lb) headerHtml += `<th class="lb-col">${enLangSet.lbHeader}</th>`;
             if (usedUnits.quart) headerHtml += `<th class="quart-col">${enLangSet.quartHeader}</th>`;
             if (usedUnits.pcs) headerHtml += `<th class="pcs-col">${enLangSet.pcsUnitHeader}</th>`;
             if (usedUnits.kunefeSmall) headerHtml += `<th class="kunefe-s-col">${enLangSet.kunefeSmallHeader}</th>`;
             if (usedUnits.kunefeLarge) headerHtml += `<th class="kunefe-l-col">${enLangSet.kunefeLargeHeader}</th>`;
-             if (!usedUnits.lb && !usedUnits.quart && !usedUnits.pcs && !usedUnits.kunefeSmall && !usedUnits.kunefeLarge && details.summaryItems.length > 0 && !headerHtml.includes("Quantity")) { // Check if any unit based header was added
-                 headerHtml += `<th class="unit-col">Quantity</th>`;
-            }
-
-
+            if (!usedUnits.lb && !usedUnits.quart && !usedUnits.pcs && !usedUnits.kunefeSmall && !usedUnits.kunefeLarge && details.summaryItems.length > 0 && !headerHtml.includes("Quantity")) { headerHtml += `<th class="unit-col">Quantity</th>`; }
             let productRowsHtml = '';
             if (details.summaryItems.length > 0) {
                 details.summaryItems.forEach(item => {
                     const productName = item.name;
-                    const productQtyText = item.quantity; // This text is already localized and includes "(M)"
+                    const productQtyText = item.quantity;
                     let rowDataHtml = `<td class="product-name-col">${productName}</td>`;
-
                     const extractQty = (text, unitEn, unitTr) => {
                         const regex = new RegExp(`([\\d\\.]+)\\s*(${unitEn}|${unitTr})`);
                         const match = text.match(regex);
-                        if (match) {
-                            return match[1] + (text.includes(enLangSet.summaryUnitManual) || text.includes(translations.tr.summaryUnitManual) ? " (M)" : "");
-                        }
+                        if (match) { return match[1] + (text.includes(enLangSet.summaryUnitManual) || text.includes(translations.tr.summaryUnitManual) ? " (M)" : ""); }
                         return '-';
                     };
-                    
                     const extractKunefeQty = (text, sizeEn, sizeTr) => {
                         const regex = new RegExp(`(\\d+)\\s*(${sizeEn}|${sizeTr})`, 'i');
                         const match = text.match(regex);
-                         if (match) {
-                            return match[1] + (text.includes(enLangSet.summaryUnitManual) || text.includes(translations.tr.summaryUnitManual) ? " (M)" : "");
-                        }
+                        if (match) { return match[1] + (text.includes(enLangSet.summaryUnitManual) || text.includes(translations.tr.summaryUnitManual) ? " (M)" : ""); }
                         return '-';
                     };
-
-
-                    if (usedUnits.lb) {
-                        rowDataHtml += `<td class="lb-col">${extractQty(productQtyText, enLangSet.summaryUnitLB, translations.tr.summaryUnitLB)}</td>`;
-                    }
-                    if (usedUnits.quart) {
-                        rowDataHtml += `<td class="quart-col">${extractQty(productQtyText, enLangSet.summaryUnitQuart, translations.tr.summaryUnitQuart)}</td>`;
-                    }
-                    if (usedUnits.pcs) {
-                        let pcsVal = '-';
-                        if (productName !== "Kunefe") { // Kunefe handled by specific columns if present
-                            pcsVal = extractQty(productQtyText, enLangSet.summaryUnitPCS, translations.tr.summaryUnitPCS);
-                        }
-                        rowDataHtml += `<td class="pcs-col">${pcsVal}</td>`;
-                    }
-                    if (usedUnits.kunefeSmall) {
-                         rowDataHtml += `<td class="kunefe-s-col">${productName === "Kunefe" ? extractKunefeQty(productQtyText, enLangSet.summaryUnitKunefeSmall, translations.tr.summaryUnitKunefeSmall) : '-'}</td>`;
-                    }
-                    if (usedUnits.kunefeLarge) {
-                         rowDataHtml += `<td class="kunefe-l-col">${productName === "Kunefe" ? extractKunefeQty(productQtyText, enLangSet.summaryUnitKunefeLarge, translations.tr.summaryUnitKunefeLarge) : '-'}</td>`;
-                    }
-                    if (!usedUnits.lb && !usedUnits.quart && !usedUnits.pcs && !usedUnits.kunefeSmall && !usedUnits.kunefeLarge) {
-                        rowDataHtml += `<td class="unit-col">${productQtyText}</td>`;
-                    }
+                    if (usedUnits.lb) { rowDataHtml += `<td class="lb-col">${extractQty(productQtyText, enLangSet.summaryUnitLB, translations.tr.summaryUnitLB)}</td>`; }
+                    if (usedUnits.quart) { rowDataHtml += `<td class="quart-col">${extractQty(productQtyText, enLangSet.summaryUnitQuart, translations.tr.summaryUnitQuart)}</td>`; }
+                    if (usedUnits.pcs) { let pcsVal = '-'; if (productName !== "Kunefe") { pcsVal = extractQty(productQtyText, enLangSet.summaryUnitPCS, translations.tr.summaryUnitPCS); } rowDataHtml += `<td class="pcs-col">${pcsVal}</td>`; }
+                    if (usedUnits.kunefeSmall) { rowDataHtml += `<td class="kunefe-s-col">${productName === "Kunefe" ? extractKunefeQty(productQtyText, enLangSet.summaryUnitKunefeSmall, translations.tr.summaryUnitKunefeSmall) : '-'}</td>`; }
+                    if (usedUnits.kunefeLarge) { rowDataHtml += `<td class="kunefe-l-col">${productName === "Kunefe" ? extractKunefeQty(productQtyText, enLangSet.summaryUnitKunefeLarge, translations.tr.summaryUnitKunefeLarge) : '-'}</td>`; }
+                    if (!usedUnits.lb && !usedUnits.quart && !usedUnits.pcs && !usedUnits.kunefeSmall && !usedUnits.kunefeLarge) { rowDataHtml += `<td class="unit-col">${productQtyText}</td>`; }
                     productRowsHtml += `<tr>${rowDataHtml}</tr>`;
                 });
             } else {
                  let colspanCount = 1 + (usedUnits.lb?1:0) + (usedUnits.quart?1:0) + (usedUnits.pcs?1:0) + (usedUnits.kunefeSmall?1:0) + (usedUnits.kunefeLarge?1:0);
-                 if (colspanCount === 1 && headerHtml.includes("Quantity")) colspanCount = 2; // Product Name + Quantity
-                 else if (colspanCount === 1) colspanCount = 2; // Default if no units (should not happen if items exist)
-                 
+                 if (colspanCount === 1 && headerHtml.includes("Quantity")) colspanCount = 2; else if (colspanCount === 1) colspanCount = 2;
                  productRowsHtml = `<tr><td colspan="${colspanCount}" style="text-align:center;">No products ordered.</td></tr>`;
             }
-
-
             let totalsHtml = '';
             if (usedUnits.lb) totalsHtml += `<p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested LB:</span><span style="margin-left:15px;">${details.totalLbText.replace(currentLangSet.summaryUnitLB, enLangSet.summaryUnitLB)}</span></p>`;
             if (usedUnits.quart) totalsHtml += `<p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested Quart:</span><span style="margin-left:15px;">${details.totalQuartText.replace(currentLangSet.summaryUnitQuart, enLangSet.summaryUnitQuart)}</span></p>`;
             if (usedUnits.pcs || usedUnits.kunefeSmall || usedUnits.kunefeLarge) totalsHtml += `<p style="margin:4px 0;font-weight:700;display:flex;justify-content:flex-end;align-items:baseline;"><span>Total Requested PCS:</span><span style="margin-left:15px;">${details.totalPcsText.replace(currentLangSet.summaryUnitPCS, enLangSet.summaryUnitPCS)}</span></p>`;
             if(totalsHtml === '') totalsHtml = '<p style="text-align:right; font-weight:bold;">No quantities selected.</p>';
-
             const notesContentForPrint = details.generalNotes ? details.generalNotes.replace(/\n/g, '<br>') : (forPdfOrWord ? '<i>No notes provided.</i>' : '<i>'+currentLangSet.emptySummaryText+'</i>');
-            
-            // This is the core HTML content that will be styled differently for browser print vs. PDF/Word wrapper
-            const mainPrintableHtml = `
-                <header class="print-header" style="box-sizing:border-box; text-align:center; margin-bottom:10px; border-bottom:1.5px solid #000; padding-bottom:6px;">
-                    <img src="${logoSrcToUse}" alt="Selda Mediterranean Logo" class="print-logo" style="max-width:80px; height:auto; margin-bottom:6px; display:block; margin-left:auto; margin-right:auto;">
-                    <h1 style="font-size:13pt; font-weight:700; margin-top:4px; margin-bottom:8px; text-align:center; color:#333;">${enLangSet.orderFormTitle}</h1>
-                    <div class="print-order-info" style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:4px; font-size:8.5pt; box-sizing:border-box;">
-                        <span style="margin:1px 0;"><strong>${enLangSet.orderNoLabel}</strong> ${details.orderNo}</span>
-                        <span style="margin:1px 0;"><strong>${enLangSet.orderDateLabel}</strong> ${details.formattedOrderDate}</span>
-                    </div>
-                </header>
-                <section class="print-section" style="margin-bottom:8px; box-sizing:border-box;">
-                    <h2 style="font-size:10pt; font-weight:700; border-bottom:1px solid #ccc; padding-bottom:2px; margin-top:12px; margin-bottom:6px; text-align:left; color:#333;">BRANCH INFORMATION</h2>
-                    <div class="print-info-compact" style="font-size:8.5pt; box-sizing:border-box;">
-                        <div class="info-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:2px 12px;">
-                            <p style="margin:1.5px 0;"><strong>${enLangSet.branchNameLabel}</strong> ${details.branchName}</p>
-                            <p style="margin:1.5px 0;"><strong>${enLangSet.authorizedPersonLabel}</strong> ${details.senderName}</p>
-                            <p style="margin:1.5px 0;"><strong>${enLangSet.contactPhoneLabel}</strong> ${details.contactPhone}</p>
-                            <p style="margin:1.5px 0;"><strong>${enLangSet.requestedDeliveryDateLabel}</strong> ${details.formattedDeliveryDate}</p>
-                        </div>
-                    </div>
-                </section>
-                <section class="print-section" style="margin-bottom:8px; box-sizing:border-box;">
-                    <h2 style="font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333;">REQUESTED PRODUCTS</h2>
-                    <table class="print-product-table" style="width:100%;border-collapse:collapse;margin-top:6px;font-size:8pt;box-sizing:border-box;">
-                        <thead style="font-size:8pt;"><tr style="page-break-inside:avoid;">
-                           ${headerHtml}
-                        </tr></thead>
-                        <tbody style="font-size:8pt;">${productRowsHtml.replace(/<td/g,'<td style="border:1px solid #ccc;padding:3px 5px;text-align:left;vertical-align:top;box-sizing:border-box;word-break:break-word;"')}</tbody>
-                    </table>
-                    <div class="print-totals" style="margin-top:8px;padding-top:8px;border-top:1px solid #666;font-size:8.5pt;box-sizing:border-box;">
-                        ${totalsHtml}
-                    </div>
-                </section>
-                <div class="print-notes-signatures-footer-group" style="padding-top: 10px; page-break-inside: avoid !important; flex-shrink: 0; ${forPdfOrWord ? 'margin-top: 20px;' : 'margin-top: auto;'}">
-                    <section class="print-section" style="margin-bottom:8px;box-sizing:border-box;">
-                        <h2 style="font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333;">${enLangSet.generalNotesTitleHeader}</h2>
-                        <div class="print-notes" style="border:none;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:6px 0;min-height:30px;margin-top:4px;font-size:8pt;white-space:pre-wrap;word-break:break-word;box-sizing:border-box;">${notesContentForPrint}</div>
-                    </section>
-                    <div style="height:1em;page-break-before:auto;"></div>
-                    <div class="print-signatures" style="margin-top:25px;display:flex;justify-content:space-between;font-size:8pt;align-items:flex-end;box-sizing:border-box;">
-                        <div class="signature-block-print" style="width:45%;text-align:center;box-sizing:border-box;"><p style="margin:0;padding-top:12px;border-top:1px solid #666;">Delivered By (Signature)</p></div>
-                        <div class="signature-block-print" style="width:45%;text-align:center;box-sizing:border-box;"><p style="margin:0;padding-top:12px;border-top:1px solid #666;">Received By (Signature)</p></div>
-                    </div>
-                    <footer class="print-footer" style="text-align:center;margin-top:15px;padding-top:6px;border-top:1px dashed #aaa;font-size:7pt;color:#555;box-sizing:border-box;">
-                        <p>${companyNamePrint}</p>
-                        <p>Address: ${COMPANY_ADDRESS_PRINT} | Phone: ${COMPANY_PHONE_PRINT}</p>
-                    </footer>
-                </div>`;
-
+            const mainPrintableHtml = `<header class="print-header" style="box-sizing:border-box; text-align:center; margin-bottom:10px; border-bottom:1.5px solid #000; padding-bottom:6px;"><img src="${logoSrcToUse}" alt="Selda Mediterranean Logo" class="print-logo" style="max-width:80px; height:auto; margin-bottom:6px; display:block; margin-left:auto; margin-right:auto;"><h1 style="font-size:13pt; font-weight:700; margin-top:4px; margin-bottom:8px; text-align:center; color:#333;">${enLangSet.orderFormTitle}</h1><div class="print-order-info" style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:4px; font-size:8.5pt; box-sizing:border-box;"><span style="margin:1px 0;"><strong>${enLangSet.orderNoLabel}</strong> ${details.orderNo}</span><span style="margin:1px 0;"><strong>${enLangSet.orderDateLabel}</strong> ${details.formattedOrderDate}</span></div></header><section class="print-section" style="margin-bottom:8px; box-sizing:border-box;"><h2 style="font-size:10pt; font-weight:700; border-bottom:1px solid #ccc; padding-bottom:2px; margin-top:12px; margin-bottom:6px; text-align:left; color:#333;">BRANCH INFORMATION</h2><div class="print-info-compact" style="font-size:8.5pt; box-sizing:border-box;"><div class="info-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:2px 12px;"><p style="margin:1.5px 0;"><strong>${enLangSet.branchNameLabel}</strong> ${details.branchName}</p><p style="margin:1.5px 0;"><strong>${enLangSet.authorizedPersonLabel}</strong> ${details.senderName}</p><p style="margin:1.5px 0;"><strong>${enLangSet.contactPhoneLabel}</strong> ${details.contactPhone}</p><p style="margin:1.5px 0;"><strong>${enLangSet.requestedDeliveryDateLabel}</strong> ${details.formattedDeliveryDate}</p></div></div></section><section class="print-section" style="margin-bottom:8px; box-sizing:border-box;"><h2 style="font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333;">REQUESTED PRODUCTS</h2><table class="print-product-table" style="width:100%;border-collapse:collapse;margin-top:6px;font-size:8pt;box-sizing:border-box;"><thead style="font-size:8pt;"><tr style="page-break-inside:avoid;">${headerHtml}</tr></thead><tbody style="font-size:8pt;">${productRowsHtml.replace(/<td/g,'<td style="border:1px solid #ccc;padding:3px 5px;text-align:left;vertical-align:top;box-sizing:border-box;word-break:break-word;"')}</tbody></table><div class="print-totals" style="margin-top:8px;padding-top:8px;border-top:1px solid #666;font-size:8.5pt;box-sizing:border-box;">${totalsHtml}</div></section><div class="print-notes-signatures-footer-group" style="padding-top: 10px; page-break-inside: avoid !important; flex-shrink: 0; ${forPdfOrWord ? 'margin-top: 20px;' : 'margin-top: auto;'}"><section class="print-section" style="margin-bottom:8px;box-sizing:border-box;"><h2 style="font-size:10pt;font-weight:700;border-bottom:1px solid #ccc;padding-bottom:2px;margin-top:12px;margin-bottom:6px;text-align:left;color:#333;">${enLangSet.generalNotesTitleHeader}</h2><div class="print-notes" style="border:none;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:6px 0;min-height:30px;margin-top:4px;font-size:8pt;white-space:pre-wrap;word-break:break-word;box-sizing:border-box;">${notesContentForPrint}</div></section><div style="height:1em;page-break-before:auto;"></div><div class="print-signatures" style="margin-top:25px;display:flex;justify-content:space-between;font-size:8pt;align-items:flex-end;box-sizing:border-box;"><div class="signature-block-print" style="width:45%;text-align:center;box-sizing:border-box;"><p style="margin:0;padding-top:12px;border-top:1px solid #666;">Delivered By (Signature)</p></div><div class="signature-block-print" style="width:45%;text-align:center;box-sizing:border-box;"><p style="margin:0;padding-top:12px;border-top:1px solid #666;">Received By (Signature)</p></div></div><footer class="print-footer" style="text-align:center;margin-top:15px;padding-top:6px;border-top:1px dashed #aaa;font-size:7pt;color:#555;box-sizing:border-box;"><p>${companyNamePrint}</p><p>Address: ${COMPANY_ADDRESS_PRINT} | Phone: ${COMPANY_PHONE_PRINT}</p></footer></div>`;
             if (forPdfOrWord) {
-                // For PDF/Word, wrap the content in #captureForPdfOrWord with pixel dimensions
-                const A4_WIDTH_PX_FOR_CANVAS = 794; // Approx 210mm at 96DPI
-                const PAGE_MARGIN_PX_FOR_CANVAS = 38; // Approx 10mm at 96DPI
+                const A4_WIDTH_PX_FOR_CANVAS = 794; const PAGE_MARGIN_PX_FOR_CANVAS = 38;
                 const pdfWordCaptureWrapperStyle = `width:${A4_WIDTH_PX_FOR_CANVAS}px; padding:${PAGE_MARGIN_PX_FOR_CANVAS}px; background:white; font-family:Arial,sans-serif; font-size:8pt; color:#000; box-sizing:border-box; margin:0 auto;`;
                 return `<div id="captureForPdfOrWord" style="${pdfWordCaptureWrapperStyle}">${mainPrintableHtml}</div>`;
-            } else {
-                // For browser print, inject directly into #printAreaContent
-                // The #printAreaContent itself is styled by @media print to be flex, min-height, etc.
-                const printAreaContentEl = document.getElementById('printAreaContent');
-                if (printAreaContentEl) {
-                    printAreaContentEl.innerHTML = mainPrintableHtml;
-                }
-                return mainPrintableHtml; // Or void, as it modified DOM. For consistency, return.
-            }
+            } else { const printAreaContentEl = document.getElementById('printAreaContent'); if (printAreaContentEl) { printAreaContentEl.innerHTML = mainPrintableHtml; } return mainPrintableHtml; }
         }
 
         async function generatePdfBlob() {
-            if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
-                console.error("jsPDF kütüphanesi yüklenemedi."); alert("PDF oluşturma kütüphanesi (jsPDF) yüklenemedi."); return null;
-            }
-            if (typeof html2canvas === 'undefined') {
-                console.error("html2canvas kütüphanesi yüklenemedi."); alert("PDF oluşturma kütüphanesi (html2canvas) yüklenemedi."); return null;
-            }
-
+            if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') { console.error("jsPDF kütüphanesi yüklenemedi."); alert("PDF oluşturma kütüphanesi (jsPDF) yüklenemedi."); return null; }
+            if (typeof html2canvas === 'undefined') { console.error("html2canvas kütüphanesi yüklenemedi."); alert("PDF oluşturma kütüphanesi (html2canvas) yüklenemedi."); return null; }
             const { jsPDF } = window.jspdf;
-            const completeHtmlForPdf = generatePrintContent(true); // Get HTML wrapped with #captureForPdfOrWord
-            
+            const completeHtmlForPdf = generatePrintContent(true);
             const tempDiv = document.createElement('div');
-            tempDiv.style.position = 'absolute'; 
-            tempDiv.style.left = '-99999px'; // Further off-screen
-            tempDiv.style.top = '0px';
-            // tempDiv.style.width = '210mm'; // Optional: provide a context width for the capture div.
-                                        // #captureForPdfOrWord already has pixel width, so this might not be needed.
+            tempDiv.style.position = 'absolute'; tempDiv.style.left = '-99999px'; tempDiv.style.top = '0px';
             document.body.appendChild(tempDiv);
-            tempDiv.innerHTML = completeHtmlForPdf; // Add the wrapped HTML
+            tempDiv.innerHTML = completeHtmlForPdf;
             const elementToCapture = tempDiv.querySelector('#captureForPdfOrWord');
-
-            if (!elementToCapture) {
-                console.error("#captureForPdfOrWord element not found in tempDiv");
-                document.body.removeChild(tempDiv);
-                return null;
-            }
-            
+            if (!elementToCapture) { console.error("#captureForPdfOrWord element not found in tempDiv"); document.body.removeChild(tempDiv); return null; }
             try {
-                const canvas = await html2canvas(elementToCapture, { 
-                    scale: 2, 
-                    useCORS: true, 
-                    logging: false,
-                    width: elementToCapture.offsetWidth, // Explicitly use offsetWidth
-                    height: elementToCapture.offsetHeight // Explicitly use offsetHeight
-                });
+                const canvas = await html2canvas(elementToCapture, { scale: 2, useCORS: true, logging: false, width: elementToCapture.offsetWidth, height: elementToCapture.offsetHeight });
                 document.body.removeChild(tempDiv);
-
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
-                
                 const imgProps = pdf.getImageProperties(imgData);
                 const pdfPageWidth = pdf.internal.pageSize.getWidth();
                 const pdfPageHeight = pdf.internal.pageSize.getHeight();
-                
-                const imgWidth = imgProps.width;
-                const imgHeight = imgProps.height;
-
-                // Calculate the aspect ratio of the image and the PDF page
+                const imgWidth = imgProps.width; const imgHeight = imgProps.height;
                 const imgAspectRatio = imgWidth / imgHeight;
-                const pdfPageAspectRatio = pdfPageWidth / pdfPageHeight;
-
                 let finalImgWidthOnPdf, finalImgHeightOnPdf;
-
-                // Scale image to fit PDF page width, height will adjust by aspect ratio
                 finalImgWidthOnPdf = pdfPageWidth;
                 finalImgHeightOnPdf = pdfPageWidth / imgAspectRatio;
-
-
                 if (finalImgHeightOnPdf <= pdfPageHeight) {
-                    // Image fits on one page
                     pdf.addImage(imgData, 'PNG', 0, 0, finalImgWidthOnPdf, finalImgHeightOnPdf);
                 } else {
-                    // Image is taller than one page, needs pagination
                     let numPages = Math.ceil(finalImgHeightOnPdf / pdfPageHeight);
-                    let yPositionOnCanvas = 0; // Current Y position on the source canvas (imgData)
-                    
-                    // Calculate how much of the source canvas height corresponds to one PDF page height
+                    let yPositionOnCanvas = 0;
                     const singlePdfPageHeightOnCanvas = (pdfPageHeight / finalImgHeightOnPdf) * imgHeight;
-
-
                     for (let i = 0; i < numPages; i++) {
                         if (i > 0) pdf.addPage();
-                        
                         let sliceHeightOnCanvas = Math.min(singlePdfPageHeightOnCanvas, imgHeight - yPositionOnCanvas);
                         if (sliceHeightOnCanvas <= 0) break;
-
                         const tempPageCanvas = document.createElement('canvas');
-                        tempPageCanvas.width = imgWidth; // Source canvas width
-                        tempPageCanvas.height = sliceHeightOnCanvas;
+                        tempPageCanvas.width = imgWidth; tempPageCanvas.height = sliceHeightOnCanvas;
                         const tempPageCtx = tempPageCanvas.getContext('2d');
-                        
-                        // Draw the slice from the original large canvas to the temporary small canvas
-                        // The original `canvas` object from html2canvas can be used here directly
-                        tempPageCtx.drawImage(canvas, 
-                                              0, yPositionOnCanvas, // sx, sy (source)
-                                              imgWidth, sliceHeightOnCanvas, // sWidth, sHeight (source)
-                                              0, 0, // dx, dy (destination)
-                                              imgWidth, sliceHeightOnCanvas); // dWidth, dHeight (destination)
-                        
+                        tempPageCtx.drawImage(canvas, 0, yPositionOnCanvas, imgWidth, sliceHeightOnCanvas, 0, 0, imgWidth, sliceHeightOnCanvas);
                         const pageImgData = tempPageCanvas.toDataURL('image/png');
-                        pdf.addImage(pageImgData, 'PNG', 0, 0, pdfPageWidth, pdfPageHeight); // Stretch slice to fill PDF page (or maintain aspect)
-                        
+                        pdf.addImage(pageImgData, 'PNG', 0, 0, pdfPageWidth, pdfPageHeight);
                         yPositionOnCanvas += sliceHeightOnCanvas;
                         if (yPositionOnCanvas >= imgHeight) break;
                     }
                 }
                 return pdf.output('blob');
-            } catch (error) {
-                console.error("PDF oluşturma hatası:", error);
-                if (tempDiv.parentElement) document.body.removeChild(tempDiv);
-                return null;
-            }
+            } catch (error) { console.error("PDF oluşturma hatası:", error); if (tempDiv.parentElement) document.body.removeChild(tempDiv); return null; }
         }
 
-
         async function generateAndDownloadWord() {
-            if (typeof htmlDocx === 'undefined' || typeof saveAs === 'undefined') {
-                console.error("html-docx-js veya FileSaver kütüphanesi yüklenemedi."); alert("Word oluşturma kütüphaneleri yüklenemedi."); return;
-            }
+            if (typeof htmlDocx === 'undefined' || typeof saveAs === 'undefined') { console.error("html-docx-js veya FileSaver kütüphanesi yüklenemedi."); alert("Word oluşturma kütüphaneleri yüklenemedi."); return; }
             const langSet = translations[currentLanguage] || translations.en;
             shareModalMessage.textContent = "Word dosyası oluşturuluyor...";
             shareButtonsContainer.style.display = 'none';
             try {
-                const completeHtmlForWord = generatePrintContent(true); // Get HTML wrapped with #captureForPdfOrWord
-                const tempDiv = document.createElement('div'); 
-                tempDiv.innerHTML = completeHtmlForWord;
-                // html-docx-js expects the innerHTML of the element to convert
+                const completeHtmlForWord = generatePrintContent(true);
+                const tempDiv = document.createElement('div'); tempDiv.innerHTML = completeHtmlForWord;
                 const contentToConvert = tempDiv.querySelector('#captureForPdfOrWord').innerHTML;
-
-                const converted = htmlDocx.asBlob(contentToConvert, {
-                    orientation: 'portrait',
-                    margins: { top: 720, right: 720, bottom: 720, left: 720, header: 0, footer: 0, gutter: 0 } // 1 inch margins
-                });
+                const converted = htmlDocx.asBlob(contentToConvert, { orientation: 'portrait', margins: { top: 720, right: 720, bottom: 720, left: 720, header: 0, footer: 0, gutter: 0 } });
                 const today = new Date();
                 const formattedDate = formatDateForFileName(today);
                 const branchName = getCurrentBranchName().replace(/[^a-zA-Z0-9\s-]/g, '').replace(/\s+/g, '_');
                 const fileName = `${branchName}_${formattedDate}.docx`;
                 saveAs(converted, fileName);
                 shareModalMessage.textContent = langSet.shareModalMessageReady;
-            } catch (error) {
-                console.error("Word oluşturma hatası:", error);
-                shareModalMessage.textContent = langSet.wordGenerationFailed;
-            } finally {
-                shareButtonsContainer.style.display = 'block';
-            }
-        }
-
-        function getOrderSummaryAsText() {
-            const details = getOrderDetails(true);
-            const langSet = translations[currentLanguage] || translations.en;
-            let text = `${langSet.orderFormTitle}\n------------------------------------\n`;
-            text += `${langSet.orderNoLabel} ${details.orderNo}\n`;
-            text += `${langSet.orderDateLabel} ${details.displayOrderDate}\n`;
-            text += `${langSet.authorizedPersonLabel} ${details.senderName}\n`;
-            text += `${langSet.branchNameLabel} ${details.branchName}\n`;
-            text += `${langSet.requestedDeliveryDateLabel} ${details.displayDeliveryDate}\n`;
-            text += `${langSet.contactPhoneLabel} ${details.contactPhone}\n`;
-            text += `------------------------------------\n${langSet.orderSummaryTitle.toUpperCase()}:\n`;
-            if (details.summaryItems.length > 0) {
-                details.summaryItems.forEach(item => { text += `- ${item.name}: ${item.quantity}\n`; });
-            } else { text += `${langSet.emptySummaryText}\n`; }
-            text += `\n------------------------------------\n`;
-
-            let usedUnitsInSummary = { lb: false, quart: false, pcs: false };
-             details.summaryItems.forEach(item => {
-                if (item.quantity.includes(langSet.summaryUnitLB)) usedUnitsInSummary.lb = true;
-                if (item.quantity.includes(langSet.summaryUnitQuart)) usedUnitsInSummary.quart = true;
-                if (item.quantity.includes(langSet.summaryUnitPCS) || item.quantity.includes(langSet.summaryUnitKunefeSmall) || item.quantity.includes(langSet.summaryUnitKunefeLarge)) usedUnitsInSummary.pcs = true;
-            });
-
-            if (usedUnitsInSummary.lb) text += `${langSet.totalLbLabel} ${details.totalLbText}\n`;
-            if (usedUnitsInSummary.quart) text += `${langSet.totalQuartLabel} ${details.totalQuartText}\n`;
-            if (usedUnitsInSummary.pcs) text += `${langSet.totalPcsLabel} ${details.totalPcsText}\n`;
-            
-            text += `\n${langSet.generalNotesTitle.toUpperCase()}:\n${details.generalNotes || langSet.emptySummaryText}\n`; // Display notes or "empty"
-            text += `------------------------------------\n`;
-            return text;
+            } catch (error) { console.error("Word oluşturma hatası:", error); shareModalMessage.textContent = langSet.wordGenerationFailed; } 
+            finally { shareButtonsContainer.style.display = 'block'; }
         }
 
         function initializeMainForm(){
             if (mainFormInitialized) return;
             assignMainFormDOMElements();
             mainFormInitialized = true;
-
             populateBranchSelect();
             loadFormSettings();
             setInitialDates();
@@ -1681,44 +1104,36 @@
             setDeveloperSignature();
             renderProducts();
             updateOrderSummary();
-
             let orderCounter = 0;
             try { orderCounter = parseInt(localStorage.getItem(LS_ORDER_COUNTER)) || 0; } catch(e) { console.warn("Sipariş sayacı okuma hatası:", e); }
             orderCounter++;
             try { localStorage.setItem(LS_ORDER_COUNTER, orderCounter); } catch(e) { console.warn("Sipariş sayacı kaydetme hatası:", e); }
-
             const now = new Date();
             const year = now.getFullYear().toString().slice(-2);
             const month = (now.getMonth() + 1).toString().padStart(2, '0');
             const day = now.getDate().toString().padStart(2, '0');
             if(orderNoInput) orderNoInput.value = `S${year}${month}${day}-${orderCounter.toString().padStart(3, '0')}`;
-
-
             if(orderSenderNameInput) orderSenderNameInput.addEventListener('input', () => saveFormSetting(LS_SENDER_NAME, orderSenderNameInput.value));
             if(contactPhoneInput) contactPhoneInput.addEventListener('input', () => saveFormSetting(LS_CONTACT_PHONE, contactPhoneInput.value));
             if(branchSelect) branchSelect.addEventListener('change', () => saveFormSetting(LS_BRANCH_SELECT_VALUE, branchSelect.value));
             if(manualBranchInput) manualBranchInput.addEventListener('input', () => saveFormSetting(LS_MANUAL_BRANCH_VALUE, manualBranchInput.value));
             if(manualBranchCheckbox) manualBranchCheckbox.addEventListener('change', () => { updateBranchInputState(); saveFormSetting(LS_MANUAL_BRANCH_ENABLED, manualBranchCheckbox.checked); });
-            
             if(orderDateInput) orderDateInput.addEventListener('change', () => saveFormSetting(LS_ORDER_DATE, orderDateInput.value));
-            if(deliveryDateInput) deliveryDateInput.addEventListener('change', () => saveFormSetting(LS_DELIVERY_DATE, deliveryDateInput.value));
-
+            
+            // DEĞİŞİKLİK 3: Teslim tarihini hafızaya kaydeden olay dinleyicisi silindi.
+            // if(deliveryDateInput) deliveryDateInput.addEventListener('change', () => saveFormSetting(LS_DELIVERY_DATE, deliveryDateInput.value));
+            
             if (mainFormLangTrBtn) mainFormLangTrBtn.addEventListener('click', () => setLanguage('tr'));
             if (mainFormLangEnBtn) mainFormLangEnBtn.addEventListener('click', () => setLanguage('en'));
-
-            if (printButton) printButton.onclick = function() { 
-                if(!mainFormInitialized || !validateOrderForm()) return; 
-                generatePrintContent(false); // This injects HTML into #printAreaContent
-                window.print(); 
-            };
-
-            if (sendEmailBtn) sendEmailBtn.addEventListener('click', function() {
-                if(!mainFormInitialized || !validateOrderForm()) return;
-                const details = getOrderDetails(true);
-                const emailBody = getOrderSummaryAsText();
-                const subject = `New Order Request - No: ${details.orderNo} - Branch: ${details.branchName} - By: ${details.senderName}`;
-                window.location.href = `mailto:${EMAIL_RECIPIENT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
-            });
+            if (printButton) printButton.onclick = function() { if(!mainFormInitialized || !validateOrderForm()) return; generatePrintContent(false); window.print(); };
+            
+            if (sendOrderBtn) {
+                sendOrderBtn.addEventListener('click', () => {
+                    if (validateOrderForm()) {
+                        sendOrderToControlPanel();
+                    }
+                });
+            }
 
             if (shareButton) shareButton.addEventListener('click', async function() {
                 if(!mainFormInitialized || !validateOrderForm()) return;
@@ -1728,13 +1143,10 @@
                 shareButtonsContainer.style.display = 'none';
                 const pdfBlob = await generatePdfBlob();
                 let pdfFileForSharing = null;
-
                 const today = new Date();
                 const formattedDate = formatDateForFileName(today);
                 const branchName = getCurrentBranchName().replace(/[^a-zA-Z0-9\s-]/g, '').replace(/\s+/g, '_');
                 const baseFileName = `${branchName}_${formattedDate}`;
-
-
                 if (pdfBlob) {
                     pdfFileForSharing = new File([pdfBlob], `${baseFileName}.pdf`, { type: 'application/pdf' });
                     downloadPdfButton.onclick = () => { const url = URL.createObjectURL(pdfBlob); const a = document.createElement('a'); a.href = url; a.download = `${baseFileName}.pdf`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); };
@@ -1763,7 +1175,6 @@
             assignLoginDOMElements();
             loadLanguage();
             loadRememberMe();
-
             if (!checkAuth()) {
                 if (loginButton) loginButton.addEventListener('click', handleLogin);
                 if (passwordInput) passwordInput.addEventListener('keypress', function(event) { if (event.key === 'Enter') { event.preventDefault(); handleLogin(); }});
@@ -1771,42 +1182,15 @@
             }
         }
 
+        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', onPageLoad); } 
+        else { onPageLoad(); }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', onPageLoad);
-        } else {
-            onPageLoad();
-        }
-
-        console.log('PWA Script: Attempting to register Service Worker...');
         if ('serviceWorker' in navigator) {
-            console.log('PWA Script: Service Worker API is available in navigator.');
             window.addEventListener('load', () => {
-                console.log('PWA Script: Window (including all resources) fully loaded. Registering Service Worker from ./sw.js');
                 navigator.serviceWorker.register('./sw.js', { scope: './' })
-                    .then((registration) => {
-                        console.log('PWA Script: Service Worker registered successfully! Scope is: ', registration.scope);
-                        registration.onupdatefound = () => {
-                            const installingWorker = registration.installing;
-                            if (installingWorker) {
-                                installingWorker.onstatechange = () => {
-                                    if (installingWorker.state === 'installed') {
-                                        if (navigator.serviceWorker.controller) {
-                                            console.log('PWA Script: New content is available; please refresh.');
-                                        } else {
-                                            console.log('PWA Script: Content is cached for offline use (basic).');
-                                        }
-                                    }
-                                };
-                            }
-                        };
-                    })
-                    .catch((registrationError) => {
-                        console.error('PWA Script: Service Worker registration FAILED: ', registrationError);
-                    });
+                    .then((registration) => { console.log('PWA Script: Service Worker registered. Scope: ', registration.scope); })
+                    .catch((err) => { console.error('PWA Script: Service Worker registration FAILED: ', err); });
             });
-        } else {
-            console.warn('PWA Script: Service Worker is NOT supported by this browser.');
         }
     })();
     </script>
